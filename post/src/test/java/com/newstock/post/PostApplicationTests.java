@@ -1,10 +1,10 @@
-package com.newsmtock.newsmtock;
+package com.newstock.post;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class NewsmtockApplicationTests {
+class PostApplicationTests {
 
 	@Test
 	void contextLoads() {
