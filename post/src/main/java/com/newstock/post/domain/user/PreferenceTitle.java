@@ -9,7 +9,7 @@ import lombok.Getter;
 public class PreferenceTitle {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long preferenceTitleKey;
+    private Long preferenceTitleId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

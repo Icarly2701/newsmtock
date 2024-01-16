@@ -17,8 +17,5 @@ public class NewsContent {
     @JoinColumn(name = "news_id")
     private News news;
 
-    @OneToMany(mappedBy = "newsContent")
-    private List<NewsImage> newsImageList = new ArrayList<>();
-
     private String newsContentText;
 }
