@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="kr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../CSS/stylecss.css" />
+    <title>Title</title>
+  </head>
+  <body>
+    <div class="center">
+      <div class="loginBox" style="height: 700px; padding-top: 30px">
+        <img
+          src="../IMAGE/logo.png"
+          class="imageBox"
+          style="width: 125px; height: 125px"
+        />
+        <form method="post" class="loginForm" style="margin-top: 30px">
+          <input
+            type="text"
+            placeholder="ID"
+            name="id"
+            class="loginInputForm"
+          />
+          <input
+            type="password"
+            placeholder="PASSWORD"
+            name="password"
+            class="loginInputForm"
+          />
+          <input
+            type="text"
+            placeholder="NICKNAME"
+            name="nickname"
+            class="loginInputForm"
+          />
+          <div style="display: flex; justify-content: space-between">
+            <select
+              name="gender"
+              required
+              class="loginInputForm"
+              style="width: 130px"
+              id="gender"
+            >
+              <option value="" disabled selected hidden>성별</option>
+              <option value="male">남자</option>
+              <option value="female">여자</option>
+              <option value="none">그 외</option>
+            </select>
+            <select
+              name="age"
+              class="loginInputForm"
+              id="age"
+              style="width: 130px"
+            >
+              <option value="" disabled selected hidden>나이</option>
+            </select>
+            <script>
+              var ageSelect = document.getElementById("age");
+              for (var i = 1; i <= 100; i++) {
+                var option = document.createElement("option");
+                option.value = i;
+                option.text = i;
+                ageSelect.add(option);
+              }
+            </script>
+          </div>
+          <input
+            type="text"
+            placeholder="관심사 설정 ','로 구분"
+            name="nickname"
+            class="loginInputForm"
+          />
+          <input class="loginEnterForm" value="회원가입" type="submit" />
+        </form>
+
+        <div style="display: flex; justify-content: center; margin-top: 30px">
+          <div style="margin-right: 45px; cursor: pointer; padding: 10px">
+            메인
+          </div>
+          <div style="margin-left: 45px; cursor: pointer; padding: 10px">
+            로그인
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

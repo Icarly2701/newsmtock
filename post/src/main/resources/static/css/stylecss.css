@@ -1,0 +1,77 @@
+.loginBox {
+  width: 500px;
+  height: 570px;
+  border-radius: 1rem;
+  border: 1px solid black;
+  margin-top: 50px;
+  background-color: #d9d9d9;
+  display: flex;
+  flex-direction: column;
+  padding-top: 80px;
+  align-items: center;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+}
+
+.imageBox {
+  width: 150px;
+  height: 150px;
+  border-radius: 1rem;
+  object-fit: cover;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  margin-top: 70px;
+}
+
+.loginInputForm {
+  margin-bottom: 20px;
+  margin-top: 0px;
+  width: 300px;
+  height: 50px;
+  border-radius: 1rem;
+  border-width: 1.5px;
+  text-indent: 15px;
+  outline: none;
+}
+
+.loginEnterForm {
+  margin-bottom: 20px;
+  margin-top: 0px;
+  width: 300px;
+  height: 50px;
+  border-radius: 1rem;
+  border-width: 1.5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #6c6c6c;
+  border: none;
+  font-size: 0.5cm;
+  cursor: pointer;
+}
+
+.loginInputForm:focus {
+  border: 2px solid #313bc7;
+  outline: none;
+}
+
+select option[value=""][disabled] {
+  display: none;
+}
+
+input,
+select {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+.placeholder-style {
+  color: gray;
+}
