@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="kr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../CSS/stylemain.css" />
+    <title>Title</title>
+  </head>
+  <body
+    style="
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    "
+  >
+    <div class="center">
+      <header
+        style="
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        "
+      >
+        <div class="logoSign">
+          <img src="../IMAGE/logo.png" class="logoImage" />
+        </div>
+        <div class="buttons">
+          <div class="whiteButton" style="margin-right: 20px">로그인</div>
+          <div class="whiteButton" style="background-color: #ff6666">
+            회원가입
+          </div>
+        </div>
+
+        <div class="mainButtons">
+          <div style="margin: 5px; cursor: pointer">메인 페이지</div>
+          <div style="margin: 5px; cursor: pointer">뉴스 페이지</div>
+          <div style="margin: 5px; cursor: pointer">게시판</div>
+          <div style="margin: 5px; cursor: pointer">마이 페이지</div>
+        </div>
+        <form method="post" class="mainSearch">
+          <select name="type" required id="type">
+            <option value="posts">게시판</option>
+            <option value="news">뉴스</option>
+          </select>
+          <input type="text" class="searchInputForm" />
+          <input
+            type="submit"
+            class="searchInputForm"
+            value="검색하기"
+            style="
+              width: 100px;
+              background-color: white;
+              font-weight: bold;
+              text-indent: 2px;
+              cursor: pointer;
+              border-width: 2px;
+            "
+          />
+        </form>
+      </header>
+      <div class="mainContent">
+        <div class="basicContainer">
+          <div class="containerHead">주식 관련 최신 뉴스</div>
+          <div style="overflow: auto; height: 87%">
+            <ul>
+              <li>a</li>
+              <li>b</li>
+              <li>c</li>
+              <li>d</li>
+              <li>e</li>
+              <li>f</li>
+              <li>g</li>
+              <li>h</li>
+              <li>i</li>
+              <li>h</li>
+            </ul>
+          </div>
+        </div>
+        <div class="basicContainer">
+          <div class="containerHead">관심어 뉴스</div>
+          <div style="overflow: auto; height: 87%">
+            <ul>
+              <li>a</li>
+              <li>b</li>
+              <li>c</li>
+              <li>d</li>
+              <li>e</li>
+              <li>f</li>
+              <li>g</li>
+              <li>h</li>
+              <li>i</li>
+              <li>h</li>
+            </ul>
+          </div>
+        </div>
+        <div class="basicContainer">
+          <div class="containerHead">인기 게시물</div>
+          <div style="overflow: auto; height: 87%">
+            <ul>
+              <li>a</li>
+              <li>b</li>
+              <li>c</li>
+              <li>d</li>
+              <li>e</li>
+              <li>f</li>
+              <li>g</li>
+              <li>h</li>
+              <li>i</li>
+              <li>h</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

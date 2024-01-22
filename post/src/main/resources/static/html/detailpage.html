@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="kr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../CSS/stylemain.css" />
+    <title>Title</title>
+  </head>
+  <body
+    style="
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    "
+  >
+    <div class="center">
+      <header
+        style="
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        "
+      >
+        <div class="logoSign">
+          <img src="../IMAGE/logo.png" class="logoImage" />
+        </div>
+        <div class="buttons">
+          <div class="whiteButton" style="margin-right: 20px">로그인</div>
+          <div class="whiteButton" style="background-color: #ff6666">
+            회원가입
+          </div>
+        </div>
+
+        <div class="mainButtons">
+          <div style="margin: 5px; cursor: pointer">메인 페이지</div>
+          <div style="margin: 5px; cursor: pointer">뉴스 페이지</div>
+          <div style="margin: 5px; cursor: pointer">게시판</div>
+          <div style="margin: 5px; cursor: pointer">마이 페이지</div>
+        </div>
+        <form method="post" class="mainSearch">
+          <select name="type" required id="type">
+            <option value="posts">게시판</option>
+            <option value="news">뉴스</option>
+          </select>
+          <input type="text" class="searchInputForm" />
+          <input
+            type="submit"
+            class="searchInputForm"
+            value="검색하기"
+            style="
+              width: 100px;
+              background-color: white;
+              font-weight: bold;
+              text-indent: 2px;
+              cursor: pointer;
+              border-width: 2px;
+            "
+          />
+        </form>
+      </header>
+      <div style="margin-left: 15%; margin-right: 15%; height: 100%">
+        <div class="newPostCategoryName" style="margin-top: 25px; width: 100px">
+          카테고리
+        </div>
+        <div class="detailPostHead">
+          <div class="detailPostHeadContent">
+            침착맨: 3단계 레몬! / 김풍: 이야 너 아프리카 오더니 많이
+            변했다?ㅋㅋㅋㅋ
+          </div>
+          <div class="detailPostHeadContent">2024/01/22</div>
+        </div>
+        <div class="detailPostSecond">
+          <div class="detailPostHeadContent" style="font-weight: 100">
+            이유성
+          </div>
+          <div style="display: flex; justify-content: center">
+            <div class="detailPostHeadContent" style="font-weight: 100">
+              조회 수 5029
+            </div>
+            <div class="detailPostHeadContent" style="font-weight: 100">
+              추천 수 31
+            </div>
+            <div class="detailPostHeadContent" style="font-weight: 100">
+              댓글 2
+            </div>
+          </div>
+        </div>
+        <div class="detailPostContent">완전 재밌다!!</div>
+        <div class="detailRecommand">
+          <form method="post" class="detailRecommandLayout">
+            <button
+              type="submit"
+              class="detailRecommandBox"
+              style="color: #77d92b; width: 100px; border-color: #77d92b"
+            >
+              추천
+            </button>
+            <div
+              class="detailRecommandBox"
+              style="
+                color: #b8b8b8;
+                border-radius: 2rem;
+                border: 2px solid #b8b8b8;
+                width: 50px;
+              "
+            >
+              29
+            </div>
+            <button
+              type="submit"
+              class="detailRecommandBox"
+              style="color: #ff7474; width: 100px; border-color: #ff7474"
+            >
+              비추천
+            </button>
+          </form>
+        </div>
+        <div class="detailCommandHead">댓글 3개</div>
+        <div class="detailCommandLayout">
+          <div class="detailCommandDetail">
+            <div class="detailCommandLayoutName">
+              <div class="detailCommandNickname">이유성</div>
+              <div class="detailCommandDate">01/22</div>
+            </div>
+            <div class="detailCommandText">이게 뭘까요?</div>
+          </div>
+          <div class="detailCommandDetail">
+            <div class="detailCommandLayoutName">
+              <div class="detailCommandNickname">이유성</div>
+              <div class="detailCommandDate">01/22</div>
+            </div>
+            <div class="detailCommandText">이게 뭘까요?</div>
+          </div>
+          <div class="detailCommandDetail">
+            <div class="detailCommandLayoutName">
+              <div class="detailCommandNickname">이유성</div>
+              <div class="detailCommandDate">01/22</div>
+            </div>
+            <div class="detailCommandText">이게 뭘까요?</div>
+          </div>
+          <div class="detailCommandDetail">
+            <div class="detailCommandLayoutName">
+              <div class="detailCommandNickname">이유성</div>
+              <div class="detailCommandDate">01/22</div>
+            </div>
+            <div class="detailCommandText">이게 뭘까요?</div>
+          </div>
+          <div class="detailCommandDetail">
+            <div class="detailCommandLayoutName">
+              <div class="detailCommandNickname">이유성</div>
+              <div class="detailCommandDate">01/22</div>
+            </div>
+            <div class="detailCommandText">이게 뭘까요?</div>
+          </div>
+        </div>
+        <div class="commandRegister">
+          <div class="commandRegisterTitle">댓글 쓰기</div>
+          <form method="post" class="commandRegisterForm">
+            <input
+              placeholder="댓글 작성 하실려면 로그인이 필요합니다. 로그인하시겠습니까?"
+              class="commandInput"
+            />
+            <button
+              class="newPostCategoryName"
+              style="margin-top: 0; width: 80px"
+            >
+              등록하기
+            </button>
+          </form>
+        </div>
+      </div>
+      <div
+        style="
+          display: flex;
+          justify-content: end;
+          margin-top: 30px;
+          margin-right: 5%;
+        "
+      >
+        <form method="post">
+          <button type="submit" class="registerPickWord" style="width: 150px">
+            새 글 작성
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,584 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  height: 90%;
+  width: 95%;
+  background-color: #f3f3f3;
+  border-radius: 1rem;
+  border: none;
+  overflow: auto;
+  padding-bottom: 2%;
+}
+
+.logoSign {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.logoImage {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.whiteButton {
+  background-color: white;
+  border: 1.5px solid black;
+  border-radius: 1rem;
+  width: 100px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 30px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.buttons {
+  display: flex;
+  justify-content: end;
+  margin-left: 60%;
+}
+
+.mainButtons {
+  margin-top: 20px;
+  width: 80%;
+  height: 30px;
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+.mainSearch {
+  margin-top: 20px;
+  width: 70%;
+  height: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+select {
+  width: 100px;
+  height: 30px;
+  border-radius: 1rem;
+  border-width: 2px;
+  text-indent: 20px;
+  font-weight: bold;
+}
+
+.searchInputForm {
+  width: 70%;
+  height: 25px;
+  border-radius: 0.7rem;
+  border-width: 1.5px;
+  text-indent: 15px;
+  outline: none;
+}
+
+.basicContainer {
+  border: 2px solid black;
+  border-radius: 1.5rem;
+  width: 25%;
+  height: 100%;
+  background-color: #d9d9d9;
+  overflow: hidden;
+}
+
+.containerHead {
+  width: 100%;
+  height: 13%;
+  background-color: #eeeeee;
+  border-bottom: 2px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+.mainContent {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 4.5%;
+  margin-right: 4.5%;
+  border: none;
+  margin-top: 3%;
+  height: 300px;
+}
+
+.pickWord {
+  border: 2px solid black;
+  border-radius: 2rem;
+  max-width: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #eeeeee;
+  padding: 3%;
+  font-weight: bold;
+}
+
+.pickWordList {
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.deletePickWord {
+  border: none;
+  background-color: #ff7474;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.pickWordRegister {
+  width: 25%;
+}
+
+.registerPickWord {
+  border: 2px solid black;
+  border-radius: 1rem;
+  width: 50px;
+  font-weight: bold;
+  background-color: #c2ff92;
+  cursor: pointer;
+}
+
+.postNewsMain {
+  width: 90%;
+  height: 80%;
+  border: 2px solid black;
+  border-radius: 1.5rem;
+  margin-left: 5%;
+  margin-right: 4.5%;
+  margin-top: 30px;
+  overflow: hidden;
+  background-color: #d9d9d9;
+}
+
+.postNewsCategory {
+  width: 100%;
+  height: 10%;
+  border-bottom: 2px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: white;
+}
+
+.postNewsCateCate {
+  width: 10%;
+  height: 100%;
+  text-align: center;
+  font-weight: bold;
+  border-right: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.postNewsCatetitle {
+  width: 50%;
+  height: 100%;
+  text-align: center;
+  font-weight: bold;
+  border-right: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.postNewsCateNick {
+  width: 10%;
+  height: 100%;
+  text-align: center;
+  font-weight: bold;
+  border-right: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.postNewsCateDate {
+  width: 10%;
+  height: 100%;
+  text-align: center;
+  font-weight: bold;
+  border-right: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.postNewsCateCount {
+  width: 10%;
+  height: 100%;
+  text-align: center;
+  font-weight: bold;
+  border-right: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.postNewsCateRecommand {
+  width: 10%;
+  height: 100%;
+  text-align: center;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.newPostCategoryName {
+  width: 125px;
+  background-color: white;
+  border-radius: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  border: 2px solid black;
+  margin-bottom: 20px;
+  margin-top: 50px;
+}
+
+.newPostGetFile {
+  width: 100px;
+  height: 30px;
+  background-color: #ffffff;
+  border-radius: 0.7rem;
+  border: 2px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.searchLabel {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  border-bottom: 3px solid black;
+}
+
+.searchLabelContent {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.searchLabelContenttext {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.searchContentTitle {
+  font-size: 20px;
+  font-weight: bold;
+  padding-left: 10px;
+  margin-bottom: 15px;
+}
+
+.searchContentContent {
+  font-size: 16px;
+  padding-left: 10px;
+  margin-bottom: 15px;
+}
+
+.detailPost {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.detailPostHead {
+  background-color: #d9d9d9;
+  border-top: 1.5px solid black;
+  border-bottom: 1.5px solid black;
+  text-indent: 20px;
+  padding-right: 20px;
+  height: 45px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.detailPostHeadContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.detailPostSecond {
+  text-indent: 20px;
+  padding-right: 20px;
+  height: 35px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  border-bottom: 1.5px solid black;
+}
+
+.detailPostContent {
+  margin-top: 30px;
+  margin-bottom: 50px;
+  padding-left: 15px;
+  width: 100%;
+}
+
+.detailRecommand {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.detailRecommandLayout {
+  display: flex;
+  justify-content: space-between;
+  width: 60%;
+}
+
+.detailRecommandBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.7rem;
+  background-color: #ffffff;
+}
+
+.detailCommandHead {
+  text-indent: 15px;
+  border: 2px solid black;
+  border-radius: 0.5rem;
+  height: 25px;
+  margin-bottom: 20px;
+}
+
+.detailCommandLayout {
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  overflow: auto;
+}
+
+.detailCommandLayoutName {
+  display: flex;
+  margin-top: 15px;
+  margin-left: 15px;
+  margin-bottom: 15px;
+}
+
+.detailCommandNickname {
+  font-size: 16px;
+  margin-right: 15px;
+}
+
+.detailCommandDate {
+  font-size: 12px;
+}
+
+.detailCommandText {
+  padding-left: 15px;
+  margin-bottom: 15px;
+}
+
+.detailCommandDetail {
+  border-top: 1.5px solid black;
+  border-bottom: 1.5px solid black;
+  display: flex;
+  flex-direction: column;
+}
+
+.commandRegister {
+  border: 2px solid black;
+  border-radius: 0.7rem;
+  background-color: #d9d9d9;
+}
+
+.commandRegisterTitle {
+  margin-top: 8px;
+  margin-left: 15px;
+  font-weight: bold;
+}
+
+.commandRegisterForm {
+  display: flex;
+  margin-top: 5px;
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-bottom: 15px;
+  justify-content: space-between;
+  height: 20%;
+}
+
+.commandInput {
+  text-indent: 15px;
+  width: 80%;
+  height: 40px;
+  border-radius: 0.7rem;
+}
+
+textarea {
+  border-radius: 1rem;
+  border: 2px solid black;
+  height: 80%;
+  width: 96%;
+  padding-top: 15px;
+  padding-left: 2%;
+  padding-bottom: 15px;
+  padding-right: 2%;
+  resize: none;
+}
+
+#file {
+  display: none;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+li:nth-child(odd) {
+  background-color: #ccc;
+}
+
+li:nth-child(even) {
+  background-color: #f0f0f0;
+}
+
+li {
+  flex: 1;
+  border: 1px solid #ccc;
+  padding-left: 23px;
+}
+
+table {
+  width: 100%;
+  height: fit-content;
+  border-collapse: collapse;
+  margin: 0; /* 기본 마진 제거 */
+  padding: 0; /* 기본 패딩 제거 */
+}
+
+tbody {
+  margin: 0; /* 기본 마진 제거 */
+  padding: 0; /* 기본 패딩 제거 */
+}
+
+tr {
+  border-bottom: 1.5px solid black;
+}
+
+td {
+  align-items: center;
+  max-height: fit-content;
+}
+
+.td_category {
+  width: 10%;
+  height: 10%;
+  text-align: center;
+}
+
+.td_title {
+  width: 50%;
+  height: 10%;
+  text-align: center;
+  cursor: pointer;
+}
+
+.td_nickname {
+  width: 10%;
+  height: 10%;
+  text-align: center;
+}
+
+.td_date {
+  width: 10%;
+  height: 10%;
+  text-align: center;
+}
+
+.td_count {
+  width: 10%;
+  height: 10%;
+  text-align: center;
+}
+
+.td_recommand {
+  width: 10%;
+  height: 10%;
+  text-align: center;
+}
+
+tr:nth-child(odd) {
+  background-color: #ccc; /* 홀수 행 배경색 */
+}
+
+tr:nth-child(even) {
+  background-color: #f0f0f0; /* 짝수 행 배경색 */
+}
+
+/* Webkit 브라우저에서만 동작 */
+/* 수직 스크롤바 스타일 */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #cfcfcf; /* 스크롤바 색상 */
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* 스크롤바에 호버할 때 색상 */
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* 스크롤바 트랙 배경색 */
+}
+
+::-webkit-scrollbar-corner {
+  background-color: #f1f1f1; /* 수평과 수직 스크롤바 교차 지점 배경색 */
+}
+
+/* 수평 스크롤바 숨기기 */
+::-webkit-scrollbar-horizontal {
+  display: none;
+}
