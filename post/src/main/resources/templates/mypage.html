@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="kr">
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="../CSS/stylemain.css" />
+    <link rel="stylesheet" th:href="@{/css/stylemain.css}" />
     <title>Title</title>
   </head>
   <body
@@ -14,51 +14,7 @@
     "
   >
     <div class="center">
-      <header
-        style="
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        "
-      >
-        <div class="logoSign">
-          <img src="../IMAGE/logo.png" class="logoImage" />
-        </div>
-        <div class="buttons">
-          <div class="whiteButton" style="margin-right: 20px">로그인</div>
-          <div class="whiteButton" style="background-color: #ff6666">
-            회원가입
-          </div>
-        </div>
-
-        <div class="mainButtons">
-          <div style="margin: 5px; cursor: pointer">메인 페이지</div>
-          <div style="margin: 5px; cursor: pointer">뉴스 페이지</div>
-          <div style="margin: 5px; cursor: pointer">게시판</div>
-          <div style="margin: 5px; cursor: pointer">마이 페이지</div>
-        </div>
-        <form method="post" class="mainSearch">
-          <select name="type" required id="type">
-            <option value="posts">게시판</option>
-            <option value="news">뉴스</option>
-          </select>
-          <input type="text" class="searchInputForm" />
-          <input
-            type="submit"
-            class="searchInputForm"
-            value="검색하기"
-            style="
-              width: 100px;
-              background-color: white;
-              font-weight: bold;
-              text-indent: 2px;
-              cursor: pointer;
-              border-width: 2px;
-            "
-          />
-        </form>
-      </header>
+      <div th:replace="head_fragment :: header"></div>
       <div class="mainContent" style="height: 250px">
         <div class="basicContainer">
           <div class="containerHead">관심어, 검색어</div>

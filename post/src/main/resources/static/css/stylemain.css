@@ -555,6 +555,29 @@ tr:nth-child(even) {
   background-color: #f0f0f0; /* 짝수 행 배경색 */
 }
 
+a:link{
+    text-decoration: none;
+    color:black;
+}
+
+a:visited{
+    text-decoration: none;
+    color:black;
+}
+a:hover{
+    text-decoration: none;
+    color:black;
+}
+a:active{
+    text-decoration: none;
+    color:black;
+}
+
+a{
+    width:100%;
+    display:flex;
+    justify-content:center
+}
 /* Webkit 브라우저에서만 동작 */
 /* 수직 스크롤바 스타일 */
 ::-webkit-scrollbar {

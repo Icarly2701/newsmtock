@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="kr">
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="../CSS/stylecss.css" />
+    <link rel="stylesheet" th:href="@{/css/stylecss.css}" />
     <title>Title</title>
   </head>
   <body>
@@ -74,10 +74,10 @@
 
         <div style="display: flex; justify-content: center; margin-top: 30px">
           <div style="margin-right: 45px; cursor: pointer; padding: 10px">
-            메인
+            <a th:href="@{/}">메인</a>
           </div>
           <div style="margin-left: 45px; cursor: pointer; padding: 10px">
-            로그인
+            <a th:href="@{/login}">로그인</a>
           </div>
         </div>
       </div>

@@ -75,3 +75,27 @@ select {
 .placeholder-style {
   color: gray;
 }
+
+a:link{
+    text-decoration: none;
+    color:black;
+}
+
+a:visited{
+    text-decoration: none;
+    color:black;
+}
+a:hover{
+    text-decoration: none;
+    color:black;
+}
+a:active{
+    text-decoration: none;
+    color:black;
+}
+
+a{
+    width:100%;
+    display:flex;
+    justify-content:center
+}
