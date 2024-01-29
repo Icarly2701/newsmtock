@@ -578,6 +578,10 @@ a{
     display:flex;
     justify-content:center
 }
+
+li{
+    cursor:pointer;
+}
 /* Webkit 브라우저에서만 동작 */
 /* 수직 스크롤바 스타일 */
 ::-webkit-scrollbar {

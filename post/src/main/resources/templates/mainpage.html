@@ -20,16 +20,9 @@
           <div class="containerHead">주식 관련 최신 뉴스</div>
           <div style="overflow: auto; height: 87%">
             <ul>
-              <li>a</li>
-              <li>b</li>
-              <li>c</li>
-              <li>d</li>
-              <li>e</li>
-              <li>f</li>
-              <li>g</li>
-              <li>h</li>
-              <li>i</li>
-              <li>h</li>
+              <li th:each="news : ${newsList}">
+                <a th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
+              </li>
             </ul>
           </div>
         </div>

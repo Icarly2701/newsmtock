@@ -7,10 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class test {
 
-    @GetMapping("/")
-    public String aa(){
-        return "mainpage";
-    }
     @GetMapping("/login")
     public String login(){
         return "loginpage";
