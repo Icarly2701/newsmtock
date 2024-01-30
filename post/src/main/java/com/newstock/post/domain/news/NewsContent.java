@@ -19,9 +19,10 @@ public class NewsContent {
 
     private String newsContentText;
 
-    public static NewsContent makeNewsContent(String newsContentText){
+    public static NewsContent makeNewsContent(String newsContentText, News news){
         NewsContent newsContent = new NewsContent();
         newsContent.newsContentText = newsContentText;
+        newsContent.news = news;
         return newsContent;
     }
 }

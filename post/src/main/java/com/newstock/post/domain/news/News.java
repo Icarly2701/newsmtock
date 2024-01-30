@@ -21,22 +21,23 @@ public class News {
     private Long newsId;
 
     @Cascade(CascadeType.PERSIST)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "news")
+    @OneToOne(fetch = FetchType.LAZY,mappedBy = "news")
     private NewsContent newsContent;
 
     private String newsHeadline;
     private String newsURL;
     private LocalDateTime newsDate;
     private int newsCheckCount;
+    private int newsLikeCount;
 
     public static News makeNewsItem(Item item){
-        log.info("item = {}", item);
         News news = new News();
 
-        news.newsContent =  NewsContent.makeNewsContent(item.getDescription());
+        news.newsContent =  NewsContent.makeNewsContent(item.getDescription(), news);
         news.newsHeadline = item.getTitle();
         news.newsURL = item.getLink() != null ? item.getLink() : item.getOriginallink();
-
+        news.newsLikeCount = 0;
+        news.newsCheckCount = 0;
         // 문자열을 LocalDateTime으로 파싱
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
         ZonedDateTime zonedDateTime = ZonedDateTime.parse(item.getPubDate(), formatter);
@@ -46,8 +47,10 @@ public class News {
         return news;
     }
 
-    public static void checkCount(){
-        //newsCheckCount++;
+    public void checkCount(){
+        log.info("newsCheckCountBefore = {}", this.newsCheckCount);
+        this.newsCheckCount++;
+        log.info("newsCheckCountAfter = {}", this.newsCheckCount);
     }
 
 }

@@ -3,7 +3,6 @@ package com.newstock.post.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newstock.post.api.Item;
 import com.newstock.post.domain.news.News;
-import com.newstock.post.repository.NewsContentRepository;
 import com.newstock.post.repository.NewsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +37,10 @@ public class NewsService {
         return newsRepository.findById(newsId);
     }
 
+    @Transactional
+    public void checkCountAdd(News news){
+        news.checkCount();
+    }
 
     @Scheduled(fixedDelay = 300000000)
     public void getStockNewsData(){
@@ -53,7 +56,6 @@ public class NewsService {
         List<Item> items = (List<Item>) newsData.get("items");
 
         for(int i = 0; i<items.size(); i++){
-            log.info("items[i] = {}", items.get(i));
             ObjectMapper mapper = new ObjectMapper();
             Item item = mapper.convertValue(items.get(i), Item.class);
             newsRepository.save(News.makeNewsItem(item));

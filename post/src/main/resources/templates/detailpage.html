@@ -16,25 +16,27 @@
     <div class="center">
       <div th:replace="head_fragment :: header"></div>
       <div style="margin-left: 15%; margin-right: 15%; height: 100%">
-        <div class="newPostCategoryName" style="margin-top: 25px; width: 100px">
-          카테고리
-        </div>
+        <div th:if="${type eq 'news'}" class="newPostCategoryName" style="margin-top: 25px; width: 100px">뉴스</div>
+        <div th:if="${type eq 'post'}" class="newPostCategoryName" style="margin-top: 25px; width: 100px">게시판</div>
         <div class="detailPostHead">
-          <div class="detailPostHeadContent">
+          <div class="detailPostHeadContent" th:text="${content.newsHeadline}">
             침착맨: 3단계 레몬! / 김풍: 이야 너 아프리카 오더니 많이
             변했다?ㅋㅋㅋㅋ
           </div>
-          <div class="detailPostHeadContent">2024/01/22</div>
+          <div class="detailPostHeadContent" th:text="${content.newsDate}">2024/01/22</div>
         </div>
         <div class="detailPostSecond">
-          <div class="detailPostHeadContent" style="font-weight: 100">
+          <div class="detailPostHeadContent" style="font-weight: 100" th:if="${type eq 'news'}" th:text="${content.newsURL}">
+            이유성
+          </div>
+          <div class="detailPostHeadContent" style="font-weight: 100" th:if="${type eq 'post'}" th:text="${content.nickname}">
             이유성
           </div>
           <div style="display: flex; justify-content: center">
-            <div class="detailPostHeadContent" style="font-weight: 100">
+            <div class="detailPostHeadContent" style="font-weight: 100" th:if="${type eq 'news'}" th:text="'조회 수 ' + ${content.newsCheckCount}">
               조회 수 5029
             </div>
-            <div class="detailPostHeadContent" style="font-weight: 100">
+            <div class="detailPostHeadContent" style="font-weight: 100" th:if="${type eq 'news'}" th:text="'추천 수 ' + ${content.newsLikeCount}">
               추천 수 31
             </div>
             <div class="detailPostHeadContent" style="font-weight: 100">
@@ -42,7 +44,8 @@
             </div>
           </div>
         </div>
-        <div class="detailPostContent">완전 재밌다!!</div>
+        <div class="detailPostContent" th:if="${type eq 'news'}" th:text="${content.newsContent.newsContentText}" ></div>
+        <div class="detailPostContent" th:if="${type eq 'post'}" th:text="${content.content}" ></div>
         <div class="detailRecommand">
           <form method="post" class="detailRecommandLayout">
             <button
@@ -60,6 +63,7 @@
                 border: 2px solid #b8b8b8;
                 width: 50px;
               "
+              th:if="${type eq 'news'}" th:text="${content.newsLikeCount}"
             >
               29
             </div>
