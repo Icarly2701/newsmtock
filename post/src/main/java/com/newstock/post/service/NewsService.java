@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -52,32 +53,42 @@ public class NewsService {
         news.subLike();
     }
 
-    @Scheduled(fixedDelay = 300000000)
-    public void getStockNewsData(){
-        WebClient webClient = getWebClient();
-        String apiUrl = getApiUrl();
+    public List<News> getNewsData(String topic){
 
-        Map<String, Object> newsData = webClient.get()
-                .uri(apiUrl)
-                .retrieve()
-                .bodyToMono(Map.class)
-                .block();
-
-        List<Item> items = (List<Item>) newsData.get("items");
+        List<Item> items = getItems(topic);
+        List<News> newsList = new ArrayList<>();
 
         for(int i = 0; i<items.size(); i++){
             ObjectMapper mapper = new ObjectMapper();
             Item item = mapper.convertValue(items.get(i), Item.class);
-            newsRepository.save(News.makeNewsItem(item));
+            News news = News.makeNewsItem(item, topic);
+
+            newsList.add(news);
+            newsRepository.save(news);
+        }
+
+        return newsList;
+    }
+
+    @Scheduled(fixedDelay = 300000000)
+    public void getStockNewsData(){
+
+        List<Item> items = getItems("코스피");
+
+        for(int i = 0; i<items.size(); i++){
+            ObjectMapper mapper = new ObjectMapper();
+            Item item = mapper.convertValue(items.get(i), Item.class);
+            item.cleanHtmlCode();
+            newsRepository.save(News.makeNewsItem(item, "코스피"));
         }
     }
 
-    private String getApiUrl() {
+    private String getApiUrl(String topic) {
         // Open API 호출을 위한 URL
         String baseUrl = "https://openapi.naver.com/v1/search/news.json";
 
         return UriComponentsBuilder.fromUriString(baseUrl)
-                .queryParam("query", "코스피")
+                .queryParam("query", topic)
                 .queryParam("display", 10)
                 .queryParam("sort", "date")
                 .build()
@@ -95,5 +106,19 @@ public class NewsService {
                 .defaultHeader("X-Naver-Client-Id", clientId)
                 .defaultHeader("X-Naver-Client-Secret", clientSecret)
                 .build();
+    }
+
+    private List<Item> getItems(String topic) {
+        WebClient webClient = getWebClient();
+        String apiUrl = getApiUrl(topic);
+
+        Map<String, Object> newsData = webClient.get()
+                .uri(apiUrl)
+                .retrieve()
+                .bodyToMono(Map.class)
+                .block();
+
+        List<Item> items = (List<Item>) newsData.get("items");
+        return items;
     }
 }

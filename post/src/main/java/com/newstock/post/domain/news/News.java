@@ -29,8 +29,9 @@ public class News {
     private LocalDateTime newsDate;
     private int newsCheckCount;
     private int newsLikeCount;
+    private String newsTopic;
 
-    public static News makeNewsItem(Item item){
+    public static News makeNewsItem(Item item, String topic){
         News news = new News();
 
         news.newsContent =  NewsContent.makeNewsContent(item.getDescription(), news);
@@ -38,6 +39,7 @@ public class News {
         news.newsURL = item.getLink() != null ? item.getLink() : item.getOriginallink();
         news.newsLikeCount = 0;
         news.newsCheckCount = 0;
+        news.newsTopic = topic;
         // 문자열을 LocalDateTime으로 파싱
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
         ZonedDateTime zonedDateTime = ZonedDateTime.parse(item.getPubDate(), formatter);
