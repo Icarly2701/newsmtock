@@ -47,14 +47,15 @@
         <div class="detailPostContent" th:if="${type eq 'news'}" th:text="${content.newsContent.newsContentText}" ></div>
         <div class="detailPostContent" th:if="${type eq 'post'}" th:text="${content.content}" ></div>
         <div class="detailRecommand">
-          <form method="post" class="detailRecommandLayout">
+          <form method="post" th:action="@{'/news/' + ${newsId}}" class="detailRecommandLayout">
             <button
               type="submit"
               class="detailRecommandBox"
-              style="color: #77d92b; width: 100px; border-color: #77d92b"
-            >
-              추천
-            </button>
+              style="color: #77d92b; width: 100px; border-color: #77d92b; cursor: pointer"
+              name="action"
+              th:value="${'like'}"
+              th:text="${'추천'}"
+            ></button>
             <div
               class="detailRecommandBox"
               style="
@@ -64,16 +65,15 @@
                 width: 50px;
               "
               th:if="${type eq 'news'}" th:text="${content.newsLikeCount}"
-            >
-              29
-            </div>
+            ></div>
             <button
               type="submit"
               class="detailRecommandBox"
-              style="color: #ff7474; width: 100px; border-color: #ff7474"
-            >
-              비추천
-            </button>
+              style="color: #ff7474; width: 100px; border-color: #ff7474; cursor: pointer"
+              name="action"
+              th:value="${'dislike'}"
+              th:text="${'비추천'}"
+            ></button>
           </form>
         </div>
         <div class="detailCommandHead">댓글 3개</div>

@@ -48,9 +48,13 @@ public class News {
     }
 
     public void checkCount(){
-        log.info("newsCheckCountBefore = {}", this.newsCheckCount);
         this.newsCheckCount++;
-        log.info("newsCheckCountAfter = {}", this.newsCheckCount);
     }
 
+    public void addLike(){
+        this.newsLikeCount++;
+    }
+    public void subLike(){
+        this.newsLikeCount--;
+    }
 }

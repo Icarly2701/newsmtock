@@ -42,6 +42,16 @@ public class NewsService {
         news.checkCount();
     }
 
+    @Transactional
+    public void addLikeCount(News news){
+        news.addLike();
+    }
+
+    @Transactional
+    public void subLikeCount(News news){
+        news.subLike();
+    }
+
     @Scheduled(fixedDelay = 300000000)
     public void getStockNewsData(){
         WebClient webClient = getWebClient();
