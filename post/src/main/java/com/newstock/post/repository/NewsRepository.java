@@ -29,18 +29,28 @@ public class NewsRepository {
     }
 
     public List<News> findRecentNewsAboutStock(){
-        return  em.createQuery("select n from News n order by n.newsDate desc")
+        return em.createQuery("select n from News n where n.newsTopic = :topic order by n.newsDate desc")
+                .setParameter("topic", "코스피")
                 .setMaxResults(10)
                 .getResultList();
     }
 
-    public List<News> findByName(String name){
-        return em.createQuery("select m from Member m where m.name = :name", News.class)
-                .setParameter("name", name)
+    public List<News> findRecentNewsAboutTopic(String topic) {
+        return em.createQuery("SELECT n FROM News n JOIN n.newsContent nc WHERE n.newsHeadline LIKE :headline OR nc.newsContentText LIKE :contentText OR n.newsTopic = :topic ORDER BY n.newsDate DESC", News.class)
+                .setParameter("topic", topic)
+                .setParameter("headline", "%" + topic + "%")
+                .setParameter("contentText", "%" + topic + "%")
+                .setMaxResults(10)
+                .getResultList();
+    }
+
+    public List<News> findAllNewsAboutTopic(){
+        return em.createQuery("select n from News n")
                 .getResultList();
     }
 
     public News findById(Long newsId) {
         return em.find(News.class, newsId);
     }
+
 }

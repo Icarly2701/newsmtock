@@ -24,8 +24,10 @@ public class News {
     @OneToOne(fetch = FetchType.LAZY,mappedBy = "news")
     private NewsContent newsContent;
 
-    private String newsHeadline;
+    @Column(unique = true)
     private String newsURL;
+
+    private String newsHeadline;
     private LocalDateTime newsDate;
     private int newsCheckCount;
     private int newsLikeCount;

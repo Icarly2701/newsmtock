@@ -21,8 +21,9 @@
           margin-top: 25px;
           margin-left: 5%;
           margin-right: 5%;
-          height: 100%;
+          height: 80%;
           flex-direction: column;
+          overflow: scroll;
         "
       >
         <div class="searchLabel">
@@ -51,31 +52,28 @@
             <div class="searchLabelContenttext">정확도순</div>
           </div>
         </div>
-        <div class="searchContent">
-          <div class="searchContentTitle">펄켓몬 개재밌음 ㅋㅋㅋ</div>
-          <div class="searchContentContent">
+        <div class="searchContent" th:each="content : ${searchData}" >
+          <div class="searchContentTitle"><a style="justify-content: flex-start" th:text="${content.newsHeadline}" th:href="@{/news/{newsId}(newsId=${content.newsId})}"></a></div>
+          <div class="searchContentContent" th:text="${content.newsContent.newsContentText}">
             와 이거 시간 가는 줄 모르겠다 ㅋㅋㅋㅋㅋ 너무 재밌어
           </div>
           <div class="searchLabelContent">
             <div
               class="searchLabelContenttext"
               style="border-right: 1.5px solid black"
-            >
-              이유성
-            </div>
+              th:text="${content.newsTopic}"
+            ></div>
             <div
               class="searchLabelContenttext"
               style="border-right: 1.5px solid black"
-            >
-              01/22
-            </div>
-            <div class="searchLabelContenttext">40</div>
+              th:text="${content.newsDate}"
+            ></div>
+            <div class="searchLabelContenttext" th:text="${content.newsCheckCount}"></div>
           </div>
         </div>
       </div>
-
       <div
-        style="
+              style="
           display: flex;
           justify-content: end;
           margin-top: 30px;

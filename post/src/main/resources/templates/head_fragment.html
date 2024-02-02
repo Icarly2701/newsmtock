@@ -27,12 +27,12 @@
           <div style="margin: 5px; cursor: pointer"><a th:href="@{/post}">게시판</a></div>
           <div style="margin: 5px; cursor: pointer"><a th:href="@{/mypage}">마이 페이지</a></div>
         </div>
-        <form method="post" class="mainSearch" th:action="@{/search}">
+        <form method="get" class="mainSearch" th:action="@{/search}">
           <select name="type" required id="type">
             <option value="posts">게시판</option>
             <option value="news">뉴스</option>
           </select>
-          <input type="text" class="searchInputForm" />
+          <input type="text" name="keyword" class="searchInputForm"/>
           <input
             type="submit"
             class="searchInputForm"

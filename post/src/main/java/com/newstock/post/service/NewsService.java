@@ -6,6 +6,7 @@ import com.newstock.post.domain.news.News;
 import com.newstock.post.repository.NewsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +35,10 @@ public class NewsService {
     public List<News> getRecentNewsAboutStock(){
         return newsRepository.findRecentNewsAboutStock();
     };
+
+    public List<News> getRecentNewsAboutTopic(String topic){
+        return newsRepository.findRecentNewsAboutTopic(topic);
+    }
 
     public News findById(Long newsId){
         return newsRepository.findById(newsId);
@@ -53,34 +59,13 @@ public class NewsService {
         news.subLike();
     }
 
-    public List<News> getNewsData(String topic){
-
-        List<Item> items = getItems(topic);
-        List<News> newsList = new ArrayList<>();
-
-        for(int i = 0; i<items.size(); i++){
-            ObjectMapper mapper = new ObjectMapper();
-            Item item = mapper.convertValue(items.get(i), Item.class);
-            News news = News.makeNewsItem(item, topic);
-
-            newsList.add(news);
-            newsRepository.save(news);
-        }
-
-        return newsList;
+    public void getNewsData(String topic){
+        getNewsDataUseApi(topic);
     }
 
     @Scheduled(fixedDelay = 300000000)
     public void getStockNewsData(){
-
-        List<Item> items = getItems("코스피");
-
-        for(int i = 0; i<items.size(); i++){
-            ObjectMapper mapper = new ObjectMapper();
-            Item item = mapper.convertValue(items.get(i), Item.class);
-            item.cleanHtmlCode();
-            newsRepository.save(News.makeNewsItem(item, "코스피"));
-        }
+        getNewsDataUseApi("코스피");
     }
 
     private String getApiUrl(String topic) {
@@ -108,7 +93,7 @@ public class NewsService {
                 .build();
     }
 
-    private List<Item> getItems(String topic) {
+    private void getNewsDataUseApi(String topic) {
         WebClient webClient = getWebClient();
         String apiUrl = getApiUrl(topic);
 
@@ -119,6 +104,22 @@ public class NewsService {
                 .block();
 
         List<Item> items = (List<Item>) newsData.get("items");
-        return items;
+        List<News> compareTopic = newsRepository.findAllNewsAboutTopic();
+
+        for (int i = 0; i < items.size(); i++) {
+            ObjectMapper mapper = new ObjectMapper();
+
+            Item item = mapper.convertValue(items.get(i), Item.class);
+            item.cleanHtmlCode();
+
+            String newsLink = item.getLink() != null ? item.getLink() : item.getOriginallink();
+            Optional<News> existingNews = compareTopic.stream()
+                    .filter(v -> ((v.getNewsURL().equals(newsLink))))
+                    .findAny();
+
+            if(existingNews.isEmpty()){
+                newsRepository.save(News.makeNewsItem(item, topic));
+            }
+        }
     }
 }
