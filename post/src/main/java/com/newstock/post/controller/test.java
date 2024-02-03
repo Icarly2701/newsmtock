@@ -11,10 +11,6 @@ public class test {
     public String login(){
         return "loginpage";
     }
-    @GetMapping("/signup")
-    public String signup(){
-        return "signuppage";
-    }
     @GetMapping("/mypage")
     public String mypage(){
         return "mypage";
