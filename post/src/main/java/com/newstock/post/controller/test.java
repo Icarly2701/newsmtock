@@ -7,10 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class test {
 
-    @GetMapping("/login")
-    public String login(){
-        return "loginpage";
-    }
     @GetMapping("/mypage")
     public String mypage(){
         return "mypage";
@@ -23,6 +19,4 @@ public class test {
     public String news(){
         return "postnewspage";
     }
-    @PostMapping("/search")
-    public String search(){return "searchapage";}
 }

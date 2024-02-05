@@ -16,4 +16,11 @@ public class PreferenceTitle {
     private User user;
 
     private String preferenceTitle;
+
+    public static PreferenceTitle preferenceTitle(User user, String preferenceTitle){
+        PreferenceTitle preferenceItem = new PreferenceTitle();
+        preferenceItem.user = user;
+        preferenceItem.preferenceTitle = preferenceTitle;
+        return preferenceItem;
+    }
 }

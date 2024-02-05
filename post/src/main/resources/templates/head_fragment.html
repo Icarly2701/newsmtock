@@ -10,8 +10,16 @@
         <div class="logoSign">
           <img src="../image/logo.png" class="logoImage" />
         </div>
-        <div class="buttons">
-          <div class="whiteButton" style="margin-right: 20px"><a th:href="@{/login}">로그인</a></div>
+
+        <div th:if="${session.loginMember != null}" class="buttons" style="margin-left: 80%">
+          <div class="whiteButton" style="background-color: #ff6666">
+            <a th:href="@{/logout}">로그아웃</a>
+          </div>
+        </div>
+
+        <div th:unless="${session.loginMember != null}" class="buttons">
+          <div class="whiteButton" style="margin-right: 20px">
+            <a th:href="@{/login}">로그인</a></div>
           <div class="whiteButton" style="background-color: #ff6666">
             <a th:href="@{/signup}">
               회원가입

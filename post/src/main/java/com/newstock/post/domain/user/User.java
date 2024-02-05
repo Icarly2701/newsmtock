@@ -5,6 +5,7 @@ import com.newstock.post.domain.news.RecentNews;
 import com.newstock.post.domain.post.PostContent;
 import com.newstock.post.domain.post.RecentPost;
 import com.newstock.post.domain.post.TempPost;
+import com.newstock.post.dto.SignupDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -31,4 +32,14 @@ public class User {
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
     private TempPost tempPost;
+
+    public static User makeuser(SignupDto signupDto){
+        User user = new User();
+        user.age = signupDto.getAge();
+        user.id = signupDto.getId();
+        user.nickname = signupDto.getNickname();
+        user.password = signupDto.getPassword();
+        user.gender = signupDto.getGender();
+        return user;
+    }
 }
