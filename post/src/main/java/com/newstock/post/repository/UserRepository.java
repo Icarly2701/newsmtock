@@ -35,4 +35,10 @@ public class UserRepository {
                 .setParameter("userId", userId)
                 .getResultList();
     }
+
+    public List<PreferenceTitle> findUserPreferenceTitle(Long userId){
+        return em.createQuery("select p from PreferenceTitle p where p.user.userId = :userId", PreferenceTitle.class)
+                .setParameter("userId", userId)
+                .getResultList();
+    }
 }

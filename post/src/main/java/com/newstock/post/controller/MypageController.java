@@ -20,6 +20,7 @@ public class MypageController {
 
     @GetMapping("/mypage")
     public String viewMypage(@Login User user, Model model){
-        
+        model.addAttribute("preferenceTitle", userService.findUserPreferenceTitle(user.getUserId()));
+        return "mypage";
     }
 }

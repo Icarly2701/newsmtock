@@ -27,19 +27,15 @@
           </div>
         </div>
         <div class="basicContainer">
-          <div class="containerHead">관심어 뉴스</div>
+          <div class="containerHead" th:text="${session.loginMember} != null ? '관심어 뉴스' : '나스닥 뉴스'">관심어 뉴스</div>
           <div style="overflow: auto; height: 87%">
             <ul>
-              <li>a</li>
-              <li>b</li>
-              <li>c</li>
-              <li>d</li>
-              <li>e</li>
-              <li>f</li>
-              <li>g</li>
-              <li>h</li>
-              <li>i</li>
-              <li>h</li>
+              <li th:unless="${session.loginMember != null}" th:each="news : ${nasdaqList}">
+                <a th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
+              </li>
+              <li th:if="${session.loginMember != null}" th:each="news : ${preferenceNews}">
+                <a th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
+              </li>
             </ul>
           </div>
         </div>

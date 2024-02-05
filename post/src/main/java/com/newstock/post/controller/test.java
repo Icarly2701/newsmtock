@@ -7,10 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class test {
 
-    @GetMapping("/mypage")
-    public String mypage(){
-        return "mypage";
-    }
     @GetMapping("/post")
     public String posts(){
         return "postnewspage";

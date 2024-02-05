@@ -37,4 +37,8 @@ public class UserService {
         if(!user.getPassword().equals(userPassword)) return null;
         return user;
     }
+
+    public List<PreferenceTitle> findUserPreferenceTitle(Long userId){
+        return userRepository.findUserPreferenceTitle(userId);
+    }
 }

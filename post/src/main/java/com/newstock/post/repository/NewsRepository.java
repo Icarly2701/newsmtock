@@ -34,6 +34,13 @@ public class NewsRepository {
                 .setMaxResults(10)
                 .getResultList();
     }
+    
+    public List<News> findRecentNewsAboutNasdaq() {
+        return em.createQuery("select n from News n where n.newsTopic = :topic order by n.newsDate desc")
+                .setParameter("topic", "나스닥")
+                .setMaxResults(10)
+                .getResultList();
+    }
 
     public List<News> findRecentNewsAboutTopic(String topic) {
         return em.createQuery("SELECT n FROM News n JOIN n.newsContent nc WHERE n.newsHeadline LIKE :headline OR nc.newsContentText LIKE :contentText OR n.newsTopic = :topic ORDER BY n.newsDate DESC", News.class)

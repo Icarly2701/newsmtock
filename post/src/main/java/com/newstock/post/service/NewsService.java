@@ -36,6 +36,10 @@ public class NewsService {
         return newsRepository.findRecentNewsAboutStock();
     };
 
+    public List<News> getRecentNewsAboutNasdaq() {
+        return newsRepository.findRecentNewsAboutNasdaq();
+    }
+
     public List<News> getRecentNewsAboutTopic(String topic){
         return newsRepository.findRecentNewsAboutTopic(topic);
     }
@@ -66,6 +70,11 @@ public class NewsService {
     @Scheduled(fixedDelay = 300000000)
     public void getStockNewsData(){
         getNewsDataUseApi("코스피");
+    }
+
+    @Scheduled(fixedDelay = 300000000)
+    public void getNasdaqNewsData(){
+        getNewsDataUseApi("나스닥");
     }
 
     private String getApiUrl(String topic) {
@@ -122,4 +131,5 @@ public class NewsService {
             }
         }
     }
+
 }

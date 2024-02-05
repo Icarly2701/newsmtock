@@ -1,5 +1,7 @@
 package com.newstock.post.controller;
 
+import com.newstock.post.domain.user.PreferenceTitle;
+import com.newstock.post.service.NewsService;
 import com.newstock.post.web.SessionConst;
 import com.newstock.post.domain.user.User;
 import com.newstock.post.dto.LoginDto;
@@ -16,12 +18,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 @Slf4j
 public class SignupLoginController {
 
     private final UserService userService;
+    private final NewsService newsService;
 
     @PostMapping("/signup")
     public String signup(@Validated @ModelAttribute("signupData") SignupDto signupDto,
@@ -64,6 +69,11 @@ public class SignupLoginController {
 
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_MEMBER, user);
+
+        List<PreferenceTitle> userPreferenceTitle = userService.findUserPreferenceTitle(user.getUserId());
+        for(PreferenceTitle preferenceTitle: userPreferenceTitle){
+            newsService.getNewsData(preferenceTitle.getPreferenceTitle());
+        }
 
         return "redirect:/";
     }
