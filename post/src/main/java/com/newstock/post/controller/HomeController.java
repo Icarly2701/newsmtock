@@ -27,7 +27,10 @@ public class HomeController {
     @GetMapping("/")
     public String home(@Login User user, Model model){
         List<News> recentNewsAboutStock = newsService.getRecentNewsAboutStock();
+        List<News> popularNews = newsService.getPopularNews();
+
         model.addAttribute("newsList",recentNewsAboutStock);
+        model.addAttribute("popularNewsList", popularNews);
 
         if(user != null){
             List<PreferenceTitle> userPreferenceTitle = userService.findUserPreferenceTitle(user.getUserId());

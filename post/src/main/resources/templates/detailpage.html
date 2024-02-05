@@ -4,6 +4,22 @@
     <meta charset="UTF-8" />
     <link rel="stylesheet" th:href="@{/css/stylemain.css}" />
     <title>Title</title>
+    <script th:inline="javascript">
+      /* 세션의 유무를 확인하고 alert를 띄우는 함수 */
+      function checkLogin(action) {
+          /* 세션 확인 */
+          var sessionValue = /*[[${session.loginMember != null}]]*/ false;
+
+          /* 세션이 없으면 alert 띄우기 */
+          if (!sessionValue) {
+              alert('로그인이 필요합니다!!');
+          }else {
+            document.getElementById('recommendForm').action = '/news/' + /*[[${newsId}]]*/;
+            document.getElementById('actionInput').value = action;
+            document.getElementById('recommendForm').submit();
+          }
+      }
+    </script>
   </head>
   <body
     style="
@@ -20,25 +36,15 @@
         <div th:if="${type eq 'post'}" class="newPostCategoryName" style="margin-top: 25px; width: 100px">게시판</div>
         <div class="detailPostHead">
           <div class="detailPostHeadContent" th:text="${content.newsHeadline}">
-            침착맨: 3단계 레몬! / 김풍: 이야 너 아프리카 오더니 많이
-            변했다?ㅋㅋㅋㅋ
           </div>
-          <div class="detailPostHeadContent" th:text="${content.newsDate}">2024/01/22</div>
+          <div class="detailPostHeadContent" th:text="${content.newsDate}"></div>
         </div>
         <div class="detailPostSecond">
-          <div class="detailPostHeadContent" style="font-weight: 100" th:if="${type eq 'news'}" th:text="${content.newsURL}">
-            이유성
-          </div>
-          <div class="detailPostHeadContent" style="font-weight: 100" th:if="${type eq 'post'}" th:text="${content.nickname}">
-            이유성
-          </div>
+          <div class="detailPostHeadContent" style="font-weight: 100" th:if="${type eq 'news'}" th:text="${content.newsURL}"></div>
+          <div class="detailPostHeadContent" style="font-weight: 100" th:if="${type eq 'post'}" th:text="${content.nickname}"></div>
           <div style="display: flex; justify-content: center">
-            <div class="detailPostHeadContent" style="font-weight: 100" th:if="${type eq 'news'}" th:text="'조회 수 ' + ${content.newsCheckCount}">
-              조회 수 5029
-            </div>
-            <div class="detailPostHeadContent" style="font-weight: 100" th:if="${type eq 'news'}" th:text="'추천 수 ' + ${content.newsLikeCount}">
-              추천 수 31
-            </div>
+            <div class="detailPostHeadContent" style="font-weight: 100" th:if="${type eq 'news'}" th:text="'조회 수 ' + ${content.newsCheckCount}"></div>
+            <div class="detailPostHeadContent" style="font-weight: 100" th:if="${type eq 'news'}" th:text="'추천 수 ' + ${content.newsLikeCount}"></div>
             <div class="detailPostHeadContent" style="font-weight: 100">
               댓글 2
             </div>
@@ -46,18 +52,17 @@
         </div>
         <div class="detailPostContent" th:if="${type eq 'news'}" th:text="${content.newsContent.newsContentText}" ></div>
         <div class="detailPostContent" th:if="${type eq 'post'}" th:text="${content.content}" ></div>
-        <div class="detailRecommand">
-          <form method="post" th:action="@{'/news/' + ${newsId}}" class="detailRecommandLayout">
+        <div class="detailRecommend">
+          <form method="post" class="detailRecommendLayout" id="recommendForm">
             <button
-              type="submit"
-              class="detailRecommandBox"
+              class="detailRecommendBox"
               style="color: #77d92b; width: 100px; border-color: #77d92b; cursor: pointer"
-              name="action"
-              th:value="${'like'}"
+              name="actionLike"
+              onclick="checkLogin('like')"
               th:text="${'추천'}"
             ></button>
             <div
-              class="detailRecommandBox"
+              class="detailRecommendBox"
               style="
                 color: #b8b8b8;
                 border-radius: 2rem;
@@ -67,45 +72,17 @@
               th:if="${type eq 'news'}" th:text="${content.newsLikeCount}"
             ></div>
             <button
-              type="submit"
-              class="detailRecommandBox"
+              class="detailRecommendBox"
               style="color: #ff7474; width: 100px; border-color: #ff7474; cursor: pointer"
-              name="action"
-              th:value="${'dislike'}"
+              name="actionDisLike"
+              onclick="checkLogin('dislike')"
               th:text="${'비추천'}"
             ></button>
+            <input type="hidden" id="actionInput" name="action" th:value="${null}" />
           </form>
         </div>
         <div class="detailCommandHead">댓글 3개</div>
         <div class="detailCommandLayout">
-          <div class="detailCommandDetail">
-            <div class="detailCommandLayoutName">
-              <div class="detailCommandNickname">이유성</div>
-              <div class="detailCommandDate">01/22</div>
-            </div>
-            <div class="detailCommandText">이게 뭘까요?</div>
-          </div>
-          <div class="detailCommandDetail">
-            <div class="detailCommandLayoutName">
-              <div class="detailCommandNickname">이유성</div>
-              <div class="detailCommandDate">01/22</div>
-            </div>
-            <div class="detailCommandText">이게 뭘까요?</div>
-          </div>
-          <div class="detailCommandDetail">
-            <div class="detailCommandLayoutName">
-              <div class="detailCommandNickname">이유성</div>
-              <div class="detailCommandDate">01/22</div>
-            </div>
-            <div class="detailCommandText">이게 뭘까요?</div>
-          </div>
-          <div class="detailCommandDetail">
-            <div class="detailCommandLayoutName">
-              <div class="detailCommandNickname">이유성</div>
-              <div class="detailCommandDate">01/22</div>
-            </div>
-            <div class="detailCommandText">이게 뭘까요?</div>
-          </div>
           <div class="detailCommandDetail">
             <div class="detailCommandLayoutName">
               <div class="detailCommandNickname">이유성</div>

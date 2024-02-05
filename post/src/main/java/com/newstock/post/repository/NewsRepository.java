@@ -60,4 +60,9 @@ public class NewsRepository {
         return em.find(News.class, newsId);
     }
 
+    public List<News> findPopularNews() {
+        return em.createQuery("select n from News n order by n.newsCheckCount desc")
+                .setMaxResults(10)
+                .getResultList();
+    }
 }

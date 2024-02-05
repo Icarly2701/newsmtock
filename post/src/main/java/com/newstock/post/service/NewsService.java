@@ -43,6 +43,7 @@ public class NewsService {
     public List<News> getRecentNewsAboutTopic(String topic){
         return newsRepository.findRecentNewsAboutTopic(topic);
     }
+    public List<News> getPopularNews(){ return newsRepository.findPopularNews();}
 
     public News findById(Long newsId){
         return newsRepository.findById(newsId);

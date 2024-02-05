@@ -245,7 +245,7 @@ select {
   align-items: center;
 }
 
-.postNewsCateRecommand {
+.postNewsCateRecommend {
   width: 10%;
   height: 100%;
   text-align: center;
@@ -356,23 +356,23 @@ select {
   margin-top: 30px;
   margin-bottom: 50px;
   padding-left: 15px;
-  width: 100%;
+  padding-right: 15px;
 }
 
-.detailRecommand {
+.detailRecommend {
   display: flex;
   justify-content: center;
   width: 100%;
   margin-bottom: 30px;
 }
 
-.detailRecommandLayout {
+.detailRecommendLayout {
   display: flex;
   justify-content: space-between;
   width: 60%;
 }
 
-.detailRecommandBox {
+.detailRecommendBox {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -489,7 +489,8 @@ li:nth-child(even) {
 li {
   flex: 1;
   border: 1px solid #ccc;
-  padding-left: 23px;
+  padding-left: 12px;
+  padding-right: 12px;
 }
 
 table {
@@ -545,7 +546,7 @@ td {
   text-align: center;
 }
 
-.td_recommand {
+.td_recommend {
   width: 10%;
   height: 10%;
   text-align: center;

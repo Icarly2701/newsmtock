@@ -20,7 +20,6 @@ public class NewsController {
     public String newsDetail(@PathVariable("newsId") Long newsId,
                              @ModelAttribute("isLike") String isLike,
                              Model model){
-        log.info("isLike = {}", isLike);
         News news = newsService.findById(newsId);
         if(isLike.isEmpty()) newsService.checkCountAdd(news);
 
@@ -36,7 +35,7 @@ public class NewsController {
                            Model model){
 
         News news = newsService.findById(newsId);
-
+        log.info("aciont = {}", action);
         if(action.equals("like")){
             newsService.addLikeCount(news);
         }else if(action.equals("dislike")){
