@@ -18,7 +18,6 @@ public class PreferenceTitleRepository {
     }
 
     public void delete(PreferenceTitle preferenceTitle){
-        log.info("preferenceTitle = {}", preferenceTitle.getPreferenceTitle());
         em.remove(preferenceTitle);
     }
 

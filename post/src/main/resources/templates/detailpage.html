@@ -25,6 +25,11 @@
           document.getElementById('commentForm').submit();
         }
       }
+
+      function deleteComment(){
+        document.getElementById('deleteForm').action =  '/news/' + /*[[${newsId} + '/delete']]*/;
+        document.getElementById('deleteForm').submit();
+      }
     </script>
   </head>
   <body
@@ -91,23 +96,32 @@
         <div class="detailCommandLayout">
           <div class="detailCommandDetail" th:each="newsComment:${newsCommentList}">
             <div class="detailCommandLayoutName">
-              <div class="detailCommandNickname" th:text="${newsComment.user.nickname}"></div>
-              <div class="detailCommandDate" th:text="${newsComment.newsCommentDate}"></div>
+              <div style="display:flex; justify-content:space-between; width:100%">
+                <div style="display:flex;">
+                  <div class="detailCommandNickname" th:text="${newsComment.user.nickname}"></div>
+                  <div class="detailCommandDate" th:text="${newsComment.newsCommentDate}"></div>
+                </div>
+                <form th:if="${session.loginMember != null && viewUser.userId != null && newsComment.user.userId == viewUser.userId}" method="post" id="deleteForm">
+                  <button type="button" class="deleteCommentButton" onclick="deleteComment()" th:text="${'삭제'}"></button>
+                  <input type="hidden" name="newsCommentId" th:value="${newsComment.newsCommentId}"/>
+                </form>
+              </div>
             </div>
             <div class="detailCommandText" th:text="${newsComment.newsCommentContent}"></div>
           </div>
         </div>
         <div class="commandRegister">
           <div class="commandRegisterTitle">댓글 쓰기</div>
-          <form method="post" class="commandRegisterForm" id="commentForm" >
+          <form method="post" class="commandRegisterForm" id="commentForm" onsubmit="return false">
             <input
               th:placeholder="${session.loginMember != null} ? '' : '댓글 작성 하실려면 로그인이 필요합니다. 로그인하시겠습니까?'"
               name="newsCommentContent"
               class="commandInput"
+              type="text"
             />
             <button
               class="newPostCategoryName"
-              style="margin-top: 0; width: 80px"
+              style="margin-top: 0; width: 80px; cursor:pointer"
               onclick="registerComment()"
               type="button"
             >

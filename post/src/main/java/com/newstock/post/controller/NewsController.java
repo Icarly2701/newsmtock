@@ -22,7 +22,8 @@ public class NewsController {
     private final NewsService newsService;
 
     @GetMapping("/news/{newsId}")
-    public String newsDetail(@PathVariable("newsId") Long newsId,
+    public String newsDetail(@Login User user,
+                             @PathVariable("newsId") Long newsId,
                              @ModelAttribute("isLike") String isLike,
                              Model model){
         News news = newsService.findById(newsId);
@@ -33,6 +34,7 @@ public class NewsController {
         model.addAttribute("newsCommentList", newsCommentList);
         model.addAttribute("content", news);
         model.addAttribute("type", "news");
+        model.addAttribute("viewUser", user);
         return "detailpage";
     }
 
@@ -62,4 +64,14 @@ public class NewsController {
         redirectAttributes.addFlashAttribute("isLike", "notCount");
         return "redirect:/news/" + newsId;
     }
+
+    @PostMapping("/news/{newsId}/delete")
+    public String newDeleteComment(@PathVariable("newsId") Long newsId,
+                                   @RequestParam("newsCommentId") Long newsCommentId,
+                                   RedirectAttributes redirectAttributes){
+        newsService.deleteNewsComment(newsCommentId);
+        redirectAttributes.addFlashAttribute("isLike", "notCount");
+        return "redirect:/news/" + newsId;
+    }
+
 }

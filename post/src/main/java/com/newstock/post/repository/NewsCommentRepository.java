@@ -15,13 +15,21 @@ public class NewsCommentRepository {
 
     private final EntityManager em;
 
-    public List<NewsComment> findById(Long newsId) {
+    public List<NewsComment> findAll(Long newsId) {
         return em.createQuery("select n from NewsComment n where n.news.newsId = :news")
                 .setParameter("news", newsId)
                 .getResultList();
     }
 
+    public NewsComment findById(Long newsCommentId){
+        return em.find(NewsComment.class, newsCommentId);
+    }
+
     public void save(NewsComment newsComment){
         em.persist(newsComment);
+    }
+
+    public void deleteNewsComment(NewsComment newsComment) {
+        em.remove(newsComment);
     }
 }

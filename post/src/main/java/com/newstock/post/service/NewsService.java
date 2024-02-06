@@ -138,12 +138,18 @@ public class NewsService {
     }
 
     public List<NewsComment> findCommentById(Long newsId) {
-        return newsCommentRepository.findById(newsId);
+        return newsCommentRepository.findAll(newsId);
     }
 
     public void addNewsComment(Long newsId, User user, String newsCommentContent) {
         News news = newsRepository.findById(newsId);
         NewsComment newsComment = NewsComment.makeNewsCommentItem(news, user, newsCommentContent);
         newsCommentRepository.save(newsComment);
+    }
+
+    @Transactional
+    public void deleteNewsComment(Long newsCommentId) {
+        NewsComment newsComment = newsCommentRepository.findById(newsCommentId);
+        newsCommentRepository.deleteNewsComment(newsComment);
     }
 }
