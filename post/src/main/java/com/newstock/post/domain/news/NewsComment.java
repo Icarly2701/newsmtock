@@ -1,5 +1,6 @@
 package com.newstock.post.domain.news;
 
+import com.newstock.post.api.Item;
 import com.newstock.post.domain.post.Post;
 import com.newstock.post.domain.user.User;
 import jakarta.persistence.*;
@@ -25,4 +26,14 @@ public class NewsComment {
     private LocalDateTime newsCommentDate;
     private String newsCommentContent;
     private int newsCommentLikeCount;
+
+    public static NewsComment makeNewsCommentItem(News news, User user, String newsCommentContent) {
+        NewsComment newsComment = new NewsComment();
+        newsComment.user = user;
+        newsComment.news = news;
+        newsComment.newsCommentContent = newsCommentContent;
+        newsComment.newsCommentLikeCount = 0;
+        newsComment.newsCommentDate = LocalDateTime.now();
+        return newsComment;
+    }
 }

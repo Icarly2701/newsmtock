@@ -3,6 +3,9 @@ package com.newstock.post.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newstock.post.api.Item;
 import com.newstock.post.domain.news.News;
+import com.newstock.post.domain.news.NewsComment;
+import com.newstock.post.domain.user.User;
+import com.newstock.post.repository.NewsCommentRepository;
 import com.newstock.post.repository.NewsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +29,7 @@ import java.util.Optional;
 public class NewsService {
 
     private final NewsRepository newsRepository;
+    private final NewsCommentRepository newsCommentRepository;
 
     public Long save(News news){
         newsRepository.save(news);
@@ -133,4 +137,13 @@ public class NewsService {
         }
     }
 
+    public List<NewsComment> findCommentById(Long newsId) {
+        return newsCommentRepository.findById(newsId);
+    }
+
+    public void addNewsComment(Long newsId, User user, String newsCommentContent) {
+        News news = newsRepository.findById(newsId);
+        NewsComment newsComment = NewsComment.makeNewsCommentItem(news, user, newsCommentContent);
+        newsCommentRepository.save(newsComment);
+    }
 }
