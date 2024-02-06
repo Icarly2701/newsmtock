@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newstock.post.api.Item;
 import com.newstock.post.domain.news.News;
 import com.newstock.post.domain.news.NewsComment;
+import com.newstock.post.domain.news.RecentNews;
 import com.newstock.post.domain.user.User;
 import com.newstock.post.repository.NewsCommentRepository;
 import com.newstock.post.repository.NewsRepository;
+import com.newstock.post.repository.RecentNewsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -30,6 +32,7 @@ public class NewsService {
 
     private final NewsRepository newsRepository;
     private final NewsCommentRepository newsCommentRepository;
+    private final RecentNewsRepository recentNewsRepository;
 
     public Long save(News news){
         newsRepository.save(news);
@@ -151,5 +154,28 @@ public class NewsService {
     public void deleteNewsComment(Long newsCommentId) {
         NewsComment newsComment = newsCommentRepository.findById(newsCommentId);
         newsCommentRepository.deleteNewsComment(newsComment);
+    }
+
+    @Transactional
+    public void addRecentNews(News news, User user) {
+        RecentNews recentNews = RecentNews.makeRecentNews(news,user);
+        recentNewsRepository.save(recentNews);
+    }
+
+    @Transactional
+    public void updateRecentNews(RecentNews recentNews){
+        recentNews.setRecentNewsDate();
+    }
+
+    public RecentNews getRecentNewsAlreadySeen(News news, User user) {
+        List<RecentNews> recentNews = recentNewsRepository.getRecentNewsAlreadySeen(news, user);
+        if(recentNews.isEmpty()){
+            return null;
+        }
+        return recentNews.get(0);
+    }
+
+    public List<RecentNews> getRecentNewsList(User user){
+        return recentNewsRepository.getRecentNews(user);
     }
 }

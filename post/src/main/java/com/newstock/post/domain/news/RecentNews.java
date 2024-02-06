@@ -22,5 +22,17 @@ public class RecentNews {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private LocalDateTime recentPostDate;
+    private LocalDateTime recentNewsDate;
+
+    public static RecentNews makeRecentNews(News news, User user){
+        RecentNews recentNews = new RecentNews();
+        recentNews.news = news;
+        recentNews.user = user;
+        recentNews.recentNewsDate = LocalDateTime.now();
+        return recentNews;
+    }
+
+    public void setRecentNewsDate(){
+        this.recentNewsDate = LocalDateTime.now();
+    }
 }

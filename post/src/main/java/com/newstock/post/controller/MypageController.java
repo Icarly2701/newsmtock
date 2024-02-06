@@ -29,13 +29,16 @@ public class MypageController {
     @GetMapping("/mypage")
     public String viewMypage(@Login User user, Model model){
         List<PreferenceTitle> userPreferenceTitle = userService.findUserPreferenceTitle(user.getUserId());
-        model.addAttribute("preferenceTitle", userPreferenceTitle);
 
         List<News> aboutPreferenceTitle = new ArrayList<>();
         for(PreferenceTitle preferenceTitle: userPreferenceTitle){
             aboutPreferenceTitle.addAll(newsService.getRecentNewsAboutTopic(preferenceTitle.getPreferenceTitle()));
         }
+
+        model.addAttribute("preferenceTitle", userPreferenceTitle);
         model.addAttribute("preferenceNews", aboutPreferenceTitle);
+        model.addAttribute("recentNews", newsService.getRecentNewsList(user));
+
         return "mypage";
     }
 

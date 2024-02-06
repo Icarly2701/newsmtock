@@ -2,6 +2,7 @@ package com.newstock.post.controller;
 
 import com.newstock.post.domain.news.News;
 import com.newstock.post.domain.news.NewsComment;
+import com.newstock.post.domain.news.RecentNews;
 import com.newstock.post.domain.user.User;
 import com.newstock.post.service.NewsService;
 import com.newstock.post.web.Login;
@@ -28,6 +29,15 @@ public class NewsController {
                              Model model){
         News news = newsService.findById(newsId);
         List<NewsComment> newsCommentList = newsService.findCommentById(newsId);
+
+        if(user != null) {
+            RecentNews recentNews = newsService.getRecentNewsAlreadySeen(news, user);
+            if(recentNews == null){
+                newsService.addRecentNews(news, user);
+            }else{
+                newsService.updateRecentNews(recentNews);
+            }
+        }
 
         if(isLike.isEmpty()) newsService.checkCountAdd(news);
 

@@ -69,7 +69,9 @@
           <div class="containerHead">최근 본 뉴스</div>
           <div style="overflow: auto; height: 87%">
             <ul>
-              <li>a</li>
+              <li th:each="news : ${recentNews}">
+                <a th:text="${news.news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.news.newsId})}"></a>
+              </li>
             </ul>
           </div>
         </div>
