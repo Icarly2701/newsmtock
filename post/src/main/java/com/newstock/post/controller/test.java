@@ -6,13 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class test {
-
     @GetMapping("/post")
     public String posts(){
-        return "postnewspage";
-    }
-    @GetMapping("/news")
-    public String news(){
-        return "postnewspage";
+        return "postpage";
     }
 }

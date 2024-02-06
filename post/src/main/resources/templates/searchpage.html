@@ -4,6 +4,26 @@
     <meta charset="UTF-8" />
     <link rel="stylesheet" th:href="@{/css/stylemain.css}" />
     <title>Title</title>
+    <script th:inline="javascript">
+      function clickContentTitle() {
+        updateQuery("target", "title_content");
+      }
+
+      function clickTitle() {
+        updateQuery("target", "title");
+      }
+
+      function clickContent() {
+        updateQuery("target", "content");
+      }
+
+      function updateQuery(key, value) {
+        var currentUrl = window.location.href;
+        var url = new URL(currentUrl);
+        url.searchParams.set(key, value);
+        window.location.href = url.href;
+      }
+    </script>
   </head>
   <body
     style="
@@ -31,16 +51,19 @@
             <div
               class="searchLabelContenttext"
               style="border-right: 1.5px solid black"
+              onclick="clickContentTitle()"
             >
               제목+내용
             </div>
             <div
               class="searchLabelContenttext"
               style="border-right: 1.5px solid black"
+              onclick="clickTitle()"
             >
               제목
             </div>
-            <div class="searchLabelContenttext">내용</div>
+            <div class="searchLabelContenttext"
+                 onclick="clickContent()">내용</div>
           </div>
           <div class="searchLabelContent">
             <div
@@ -55,7 +78,6 @@
         <div class="searchContent" th:each="content : ${searchData}" >
           <div class="searchContentTitle"><a style="justify-content: flex-start" th:text="${content.newsHeadline}" th:href="@{/news/{newsId}(newsId=${content.newsId})}"></a></div>
           <div class="searchContentContent" th:text="${content.newsContent.newsContentText}">
-            와 이거 시간 가는 줄 모르겠다 ㅋㅋㅋㅋㅋ 너무 재밌어
           </div>
           <div class="searchLabelContent">
             <div

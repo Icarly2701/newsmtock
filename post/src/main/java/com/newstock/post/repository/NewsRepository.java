@@ -36,16 +36,29 @@ public class NewsRepository {
     }
     
     public List<News> findRecentNewsAboutNasdaq() {
-        return em.createQuery("select n from News n where n.newsTopic = :topic order by n.newsDate desc")
+        return em.createQuery("SELECT n FROM News n WHERE n.newsTopic = :topic ORDER BY n.newsDate DESC")
                 .setParameter("topic", "나스닥")
                 .setMaxResults(10)
                 .getResultList();
     }
 
     public List<News> findRecentNewsAboutTopic(String topic) {
-        return em.createQuery("SELECT n FROM News n JOIN n.newsContent nc WHERE n.newsHeadline LIKE :headline OR nc.newsContentText LIKE :contentText OR n.newsTopic = :topic ORDER BY n.newsDate DESC", News.class)
-                .setParameter("topic", topic)
+        return em.createQuery("SELECT n FROM News n JOIN n.newsContent nc WHERE n.newsHeadline LIKE :headline and nc.newsContentText LIKE :contentText ORDER BY n.newsDate DESC", News.class)
                 .setParameter("headline", "%" + topic + "%")
+                .setParameter("contentText", "%" + topic + "%")
+                .setMaxResults(10)
+                .getResultList();
+    }
+
+    public List<News> findRecentNewsAboutTopicTitle(String topic) {
+        return em.createQuery("SELECT n FROM News n JOIN n.newsContent nc WHERE n.newsHeadline LIKE :headline ORDER BY n.newsDate DESC", News.class)
+                .setParameter("headline", "%" + topic + "%")
+                .setMaxResults(10)
+                .getResultList();
+    }
+
+    public List<News> findRecentNewsAboutTopicContent(String topic) {
+        return em.createQuery("SELECT n FROM News n JOIN n.newsContent nc WHERE nc.newsContentText LIKE :contentText ORDER BY n.newsDate DESC", News.class)
                 .setParameter("contentText", "%" + topic + "%")
                 .setMaxResults(10)
                 .getResultList();
@@ -62,6 +75,13 @@ public class NewsRepository {
 
     public List<News> findPopularNews() {
         return em.createQuery("select n from News n order by n.newsCheckCount desc")
+                .setMaxResults(10)
+                .getResultList();
+    }
+
+    public List<News> findRecentNewsAboutKosdaq() {
+        return em.createQuery("select n from News n where n.newsTopic = :topic order by n.newsDate desc")
+                .setParameter("topic", "코스닥")
                 .setMaxResults(10)
                 .getResultList();
     }

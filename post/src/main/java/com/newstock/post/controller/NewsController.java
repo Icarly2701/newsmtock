@@ -3,6 +3,7 @@ package com.newstock.post.controller;
 import com.newstock.post.domain.news.News;
 import com.newstock.post.domain.news.NewsComment;
 import com.newstock.post.domain.news.RecentNews;
+import com.newstock.post.domain.user.PreferenceTitle;
 import com.newstock.post.domain.user.User;
 import com.newstock.post.service.NewsService;
 import com.newstock.post.web.Login;
@@ -14,6 +15,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -22,6 +26,19 @@ import java.util.List;
 public class NewsController {
 
     private final NewsService newsService;
+
+    @GetMapping("/news")
+    public String viewNews(Model model){
+        List<News> newsList = new ArrayList<>();
+
+        newsList.addAll(newsService.getRecentNewsAboutStock());
+        newsList.addAll(newsService.getRecentNewsAboutNasdaq());
+        newsList.addAll(newsService.getRecentNewsAboutKosdaq());
+        newsList.sort(Comparator.comparing(News::getNewsDate));
+
+        model.addAttribute("newsList", newsList);
+        return "newspage";
+    }
 
     @GetMapping("/news/{newsId}")
     public String newsDetail(@Login User user,

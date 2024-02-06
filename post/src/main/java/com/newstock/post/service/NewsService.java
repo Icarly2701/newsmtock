@@ -34,24 +34,27 @@ public class NewsService {
     private final RecentNewsRepository recentNewsRepository;
     private final LikeDislikeNewsRepository likeDislikeNewsRepository;
 
-    public Long save(News news){
-        newsRepository.save(news);
-        return news.getNewsId();
-    }
-
     public List<News> getRecentNewsAboutStock(){
         return newsRepository.findRecentNewsAboutStock();
     };
-
     public List<News> getRecentNewsAboutNasdaq() {
         return newsRepository.findRecentNewsAboutNasdaq();
+    }
+    public List<News> getRecentNewsAboutKosdaq() {
+        return newsRepository.findRecentNewsAboutKosdaq();
     }
 
     public List<News> getRecentNewsAboutTopic(String topic){
         return newsRepository.findRecentNewsAboutTopic(topic);
     }
-    public List<News> getPopularNews(){ return newsRepository.findPopularNews();}
+    public List<News> getRecentNewsAboutTitle(String topic){
+        return newsRepository.findRecentNewsAboutTopicTitle(topic);
+    }
+    public List<News> getRecentNewsAboutContent(String topic){
+        return newsRepository.findRecentNewsAboutTopicContent(topic);
+    }
 
+    public List<News> getPopularNews(){ return newsRepository.findPopularNews();}
     public News findById(Long newsId){
         return newsRepository.findById(newsId);
     }
@@ -91,13 +94,16 @@ public class NewsService {
     }
 
     @Scheduled(fixedDelay = 300000000)
-    public void getStockNewsData(){
+    public void getKospiNewsData(){
         getNewsDataUseApi("코스피");
     }
-
     @Scheduled(fixedDelay = 300000000)
     public void getNasdaqNewsData(){
         getNewsDataUseApi("나스닥");
+    }
+    @Scheduled(fixedDelay = 300000000)
+    public void getKosdaqNewsData(){
+        getNewsDataUseApi("코스닥");
     }
 
     private String getApiUrl(String topic) {

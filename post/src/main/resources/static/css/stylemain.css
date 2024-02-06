@@ -238,7 +238,7 @@ select {
 }
 
 .postNewsCateDate {
-  width: 10%;
+  width: 20%;
   height: 100%;
   text-align: center;
   font-weight: bold;
@@ -520,6 +520,7 @@ tbody {
   padding: 0; /* 기본 패딩 제거 */
 }
 
+
 tr {
   border-bottom: 1.5px solid black;
 }
@@ -549,7 +550,7 @@ td {
 }
 
 .td_date {
-  width: 10%;
+  width: 20%;
   height: 10%;
   text-align: center;
 }
