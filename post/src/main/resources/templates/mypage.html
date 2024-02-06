@@ -48,9 +48,9 @@
       </div>
       <div class="mainContent" style="height: 250px">
         <div class="pickWordRegister">
-          <form method="post">
+          <form method="post" th:action="@{/mypage/add}">
             <div style="display: flex; justify-content: space-between">
-              <input class="searchInputForm" />
+              <input class="searchInputForm"  name="interestWord"/>
               <button type="submit" class="registerPickWord">등록</button>
             </div>
           </form>

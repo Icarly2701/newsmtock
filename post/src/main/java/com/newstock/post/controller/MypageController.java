@@ -44,4 +44,11 @@ public class MypageController {
         userService.deletePreferenceTitle(preferenceTitleId);
         return "redirect:/mypage";
     }
+
+    @PostMapping("/mypage/add")
+    public String addPreferenceTitle(@Login User user, @RequestParam("interestWord") String interestWord){
+        userService.addPreferenceTitle(interestWord, user.getUserId());
+        newsService.getNewsData(interestWord);
+        return "redirect:/mypage";
+    }
 }

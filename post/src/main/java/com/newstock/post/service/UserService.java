@@ -48,4 +48,10 @@ public class UserService {
     public void deletePreferenceTitle(Long preferenceTitleId) {
         preferenceTitleRepository.delete(preferenceTitleRepository.findById(preferenceTitleId));
     }
+
+    @Transactional
+    public void addPreferenceTitle(String interestWord, Long userId) {
+        PreferenceTitle preferenceTitle = PreferenceTitle.preferenceTitle(userRepository.findById(userId), interestWord);
+        preferenceTitleRepository.save(preferenceTitle);
+    }
 }
