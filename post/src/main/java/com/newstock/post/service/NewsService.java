@@ -2,10 +2,9 @@ package com.newstock.post.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newstock.post.api.Item;
-import com.newstock.post.domain.news.News;
-import com.newstock.post.domain.news.NewsComment;
-import com.newstock.post.domain.news.RecentNews;
+import com.newstock.post.domain.news.*;
 import com.newstock.post.domain.user.User;
+import com.newstock.post.repository.LikeDislikeNewsRepository;
 import com.newstock.post.repository.NewsCommentRepository;
 import com.newstock.post.repository.NewsRepository;
 import com.newstock.post.repository.RecentNewsRepository;
@@ -33,6 +32,7 @@ public class NewsService {
     private final NewsRepository newsRepository;
     private final NewsCommentRepository newsCommentRepository;
     private final RecentNewsRepository recentNewsRepository;
+    private final LikeDislikeNewsRepository likeDislikeNewsRepository;
 
     public Long save(News news){
         newsRepository.save(news);
@@ -62,13 +62,28 @@ public class NewsService {
     }
 
     @Transactional
-    public void addLikeCount(News news){
-        news.addLike();
+    public void addLikeCount(News news, User user){
+        List<LikeNews> likeNews = likeDislikeNewsRepository.findLikeNews(news, user);
+        if(likeNews.isEmpty()){
+            news.addLike();
+            likeDislikeNewsRepository.saveLikeNews(LikeNews.makeLikeNews(news, user));
+            return;
+        }
+
+        news.subLike();
+        likeDislikeNewsRepository.deleteLikeNews(likeNews.get(0));
     }
 
     @Transactional
-    public void subLikeCount(News news){
-        news.subLike();
+    public void subLikeCount(News news, User user){
+        List<DislikeNews> dislikeNews = likeDislikeNewsRepository.findDislikeNews(news, user);
+        if(dislikeNews.isEmpty()){
+            news.subLike();
+            likeDislikeNewsRepository.saveDislikeNews(DislikeNews.makeDislikeNews(news, user));
+            return;
+        }
+        news.addLike();
+        likeDislikeNewsRepository.deleteDislikeNews(dislikeNews.get(0));
     }
 
     public void getNewsData(String topic){

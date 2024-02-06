@@ -502,6 +502,7 @@ li:nth-child(even) {
 li {
   flex: 1;
   border: 1px solid #ccc;
+  max-height:65px;
   padding-left: 12px;
   padding-right: 12px;
 }

@@ -7,6 +7,7 @@ import com.newstock.post.domain.user.User;
 import com.newstock.post.service.NewsService;
 import com.newstock.post.web.Login;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,16 +50,17 @@ public class NewsController {
     }
 
     @PostMapping("/news/{newsId}")
-    public String newsLike(@RequestParam String action,
+    public String newsLike(@Login User user,
+                           @RequestParam String action,
                            @PathVariable("newsId") Long newsId,
                            RedirectAttributes redirectAttributes){
 
         News news = newsService.findById(newsId);
 
         if(action.equals("like")){
-            newsService.addLikeCount(news);
+            newsService.addLikeCount(news, user);
         }else if(action.equals("dislike")){
-            newsService.subLikeCount(news);
+            newsService.subLikeCount(news, user);
         }
 
         redirectAttributes.addFlashAttribute("isLike", "notCount");
