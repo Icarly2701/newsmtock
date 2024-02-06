@@ -22,10 +22,6 @@ public class UserRepository {
         return user.getUserId();
     }
 
-    public void savePreferenceTitle(PreferenceTitle preferenceTitle){
-        em.persist(preferenceTitle);
-    }
-
     public User findById(Long userId) {
         return em.find(User.class, userId);
     }
@@ -41,4 +37,5 @@ public class UserRepository {
                 .setParameter("userId", userId)
                 .getResultList();
     }
+
 }

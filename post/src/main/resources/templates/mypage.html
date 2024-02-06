@@ -19,35 +19,11 @@
         <div class="basicContainer">
           <div class="containerHead">관심어, 검색어</div>
           <div style="overflow: auto; height: 87%">
-            <div class="pickWordList">
+            <div class="pickWordList" th:each="interestWord : ${preferenceTitle}">
               <div style="display: flex; justify-content: center">
-                <div class="pickWord">코스닥</div>
-                <form method="post">
-                  <button type="submit" class="deletePickWord">x</button>
-                </form>
-              </div>
-            </div>
-            <div class="pickWordList">
-              <div style="display: flex; justify-content: center">
-                <div class="pickWord">포켓몬을따라한 펠월드? 문제가 되나?</div>
-                <form method="post">
-                  <button type="submit" class="deletePickWord">x</button>
-                </form>
-              </div>
-            </div>
-            <div class="pickWordList">
-              <div style="display: flex; justify-content: center">
-                <div class="pickWord">펠월드를 제작한 20대 편의점 알바생</div>
-                <form method="post">
-                  <button type="submit" class="deletePickWord">x</button>
-                </form>
-              </div>
-            </div>
-            <div class="pickWordList">
-              <div style="display: flex; justify-content: center">
-                <div class="pickWord">다시 한번 포켓몬 속으로 펠월드</div>
-                <form method="post">
-                  <button type="submit" class="deletePickWord">x</button>
+                <div class="pickWord" th:text="${interestWord.preferenceTitle}"></div>
+                <form method="post" th:action="@{/mypage/delete/{preferenceTitleId}(preferenceTitleId=${interestWord.preferenceTitleId})}">
+                  <button type="submit" name="delete" class="deletePickWord">x</button>
                 </form>
               </div>
             </div>
@@ -58,15 +34,6 @@
           <div style="overflow: auto; height: 87%">
             <ul>
               <li>a</li>
-              <li>b</li>
-              <li>c</li>
-              <li>d</li>
-              <li>e</li>
-              <li>f</li>
-              <li>g</li>
-              <li>h</li>
-              <li>i</li>
-              <li>h</li>
             </ul>
           </div>
         </div>
@@ -75,15 +42,6 @@
           <div style="overflow: auto; height: 87%">
             <ul>
               <li>a</li>
-              <li>b</li>
-              <li>c</li>
-              <li>d</li>
-              <li>e</li>
-              <li>f</li>
-              <li>g</li>
-              <li>h</li>
-              <li>i</li>
-              <li>h</li>
             </ul>
           </div>
         </div>
@@ -101,16 +59,9 @@
           <div class="containerHead">관심, 관심어 뉴스</div>
           <div style="overflow: auto; height: 87%">
             <ul>
-              <li>a</li>
-              <li>b</li>
-              <li>c</li>
-              <li>d</li>
-              <li>e</li>
-              <li>f</li>
-              <li>g</li>
-              <li>h</li>
-              <li>i</li>
-              <li>h</li>
+              <li th:each="news : ${preferenceNews}">
+                <a th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
+              </li>
             </ul>
           </div>
         </div>
@@ -119,15 +70,6 @@
           <div style="overflow: auto; height: 87%">
             <ul>
               <li>a</li>
-              <li>b</li>
-              <li>c</li>
-              <li>d</li>
-              <li>e</li>
-              <li>f</li>
-              <li>g</li>
-              <li>h</li>
-              <li>i</li>
-              <li>h</li>
             </ul>
           </div>
         </div>

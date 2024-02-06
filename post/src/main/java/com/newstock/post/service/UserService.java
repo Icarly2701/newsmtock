@@ -2,6 +2,7 @@ package com.newstock.post.service;
 
 import com.newstock.post.domain.user.PreferenceTitle;
 import com.newstock.post.domain.user.User;
+import com.newstock.post.repository.PreferenceTitleRepository;
 import com.newstock.post.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PreferenceTitleRepository preferenceTitleRepository;
 
     public Long save(User user){
         return userRepository.save(user);
@@ -25,7 +27,7 @@ public class UserService {
     public void savePreferenceTitle(Long userId, String preferenceWord){
         User user = userRepository.findById(userId);
         PreferenceTitle preferenceTitle = PreferenceTitle.preferenceTitle(user, preferenceWord);
-        userRepository.savePreferenceTitle(preferenceTitle);
+        preferenceTitleRepository.save(preferenceTitle);
     }
 
     public User findByUserId(String userId, String userPassword){
@@ -40,5 +42,10 @@ public class UserService {
 
     public List<PreferenceTitle> findUserPreferenceTitle(Long userId){
         return userRepository.findUserPreferenceTitle(userId);
+    }
+
+    @Transactional
+    public void deletePreferenceTitle(Long preferenceTitleId) {
+        preferenceTitleRepository.delete(preferenceTitleRepository.findById(preferenceTitleId));
     }
 }
