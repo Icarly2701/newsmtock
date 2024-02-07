@@ -25,9 +25,11 @@ public class UserService {
     }
 
     public void savePreferenceTitle(Long userId, String preferenceWord){
-        User user = userRepository.findById(userId);
-        PreferenceTitle preferenceTitle = PreferenceTitle.preferenceTitle(user, preferenceWord);
-        preferenceTitleRepository.save(preferenceTitle);
+        if(!preferenceWord.trim().isEmpty()){
+            User user = userRepository.findById(userId);
+            PreferenceTitle preferenceTitle = PreferenceTitle.preferenceTitle(user, preferenceWord);
+            preferenceTitleRepository.save(preferenceTitle);
+        }
     }
 
     public User findByUserId(String userId, String userPassword){

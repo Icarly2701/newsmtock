@@ -47,7 +47,7 @@ public class SignupLoginController {
             userService.savePreferenceTitle(userId, interestWord.trim());
         }
 
-        return "redirect:/";
+        return "redirect:/login";
     }
 
     @GetMapping("/signup")

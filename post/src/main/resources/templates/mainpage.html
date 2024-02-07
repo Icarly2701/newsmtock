@@ -16,35 +16,41 @@
     <div class="center">
       <div th:replace="head_fragment :: header"></div>
       <div class="mainContent">
-        <div class="basicContainer">
-          <div class="containerHead">주식 관련 최신 뉴스</div>
+        <div class="basicContainer" th:style="${session.loginMember != null ? 'width:25%' : ''}">
+          <div class="containerHead">
+            <p style="font-weight: 800">주식 관련&nbsp;</p>
+            <p>최신 뉴스</p></div>
           <div style="overflow: auto; height: 87%">
             <ul>
               <li th:each="news : ${newsList}">
-                <a th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
+                <a class="aText" th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
               </li>
             </ul>
           </div>
         </div>
-        <div class="basicContainer">
-          <div class="containerHead" th:text="${session.loginMember} != null ? '관심어 뉴스' : '나스닥 뉴스'">관심어 뉴스</div>
-          <div style="overflow: auto; height: 87%">
-            <ul>
-              <li th:unless="${session.loginMember != null}" th:each="news : ${nasdaqList}">
-                <a th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
-              </li>
-              <li th:if="${session.loginMember != null}" th:each="news : ${preferenceNews}">
-                <a th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="basicContainer">
-          <div class="containerHead">인기 뉴스</div>
+        <div class="basicContainer" th:style="${session.loginMember != null ? 'width:25%' : ''}">
+          <div class="containerHead">
+            <p style="font-weight: 800">인기&nbsp;</p>
+            <p>뉴스</p></div>
           <div style="overflow: auto; height: 87%">
             <ul>
               <li th:each="news : ${popularNewsList}">
-                <a th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
+                <a class="aText" th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="basicContainer" th:style="${session.loginMember != null ? 'width:40%' : ''}">
+          <div class="containerHead"  th:style="${session.loginMember != null ? 'color: #2f5597' : ''}" >
+            <p style="font-weight: 800" th:text="${session.loginMember} != null ? '관심어&nbsp;' : '나스닥&nbsp;'"></p>
+            <p>뉴스</p></div>
+          <div style="overflow: auto; height: 87%">
+            <ul>
+              <li th:unless="${session.loginMember != null}" th:each="news : ${nasdaqList}">
+                <a class="aText" th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
+              </li>
+              <li th:if="${session.loginMember != null}" th:each="news : ${preferenceNews}" class="interestWord">
+                <a class="aText" th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
               </li>
             </ul>
           </div>

@@ -1,59 +1,99 @@
 <div th:fragment="header">
-      <header
-        style="
+  <header
+          style="
           display: flex;
           flex-direction: column;
           justify-content: center;
           align-items: center;
         "
-      >
-        <div class="logoSign">
-          <img src="../image/logo.png" class="logoImage" th:href="@{/}" />
-        </div>
-
-        <div th:if="${session.loginMember != null}" class="buttons" style="margin-left: 80%">
-          <div class="whiteButton" style="background-color: #ff6666">
-            <a th:href="@{/logout}">로그아웃</a>
-          </div>
-        </div>
-
-        <div th:unless="${session.loginMember != null}" class="buttons">
-          <div class="whiteButton" style="margin-right: 20px">
-            <a th:href="@{/login}">로그인</a></div>
-          <div class="whiteButton" style="background-color: #ff6666">
-            <a th:href="@{/signup}">
-              회원가입
-            </a>
-          </div>
-        </div>
-
-        <div class="mainButtons">
-          <div style="margin: 5px; cursor: pointer">
-            <a th:href="@{/}">메인 페이지</a>
-          </div>
-          <div style="margin: 5px; cursor: pointer"><a th:href="@{/news}">뉴스 페이지</a></div>
-          <div style="margin: 5px; cursor: pointer"><a th:href="@{/post}">게시판</a></div>
-          <div style="margin: 5px; cursor: pointer"><a th:href="@{/mypage}">마이 페이지</a></div>
-        </div>
-        <form method="get" class="mainSearch" th:action="@{/search}">
+  >
+    <div class="logoSign">
+      <a th:href="@{/}" style="display:initial; width:auto;">
+      <img src="../image/MainLogo.png" class="logoImage" />
+      </a>
+      <form method="get" class="mainSearch" th:action="@{/search}">
+        <div class="searchForm">
           <select name="type" required id="type">
-            <option value="posts">게시판</option>
             <option value="news">뉴스</option>
+            <option value="posts">게시판</option>
           </select>
-          <input type="text" name="keyword" class="searchInputForm"/>
-          <input
-            type="submit"
-            class="searchInputForm"
-            value="검색하기"
-            style="
-              width: 100px;
-              background-color: white;
-              font-weight: bold;
-              text-indent: 2px;
-              cursor: pointer;
-              border-width: 2px;
+          <input type="text" name="keyword" style="border-left: none" />
+        </div>
+        <input
+                type="submit"
+                class="searchInputForm"
+                value="검  색"
+                style="
+                width: 80px;
+                background-color: #2f5597;
+                color: white;
+                font-weight: bold;
+                text-indent: 2px;
+                cursor: pointer;
+                border-width: 2px;
+                padding-right: 3px;
+                border: none;
+              "
+        />
+      </form>
+    </div>
+
+    <div class="mainButtons">
+      <div
+              style="
+              display: flex;
+              justify-content: space-between;
+              width: 60%;
+              margin-left: 30px;
             "
-          />
-        </form>
-      </header>
+      >
+        <div style="margin: 7px; cursor: pointer">
+          <a th:href="@{/}">메인 페이지</a>
+        </div>
+        <div style="margin: 7px; cursor: pointer">
+          <a th:href="@{/post/economic}">경제 게시판</a>
+        </div>
+        <div style="margin: 7px; cursor: pointer">
+          <a th:href="@{/post/humor}">유머 게시판</a>
+        </div>
+        <div style="margin: 7px; cursor: pointer">
+          <a th:href="@{/post/freeboard}">자유 게시판</a>
+        </div>
+        <div style="margin: 7px; cursor: pointer">
+          <a th:href="@{/mypage}">마이 페이지</a>
+        </div>
+      </div>
+      <div class="buttons" th:unless="${session.loginMember != null}">
+        <div
+                class="whiteButton"
+                style="
+                margin-right: 20px;
+                background-color: white;
+                color: #2f5597;
+              "
+        >
+          <a class="loginB" th:href="@{/login}">로그인</a>
+        </div>
+        <div
+                class="whiteButton"
+                style="background-color: white; color: #2f5597; margin-right: 0px"
+        >
+          <a class="loginB" th:href="@{/signup}"> 회원가입 </a>
+        </div>
+      </div>
+
+      <div class="buttons" th:if="${session.loginMember != null}">
+        <div
+                class="whiteButton"
+                style="
+                margin-right: 20px;
+                background-color: white;
+                color: #2f5597;
+              "
+        >
+          <a class="loginB" th:href="@{/logout}">로그아웃</a>
+        </div>
+      </div>
+    </div>
+  </header>
 </div>

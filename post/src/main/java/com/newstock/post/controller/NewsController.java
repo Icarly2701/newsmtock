@@ -27,19 +27,6 @@ public class NewsController {
 
     private final NewsService newsService;
 
-    @GetMapping("/news")
-    public String viewNews(Model model){
-        List<News> newsList = new ArrayList<>();
-
-        newsList.addAll(newsService.getRecentNewsAboutStock());
-        newsList.addAll(newsService.getRecentNewsAboutNasdaq());
-        newsList.addAll(newsService.getRecentNewsAboutKosdaq());
-        newsList.sort(Comparator.comparing(News::getNewsDate));
-
-        model.addAttribute("newsList", newsList);
-        return "newspage";
-    }
-
     @GetMapping("/news/{newsId}")
     public String newsDetail(@Login User user,
                              @PathVariable("newsId") Long newsId,

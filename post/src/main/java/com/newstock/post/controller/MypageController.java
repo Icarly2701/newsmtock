@@ -50,8 +50,10 @@ public class MypageController {
 
     @PostMapping("/mypage/add")
     public String addPreferenceTitle(@Login User user, @RequestParam("interestWord") String interestWord){
-        userService.addPreferenceTitle(interestWord, user.getUserId());
-        newsService.getNewsData(interestWord);
+        if(!interestWord.trim().isEmpty()){
+            userService.addPreferenceTitle(interestWord, user.getUserId());
+            newsService.getNewsData(interestWord);
+        }
         return "redirect:/mypage";
     }
 }

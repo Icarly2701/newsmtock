@@ -40,9 +40,6 @@ public class NewsService {
     public List<News> getRecentNewsAboutNasdaq() {
         return newsRepository.findRecentNewsAboutNasdaq();
     }
-    public List<News> getRecentNewsAboutKosdaq() {
-        return newsRepository.findRecentNewsAboutKosdaq();
-    }
 
     public List<News> getRecentNewsAboutTopic(String topic){
         return newsRepository.findRecentNewsAboutTopic(topic);
@@ -67,9 +64,15 @@ public class NewsService {
     @Transactional
     public void addLikeCount(News news, User user){
         List<LikeNews> likeNews = likeDislikeNewsRepository.findLikeNews(news, user);
-        if(likeNews.isEmpty()){
+        List<DislikeNews> dislikeNews = likeDislikeNewsRepository.findDislikeNews(news, user);
+
+        if(likeNews.isEmpty() && dislikeNews.isEmpty()){
             news.addLike();
             likeDislikeNewsRepository.saveLikeNews(LikeNews.makeLikeNews(news, user));
+            return;
+        }else if(likeNews.isEmpty()){
+            news.addLike();
+            likeDislikeNewsRepository.deleteDislikeNews(dislikeNews.get(0));
             return;
         }
 
@@ -80,11 +83,18 @@ public class NewsService {
     @Transactional
     public void subLikeCount(News news, User user){
         List<DislikeNews> dislikeNews = likeDislikeNewsRepository.findDislikeNews(news, user);
-        if(dislikeNews.isEmpty()){
+        List<LikeNews> likeNews = likeDislikeNewsRepository.findLikeNews(news, user);
+
+        if(dislikeNews.isEmpty() && likeNews.isEmpty()){
             news.subLike();
             likeDislikeNewsRepository.saveDislikeNews(DislikeNews.makeDislikeNews(news, user));
             return;
+        }else if(dislikeNews.isEmpty()){
+            news.subLike();
+            likeDislikeNewsRepository.deleteLikeNews(likeNews.get(0));
+            return;
         }
+
         news.addLike();
         likeDislikeNewsRepository.deleteDislikeNews(dislikeNews.get(0));
     }
@@ -100,10 +110,6 @@ public class NewsService {
     @Scheduled(fixedDelay = 300000000)
     public void getNasdaqNewsData(){
         getNewsDataUseApi("나스닥");
-    }
-    @Scheduled(fixedDelay = 300000000)
-    public void getKosdaqNewsData(){
-        getNewsDataUseApi("코스닥");
     }
 
     private String getApiUrl(String topic) {

@@ -43,9 +43,10 @@ public class NewsRepository {
     }
 
     public List<News> findRecentNewsAboutTopic(String topic) {
-        return em.createQuery("SELECT n FROM News n JOIN n.newsContent nc WHERE n.newsHeadline LIKE :headline and nc.newsContentText LIKE :contentText ORDER BY n.newsDate DESC", News.class)
+        return em.createQuery("SELECT n FROM News n JOIN n.newsContent nc WHERE n.newsHeadline LIKE :headline or nc.newsContentText LIKE :contentText or n.newsTopic LIKE :topic ORDER BY n.newsDate DESC", News.class)
                 .setParameter("headline", "%" + topic + "%")
                 .setParameter("contentText", "%" + topic + "%")
+                .setParameter("topic", "%" + topic + "%")
                 .setMaxResults(10)
                 .getResultList();
     }
@@ -75,13 +76,6 @@ public class NewsRepository {
 
     public List<News> findPopularNews() {
         return em.createQuery("select n from News n order by n.newsCheckCount desc")
-                .setMaxResults(10)
-                .getResultList();
-    }
-
-    public List<News> findRecentNewsAboutKosdaq() {
-        return em.createQuery("select n from News n where n.newsTopic = :topic order by n.newsDate desc")
-                .setParameter("topic", "코스닥")
                 .setMaxResults(10)
                 .getResultList();
     }

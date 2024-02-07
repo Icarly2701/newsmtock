@@ -16,11 +16,14 @@
     <div class="center">
       <div th:replace="head_fragment :: header"></div>
       <div class="mainContent" style="height: 250px">
-        <div class="basicContainer">
-          <div class="containerHead">관심어, 검색어</div>
-          <div style="overflow: auto; height: 87%">
+        <div class="basicContainer" style="width:20%">
+          <div class="containerHead">
+            <p style="font-weight: 800">관심어&nbsp;</p>
+            <p style="font-weight: 800">검색어</p>
+          </div>
+          <div style="overflow: auto; height: 87%; background-color:#DAE3F3; border-radius:0.3rem; border:none">
             <div class="pickWordList" th:each="interestWord : ${preferenceTitle}">
-              <div style="display: flex; justify-content: center">
+              <div style="display: flex; justify-content:center">
                 <div class="pickWord" th:text="${interestWord.preferenceTitle}"></div>
                 <form method="post" th:action="@{/mypage/delete/{preferenceTitleId}(preferenceTitleId=${interestWord.preferenceTitleId})}">
                   <button type="submit" name="delete" class="deletePickWord">x</button>
@@ -29,16 +32,22 @@
             </div>
           </div>
         </div>
-        <div class="basicContainer">
-          <div class="containerHead">작성한 게시물</div>
+        <div class="basicContainer" style="width:35%">
+          <div class="containerHead">
+            <p style="font-weight: 800">작성&nbsp;</p>
+            <p>게시물</p>
+          </div>
           <div style="overflow: auto; height: 87%">
             <ul>
               <li>a</li>
             </ul>
           </div>
         </div>
-        <div class="basicContainer">
-          <div class="containerHead">최근 본 게시물</div>
+        <div class="basicContainer"  style="width:35%">
+          <div class="containerHead">
+            <p style="font-weight: 800">최근 본&nbsp;</p>
+            <p>게시물</p>
+          </div>
           <div style="overflow: auto; height: 87%">
             <ul>
               <li>a</li>
@@ -46,7 +55,7 @@
           </div>
         </div>
       </div>
-      <div class="mainContent" style="height: 250px">
+      <div class="mainContent" style="height: 250px; margin-top: 3%">
         <div class="pickWordRegister">
           <form method="post" th:action="@{/mypage/add}">
             <div style="display: flex; justify-content: space-between">
@@ -55,22 +64,28 @@
             </div>
           </form>
         </div>
-        <div class="basicContainer">
-          <div class="containerHead">관심, 관심어 뉴스</div>
+        <div class="basicContainer" style="width:35%">
+          <div class="containerHead">
+            <p style="font-weight: 800">관심어, 검색어&nbsp;</p>
+            <p>뉴스</p>
+          </div>
           <div style="overflow: auto; height: 87%">
             <ul>
               <li th:each="news : ${preferenceNews}">
-                <a th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
+                <a class="aText" th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
               </li>
             </ul>
           </div>
         </div>
-        <div class="basicContainer">
-          <div class="containerHead">최근 본 뉴스</div>
+        <div class="basicContainer" style="width:35%">
+          <div class="containerHead">
+            <p style="font-weight: 800">최근 본&nbsp;</p>
+            <p>뉴스</p>
+          </div>
           <div style="overflow: auto; height: 87%">
             <ul>
               <li th:each="news : ${recentNews}">
-                <a th:text="${news.news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.news.newsId})}"></a>
+                <a class="aText" th:text="${news.news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.news.newsId})}"></a>
               </li>
             </ul>
           </div>

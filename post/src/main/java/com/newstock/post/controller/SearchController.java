@@ -23,9 +23,7 @@ public class SearchController {
                                @RequestParam(value = "target", required = false) Target target,
                                Model model){
 
-        log.info("target = {}", target);
-
-        if(type.equals("news") && !keyword.isEmpty()){
+        if(type.equals("news") && !keyword.trim().isEmpty()){
             newsService.getNewsData(keyword);
             List<News> newsData;
             if(target != null){

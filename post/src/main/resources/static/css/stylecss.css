@@ -1,10 +1,10 @@
 .loginBox {
   width: 500px;
   height: 570px;
-  border-radius: 1rem;
-  border: 1px solid black;
+  border-radius: 0.3rem;
+  border: 2px solid #2f5597;
   margin-top: 50px;
-  background-color: #d9d9d9;
+  background-color: white;
   display: flex;
   flex-direction: column;
   padding-top: 80px;
@@ -36,6 +36,7 @@
   height: 50px;
   border-radius: 1rem;
   border-width: 1.5px;
+  border-color: #2f5597;
   text-indent: 15px;
   outline: none;
 }
@@ -67,7 +68,8 @@ border-color: #dc3545;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #6c6c6c;
+  background-color: #2f5597;
+  color:white;
   border: none;
   font-size: 0.5cm;
   cursor: pointer;

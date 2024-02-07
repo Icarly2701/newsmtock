@@ -41,9 +41,7 @@
           margin-top: 25px;
           margin-left: 5%;
           margin-right: 5%;
-          height: 80%;
           flex-direction: column;
-          overflow: scroll;
         "
       >
         <div class="searchLabel">
@@ -76,7 +74,7 @@
           </div>
         </div>
         <div class="searchContent" th:each="content : ${searchData}" >
-          <div class="searchContentTitle"><a style="justify-content: flex-start" th:text="${content.newsHeadline}" th:href="@{/news/{newsId}(newsId=${content.newsId})}"></a></div>
+          <div class="searchContentTitle"><a style="justify-content: flex-start; color:black" th:text="${content.newsHeadline}" th:href="@{/news/{newsId}(newsId=${content.newsId})}"></a></div>
           <div class="searchContentContent" th:text="${content.newsContent.newsContentText}">
           </div>
           <div class="searchLabelContent">
