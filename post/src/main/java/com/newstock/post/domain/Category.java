@@ -14,4 +14,10 @@ public class Category {
     private Long categoryId;
 
     private String categoryContent;
+
+    public static Category makeCategory(String categoryContent){
+        Category category = new Category();
+        category.categoryContent = categoryContent;
+        return category;
+    }
 }

@@ -1,5 +1,6 @@
 package com.newstock.post.domain.post;
 
+import com.newstock.post.dto.PostDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -17,8 +18,12 @@ public class PostContent {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @OneToMany(mappedBy = "postContent")
-    private List<PostImage> postImageList = new ArrayList<>();
-
     private String postContentText;
+
+    public static PostContent makePostContent(PostDto postDto, Post post){
+        PostContent postContent = new PostContent();
+        postContent.postContentText = postDto.getPostContent();
+        postContent.post = post;
+        return postContent;
+    }
 }

@@ -15,4 +15,11 @@ public class PostImage {
     private PostContent postContent;
 
     private String postImagePath;
+
+    public static PostImage makePostImage(String postImagePath, PostContent postContent){
+        PostImage postImage = new PostImage();
+        postImage.postContent = postContent;
+        postImage.postImagePath = postImagePath;
+        return postImage;
+    }
 }

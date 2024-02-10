@@ -5,6 +5,15 @@ body {
   overflow: hidden;
 }
 
+@font-face {
+    font-family: 'NanumGothic';
+    src: url('/fonts/NanumGothic.otf') format('opentype');
+}
+
+* {
+    font-family: 'NanumGothic', sans-serif;
+}
+
 .center {
   display: flex;
   flex-direction: column;

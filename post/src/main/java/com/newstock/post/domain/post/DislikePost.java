@@ -20,7 +20,7 @@ public class DislikePost {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static DislikePost makeDislikeNews(Post post, User user){
+    public static DislikePost makeDislikePost(Post post, User user){
         DislikePost dislikePost = new DislikePost();
         dislikePost.post = post;
         dislikePost.user = user;

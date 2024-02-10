@@ -1,5 +1,7 @@
 package com.newstock.post.domain.post;
 
+import com.newstock.post.domain.news.News;
+import com.newstock.post.domain.news.NewsComment;
 import com.newstock.post.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -25,4 +27,14 @@ public class PostComment {
     private LocalDateTime postCommentDate;
     private String postCommentContent;
     private int postCommentLikeCount;
+
+    public static PostComment makePostComment(Post post, User user, String postCommentContent) {
+        PostComment postComment = new PostComment();
+        postComment.user = user;
+        postComment.post = post;
+        postComment.postCommentContent = postCommentContent;
+        postComment.postCommentLikeCount = 0;
+        postComment.postCommentDate = LocalDateTime.now();
+        return postComment;
+    }
 }

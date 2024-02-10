@@ -2,6 +2,7 @@ package com.newstock.post.domain.post;
 
 import com.newstock.post.domain.Category;
 import com.newstock.post.domain.user.User;
+import com.newstock.post.dto.PostDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -22,4 +23,13 @@ public class TempPost {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    public static TempPost tempPost(PostDto postDto, User user){
+        TempPost tempPost = new TempPost();
+        tempPost.user = user;
+        tempPost.tempPostTitle = postDto.getTitle();
+        tempPost.tempPostText = postDto.getPostContent();
+        tempPost.category = Category.makeCategory(postDto.getCategory());
+        return tempPost;
+    }
 }

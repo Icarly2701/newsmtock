@@ -20,7 +20,7 @@ public class LikePost {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static LikePost makeLikeNews(Post post, User user){
+    public static LikePost makeLikePost(Post post, User user){
         LikePost likePost = new LikePost();
         likePost.post = post;
         likePost.user = user;
