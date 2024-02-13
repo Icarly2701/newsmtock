@@ -16,10 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -78,18 +76,56 @@ public class PostController {
     @GetMapping("/post/{postId}")
     public String viewPostDetail(@Login User user,
                                  @PathVariable("postId") Long postId,
+                                 @ModelAttribute("isLike") String isLike,
                                  Model model){
+
         Post post = postService.findById(postId);
         List<PostComment> postCommentList = postService.findCommentByPost(postId);
         List<PostImage> postImageList = postService.findImageByPost(postId);
-        for(PostImage p : postImageList){
-            log.info("sss = {}", p.getPostImagePath());
-        }
+
+        if(isLike.isEmpty()) postService.checkCountAdd(post);
+
         model.addAttribute("content",PostDetailDto.makePostDetailDto(post));
         model.addAttribute("postCommentList", postCommentList);
         model.addAttribute("postImageList", postImageList);
         model.addAttribute("viewUser", user);
         return "postdetailpage";
+    }
+
+    @PostMapping("/post/{postId}")
+    public String postLike(@Login User user,
+                           @RequestParam String action,
+                           @PathVariable("postId") Long postId,
+                           RedirectAttributes redirectAttributes){
+        Post post = postService.findById(postId);
+
+        if(action.equals("like")){
+            postService.addLikeCount(post, user);
+        }else if(action.equals("dislike")){
+            postService.subLikeCount(post, user);
+        }
+
+        redirectAttributes.addFlashAttribute("isLike", "notCount");
+        return "redirect:/post/" + postId;
+    }
+
+    @PostMapping("/post/{postId}/add")
+    public String postAddComment(@Login User user,
+                                 @PathVariable("postId") Long postId,
+                                 @RequestParam("postCommentContent") String postCommentContent,
+                                 RedirectAttributes redirectAttributes){
+        postService.addPostComment(postId, user, postCommentContent);
+        redirectAttributes.addFlashAttribute("isLike", "notCount");
+        return "redirect:/post/" + postId;
+    }
+
+    @PostMapping("/post/{postId}/delete")
+    public String postAddComment(@PathVariable("postId") Long postId,
+                                 @RequestParam("postCommentId") Long postCommentId,
+                                 RedirectAttributes redirectAttributes){
+        postService.deletePostComment(postCommentId);
+        redirectAttributes.addFlashAttribute("isLike", "notCount");
+        return "redirect:/post/" + postId;
     }
 
 }

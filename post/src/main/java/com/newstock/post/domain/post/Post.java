@@ -47,4 +47,15 @@ public class Post {
         return post;
     }
 
+    public void checkCount() {
+        this.postCheckCount++;
+    }
+
+    public void addLike() {
+        this.postLikeCount++;
+    }
+
+    public void subLike(){
+        this.postLikeCount--;
+    }
 }

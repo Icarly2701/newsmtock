@@ -10,7 +10,7 @@
           if (!sessionValue) {
               alert('로그인이 필요합니다!!');
           }else {
-            document.getElementById('recommendForm').action = '/news/' + /*[[${newsId}]]*/;
+            document.getElementById('recommendForm').action = '/post/' + /*[[${postId}]]*/;
             document.getElementById('actionInput').value = action;
             document.getElementById('recommendForm').submit();
           }
@@ -21,13 +21,13 @@
         if(!sessionValue){
           alert('로그인이 필요합니다!!');
         } else {
-          document.getElementById('commentForm').action =  '/post/' + /*[[${newsId} + '/add']]*/;
+          document.getElementById('commentForm').action =  '/post/' + /*[[${postId} + '/add']]*/;
           document.getElementById('commentForm').submit();
         }
       }
 
       function deleteComment(){
-        document.getElementById('deleteForm').action =  '/post/' + /*[[${newsId} + '/delete']]*/;
+        document.getElementById('deleteForm').action =  '/post/' + /*[[${postId} + '/delete']]*/;
         document.getElementById('deleteForm').submit();
       }
     </script>
@@ -134,7 +134,6 @@
           display: flex;
           justify-content: end;
           margin-top: 50px;
-          margin-right: 5%;
         "
         >
           <form method="post">

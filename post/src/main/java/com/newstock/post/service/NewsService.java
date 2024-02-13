@@ -171,6 +171,7 @@ public class NewsService {
         return newsCommentRepository.findAll(newsId);
     }
 
+    @Transactional
     public void addNewsComment(Long newsId, User user, String newsCommentContent) {
         News news = newsRepository.findById(newsId);
         NewsComment newsComment = NewsComment.makeNewsCommentItem(news, user, newsCommentContent);
