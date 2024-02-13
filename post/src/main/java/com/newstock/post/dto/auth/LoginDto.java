@@ -1,4 +1,4 @@
-package com.newstock.post.dto;
+package com.newstock.post.dto.auth;
 
 import lombok.Data;
 

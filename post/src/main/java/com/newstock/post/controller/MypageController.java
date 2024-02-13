@@ -4,6 +4,7 @@ import com.newstock.post.domain.news.News;
 import com.newstock.post.domain.user.PreferenceTitle;
 import com.newstock.post.domain.user.User;
 import com.newstock.post.service.NewsService;
+import com.newstock.post.service.PostService;
 import com.newstock.post.service.UserService;
 import com.newstock.post.web.Login;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import java.util.List;
 public class MypageController {
 
     private final NewsService newsService;
+    private final PostService postService;
     private final UserService userService;
 
     @GetMapping("/mypage")
@@ -38,6 +40,8 @@ public class MypageController {
         model.addAttribute("preferenceTitle", userPreferenceTitle);
         model.addAttribute("preferenceNews", aboutPreferenceTitle);
         model.addAttribute("recentNews", newsService.getRecentNewsList(user));
+        model.addAttribute("recentPost", postService.getRecentPostList(user));
+        model.addAttribute("myPost", postService.getMyPostList(user));
 
         return "mypage";
     }

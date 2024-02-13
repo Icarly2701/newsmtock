@@ -3,10 +3,11 @@ package com.newstock.post.controller;
 import com.newstock.post.domain.post.Post;
 import com.newstock.post.domain.post.PostComment;
 import com.newstock.post.domain.post.PostImage;
+import com.newstock.post.domain.post.RecentPost;
 import com.newstock.post.domain.user.User;
-import com.newstock.post.dto.PostDetailDto;
-import com.newstock.post.dto.PostDto;
-import com.newstock.post.dto.PostUpload;
+import com.newstock.post.dto.post.PostDetailDto;
+import com.newstock.post.dto.post.PostDto;
+import com.newstock.post.dto.post.PostUpload;
 import com.newstock.post.repository.file.FileStore;
 import com.newstock.post.repository.file.UploadFile;
 import com.newstock.post.service.PostService;
@@ -82,6 +83,15 @@ public class PostController {
         Post post = postService.findById(postId);
         List<PostComment> postCommentList = postService.findCommentByPost(postId);
         List<PostImage> postImageList = postService.findImageByPost(postId);
+
+        if(user != null){
+            RecentPost recentPost = postService.getRecentPostAlreadySeen(post, user);
+            if(recentPost == null){
+                postService.addRecentPost(post,user);
+            }else{
+                postService.updateRecentPost(recentPost);
+            }
+        }
 
         if(isLike.isEmpty()) postService.checkCountAdd(post);
 

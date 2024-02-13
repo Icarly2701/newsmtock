@@ -2,7 +2,7 @@ package com.newstock.post.domain.post;
 
 import com.newstock.post.domain.Category;
 import com.newstock.post.domain.user.User;
-import com.newstock.post.dto.PostDto;
+import com.newstock.post.dto.post.PostDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 

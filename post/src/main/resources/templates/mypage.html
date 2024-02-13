@@ -39,7 +39,9 @@
           </div>
           <div style="overflow: auto; height: 87%">
             <ul>
-              <li>a</li>
+              <li th:each="post : ${myPost}">
+                <a class="aText" th:text="${post.postTitle}" th:href="@{/post/{postId}(postId=${post.postId})}"></a>
+              </li>
             </ul>
           </div>
         </div>
@@ -50,7 +52,9 @@
           </div>
           <div style="overflow: auto; height: 87%">
             <ul>
-              <li>a</li>
+              <li th:each="post : ${recentPost}">
+                <a class="aText" th:text="${post.post.postTitle}" th:href="@{/post/{postId}(postId=${post.post.postId})}"></a>
+              </li>
             </ul>
           </div>
         </div>

@@ -1,4 +1,4 @@
-package com.newstock.post.repository;
+package com.newstock.post.repository.user;
 
 import com.newstock.post.domain.user.PreferenceTitle;
 import jakarta.persistence.EntityManager;

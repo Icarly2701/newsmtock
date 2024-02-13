@@ -1,7 +1,8 @@
-package com.newstock.post.repository;
+package com.newstock.post.repository.post;
 
 import com.newstock.post.domain.news.News;
 import com.newstock.post.domain.post.Post;
+import com.newstock.post.domain.user.User;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,5 +29,11 @@ public class PostRepository {
 
     public Post findById(Long postId) {
         return em.find( Post.class, postId);
+    }
+
+    public List<Post> findByUser(User user) {
+        return em.createQuery("select p from Post p where p.user.userId = :userId")
+                .setParameter("userId", user.getUserId())
+                .getResultList();
     }
 }

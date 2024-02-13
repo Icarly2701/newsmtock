@@ -1,4 +1,4 @@
-package com.newstock.post.dto;
+package com.newstock.post.dto.post;
 
 import com.newstock.post.domain.post.Post;
 import lombok.Data;

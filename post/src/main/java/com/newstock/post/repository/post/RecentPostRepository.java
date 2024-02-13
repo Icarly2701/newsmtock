@@ -1,4 +1,4 @@
-package com.newstock.post.repository;
+package com.newstock.post.repository.post;
 
 import com.newstock.post.domain.news.News;
 import com.newstock.post.domain.news.RecentNews;
@@ -26,7 +26,7 @@ public class RecentPostRepository {
     public List<RecentPost> getRecentPostAlreadySeen(Post post, User user) {
         return em.createQuery("select r from RecentPost r where r.user.userId = :userId and r.post.postId = :postId")
                 .setParameter("userId", user.getUserId())
-                .setParameter("newsId", post.getPostId())
+                .setParameter("postId", post.getPostId())
                 .getResultList();
     }
 

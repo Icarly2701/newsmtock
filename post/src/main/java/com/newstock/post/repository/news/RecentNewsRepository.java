@@ -1,4 +1,4 @@
-package com.newstock.post.repository;
+package com.newstock.post.repository.news;
 
 import com.newstock.post.domain.news.News;
 import com.newstock.post.domain.news.RecentNews;

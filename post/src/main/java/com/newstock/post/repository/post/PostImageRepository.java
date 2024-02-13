@@ -1,4 +1,4 @@
-package com.newstock.post.repository;
+package com.newstock.post.repository.post;
 
 import com.newstock.post.domain.post.PostImage;
 import jakarta.persistence.EntityManager;

@@ -1,4 +1,4 @@
-package com.newstock.post.dto;
+package com.newstock.post.dto.news;
 
 import lombok.Getter;
 import lombok.Setter;

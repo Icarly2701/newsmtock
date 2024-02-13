@@ -1,4 +1,4 @@
-package com.newstock.post.dto;
+package com.newstock.post.dto.post;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

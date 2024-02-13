@@ -1,4 +1,4 @@
-package com.newstock.post.repository;
+package com.newstock.post.repository.news;
 
 import com.newstock.post.domain.news.NewsComment;
 import jakarta.persistence.EntityManager;

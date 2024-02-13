@@ -2,10 +2,9 @@ package com.newstock.post.domain.user;
 
 import com.newstock.post.domain.Gender;
 import com.newstock.post.domain.news.RecentNews;
-import com.newstock.post.domain.post.PostContent;
 import com.newstock.post.domain.post.RecentPost;
 import com.newstock.post.domain.post.TempPost;
-import com.newstock.post.dto.SignupDto;
+import com.newstock.post.dto.auth.SignupDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 

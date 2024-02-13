@@ -1,11 +1,8 @@
 package com.newstock.post.domain.post;
 
-import com.newstock.post.dto.PostDto;
+import com.newstock.post.dto.post.PostDto;
 import jakarta.persistence.*;
 import lombok.Getter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter

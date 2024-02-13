@@ -2,8 +2,8 @@ package com.newstock.post.service;
 
 import com.newstock.post.domain.user.PreferenceTitle;
 import com.newstock.post.domain.user.User;
-import com.newstock.post.repository.PreferenceTitleRepository;
-import com.newstock.post.repository.UserRepository;
+import com.newstock.post.repository.user.PreferenceTitleRepository;
+import com.newstock.post.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

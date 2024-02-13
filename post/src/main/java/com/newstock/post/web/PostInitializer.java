@@ -2,7 +2,7 @@ package com.newstock.post.web;
 
 import com.newstock.post.domain.Gender;
 import com.newstock.post.domain.user.User;
-import com.newstock.post.dto.SignupDto;
+import com.newstock.post.dto.auth.SignupDto;
 import com.newstock.post.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;

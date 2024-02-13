@@ -1,14 +1,8 @@
 package com.newstock.post.service;
 
-import com.newstock.post.domain.news.DislikeNews;
-import com.newstock.post.domain.news.LikeNews;
 import com.newstock.post.domain.post.*;
 import com.newstock.post.domain.user.User;
-import com.newstock.post.repository.LikeDislikePostRepository;
-import com.newstock.post.repository.PostCommentRepository;
-import com.newstock.post.repository.PostImageRepository;
-import com.newstock.post.repository.PostRepository;
-import com.newstock.post.repository.file.FileStore;
+import com.newstock.post.repository.post.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +20,7 @@ public class PostService {
     private final PostCommentRepository postCommentRepository;
     private final PostImageRepository postImageRepository;
     private final LikeDislikePostRepository likeDislikePostRepository;
+    private final RecentPostRepository recentPostRepository;
 
     public List<Post> findAll(){
         return postRepository.findAll();
@@ -107,5 +102,32 @@ public class PostService {
     public void deletePostComment(Long postCommentId) {
         PostComment postComment = postCommentRepository.findById(postCommentId);
         postCommentRepository.deletePostComment(postComment);
+    }
+
+    public List<Post> getMyPostList(User user) {
+        return postRepository.findByUser(user);
+    }
+
+    public List<RecentPost> getRecentPostList(User user) {
+        return recentPostRepository.getRecentPost(user);
+    }
+
+    public RecentPost getRecentPostAlreadySeen(Post post, User user) {
+        List<RecentPost> recentPost = recentPostRepository.getRecentPostAlreadySeen(post, user);
+        if(recentPost.isEmpty()){
+            return null;
+        }
+        return recentPost.get(0);
+    }
+
+    @Transactional
+    public void addRecentPost(Post post, User user) {
+        RecentPost recentPost = RecentPost.makeRecentPost(post, user);
+        recentPostRepository.save(recentPost);
+    }
+
+    @Transactional
+    public void updateRecentPost(RecentPost recentPost){
+        recentPost.setRecentPostDate();
     }
 }

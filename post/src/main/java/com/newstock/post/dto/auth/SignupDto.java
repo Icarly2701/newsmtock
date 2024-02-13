@@ -1,4 +1,4 @@
-package com.newstock.post.dto;
+package com.newstock.post.dto.auth;
 
 import com.newstock.post.domain.Gender;
 import jakarta.validation.constraints.NotBlank;
