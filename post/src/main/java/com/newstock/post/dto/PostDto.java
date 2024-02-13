@@ -1,5 +1,6 @@
 package com.newstock.post.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.List;

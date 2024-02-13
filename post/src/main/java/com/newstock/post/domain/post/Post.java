@@ -5,6 +5,8 @@ import com.newstock.post.domain.user.User;
 import com.newstock.post.dto.PostDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import java.time.LocalDateTime;
 
@@ -21,8 +23,10 @@ public class Post {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
+    @Cascade(CascadeType.PERSIST)
     private Category category;
 
+    @Cascade(CascadeType.PERSIST)
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "post")
     private PostContent postContent;
 

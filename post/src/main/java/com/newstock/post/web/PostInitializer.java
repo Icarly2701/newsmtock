@@ -18,6 +18,7 @@ public class PostInitializer implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         makeDummyUser();
+
     }
 
     private void makeDummyUser() {

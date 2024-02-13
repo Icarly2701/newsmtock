@@ -6,12 +6,12 @@ body {
 }
 
 @font-face {
-    font-family: 'NanumGothic';
-    src: url('/fonts/NanumGothic.otf') format('opentype');
+  font-family: "NanumGothic";
+  src: url("/fonts/NanumGothic.otf") format("opentype");
 }
 
 * {
-    font-family: 'NanumGothic', sans-serif;
+  font-family: "NanumGothic", sans-serif;
 }
 
 .center {
@@ -57,7 +57,7 @@ body {
 .buttons {
   display: flex;
   margin-right: 30px;
-  color:white;
+  color: white;
 }
 
 .mainButtons {
@@ -136,7 +136,7 @@ input {
 
 .containerHead {
   width: 100%;
-  height: 13%;
+  height: 40px;
   border-bottom: none;
   display: flex;
   justify-content: start;
@@ -161,7 +161,7 @@ input {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #EBF0F9;
+  background-color: #ebf0f9;
   padding: 3%;
   font-weight: bold;
 }
@@ -316,9 +316,9 @@ input {
 .newPostGetFile {
   width: 100px;
   height: 30px;
-  background-color: #ffffff;
-  border-radius: 0.7rem;
-  border: 2px solid black;
+  background-color: #2f5597;
+  color:white;
+  border-radius: 0.3rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -370,7 +370,7 @@ input {
 }
 
 .detailPostHead {
-  background-color: #DAE3F3;
+  background-color: #dae3f3;
   border-top: 1.5px solid black;
   border-bottom: 1.5px solid black;
   text-indent: 20px;
@@ -469,7 +469,7 @@ input {
 .commandRegister {
   border: 2px solid black;
   border-radius: 0.3rem;
-  background-color: #DAE3F3;
+  background-color: #dae3f3;
   margin-top: 20px;
 }
 
@@ -494,11 +494,96 @@ input {
   width: 80%;
   height: 40px;
   border-radius: 0.3rem;
-  border:1.5px solid black;
+  border: 1.5px solid black;
+}
+
+.postMainContent {
+  margin-left: 5%;
+  margin-right: 5%;
+  border: none;
+  margin-top: 50px;
+}
+
+.postConstruct {
+  display: flex;
+  width: 100%;
+}
+
+.td_category {
+  width: 10%;
+  height: 10%;
+  text-align: center;
+}
+
+.td_title {
+  width: 45%;
+  height: 10%;
+  text-align: center;
+  cursor: pointer;
+}
+
+.td_nickname {
+  width: 20%;
+  height: 10%;
+  text-align: center;
+}
+
+.td_date {
+  width: 15%;
+  height: 10%;
+  text-align: center;
+}
+
+.td_count {
+  width: 10%;
+  height: 10%;
+  text-align: center;
+}
+
+.td_recommend {
+  width: 10%;
+  height: 10%;
+  text-align: center;
+}
+
+a.aSpecial:link,
+a.aSpecial:visited,
+a.aSpecial:hover,
+a.aSpecial:active {
+  text-decoration: none;
+  color: black;
+}
+
+.postTitleStyle {
+  font-size: x-large;
+}
+
+.posttitle{
+  border-radius: 0.3rem;
+  border: 2px solid black;
+  height:15px;
+  width:96%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 2%;
+  padding-right: 2%;
+  resize: none;
+}
+
+.imageContainer{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.postImage{
+    width: 90%;
+    object-fit: contain;
+    margin:15px;
 }
 
 textarea {
-  border-radius: 1rem;
+  border-radius: 0.3rem;
   border: 2px solid black;
   height: 80%;
   width: 96%;
@@ -532,12 +617,12 @@ li:nth-child(even) {
   background-color: white;
 }
 
-li.interestWord:nth-child(odd){
-    background-color: #DAE3F3;
+li.interestWord:nth-child(odd) {
+  background-color: #dae3f3;
 }
 
-li.interestWord:nth-child(even){
-    background-color: #EBF0F9;
+li.interestWord:nth-child(even) {
+  background-color: #ebf0f9;
 }
 
 li {
@@ -571,43 +656,6 @@ td {
   max-height: fit-content;
 }
 
-.td_category {
-  width: 10%;
-  height: 10%;
-  text-align: center;
-}
-
-.td_title {
-  width: 50%;
-  height: 10%;
-  text-align: center;
-  cursor: pointer;
-}
-
-.td_nickname {
-  width: 10%;
-  height: 10%;
-  text-align: center;
-}
-
-.td_date {
-  width: 20%;
-  height: 10%;
-  text-align: center;
-}
-
-.td_count {
-  width: 10%;
-  height: 10%;
-  text-align: center;
-}
-
-.td_recommend {
-  width: 10%;
-  height: 10%;
-  text-align: center;
-}
-
 input:focus {
   outline: none;
 }
@@ -632,19 +680,20 @@ a:active {
   color: white; /* 모든 상태에 대해 같은 색상을 사용 */
 }
 
-a.loginB{
-    color: #2f5597;
+a.loginB {
+  color: #2f5597;
 }
 
-a.aText{
-    color: black;
-    font-size: 16px;
+a.aText {
+  color: black;
+  font-size: 16px;
 }
 
 p {
   color: #172947;
   font-weight: 250;
   font-size: large;
+  margin-top : 0;
 }
 
 a {
@@ -655,8 +704,8 @@ a {
 
 li {
   cursor: pointer;
-  padding-top:5px;
-  padding-bottom:5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 /* Webkit 브라우저에서만 동작 */
 /* 수직 스크롤바 스타일 */

@@ -90,4 +90,17 @@ public class NewsController {
         return "redirect:/news/" + newsId;
     }
 
+    @GetMapping("/news/economic")
+    public String viewNews(Model model){
+        List<News> recentNewsAboutNasdaq = newsService.getRecentNewsAboutNasdaq();
+        List<News> recentNewsAboutStock = newsService.getRecentNewsAboutStock();
+
+        List<News> newsList = new ArrayList<>();
+        newsList.addAll(recentNewsAboutNasdaq);
+        newsList.addAll(recentNewsAboutStock);
+
+        model.addAttribute("newsList", newsList);
+        return "newspage";
+    }
+
 }

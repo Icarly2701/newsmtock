@@ -18,8 +18,8 @@
 
       <div class="postMainContent">
         <div class="containerHead">
-          <p class="postTitleStyle" style="font-weight: 800" th:text="${mainName + '&nbsp;'}"></p>
-          <p class="postTitleStyle">게시판</p>
+          <p class="postTitleStyle" style="font-weight: 800">경제&nbsp;</p>
+          <p class="postTitleStyle">뉴스</p>
         </div>
         <div
                 class="postConstruct"
@@ -50,10 +50,9 @@
             border-bottom: 1.5px solid lightgray;
           "
         >
-          <div class="td_title" style="cursor: auto">
+          <div class="td_title" style="cursor: auto; width:65%">
             <a class="aSpecial">제목</a>
           </div>
-          <div class="td_nickname"><a class="aSpecial">닉네임</a></div>
           <div class="td_date"><a class="aSpecial">날짜</a></div>
           <div class="td_count"><a class="aSpecial">조회</a></div>
           <div class="td_recommend"><a class="aSpecial">추천</a></div>
@@ -68,48 +67,31 @@
               padding-right: 0;
               cursor: auto;
             "
-                  th:each="post:${postList}"
+                  th:each="news:${newsList}"
           >
             <a
                     class="td_title aSpecial"
-                    style="height: auto; align-items: center; cursor: pointer"
-                    th:text="${post.postTitle}"
-                    th:href="@{'/post/' + ${post.postId}}"
-            ></a>
-            <a
-                    class="td_nickname aSpecial"
-                    style="height: auto; align-items: center"
-                    th:text="${post.user.nickname}"
+                    style="height: auto; align-items: center; cursor: pointer;width:65%"
+                    th:text="${news.newsHeadline}"
+                    th:href="@{'/news/' + ${news.newsId}}"
             ></a>
             <a
                     class="td_date aSpecial"
                     style="height: auto; align-items: center"
-                    th:text="${post.postDate}"
+                    th:text="${news.newsDate}"
             ></a>
             <a
                     class="td_count aSpecial"
                     style="height: auto; align-items: center"
-                    th:text="${post.postCheckCount}"
+                    th:text="${news.newsCheckCount}"
             ></a>
             <a
                     class="td_recommend aSpecial"
                     style="height: auto; align-items: center"
-                    th:text="${post.postLikeCount}"
+                    th:text="${news.newsLikeCount}"
             ></a>
           </li>
         </ul>
-      </div>
-      <div
-              style="
-          display: flex;
-          justify-content: end;
-          margin-top: 30px;
-          margin-right: 5%;
-        "
-      >
-          <button type="button" class="registerPickWord" style="width: 100px">
-            <a th:href="@{'/post/add/' + ${category}}">새 글 작성</a>
-          </button>
       </div>
     </div>
   </body>

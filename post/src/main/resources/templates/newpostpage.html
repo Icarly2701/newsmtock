@@ -23,19 +23,20 @@
           height: 100%;
         "
       >
-        <div class="newPostCategoryName">게시판 이름</div>
-        <form method="post" style="height: 80%; width: 100%">
-          <textarea placeholder="게시글을 작성해주세요."></textarea>
+        <div class="newPostCategoryName" th:text="${category}"></div>
+        <form method="post" style="height: 80%; width: 100%" enctype="multipart/form-data">
+          <textarea class="posttitle" placeholder="제목을 입력해주세요." name="title"></textarea>
+          <textarea placeholder="게시글을 작성해주세요." name="content"></textarea>
           <div style="width: 100%; margin-top: 20px; margin-bottom: 50px">
             <div
-              style="width: 40%; display: flex; justify-content: space-between"
+              style="width: 50%; display: flex; justify-content: space-between"
             >
               <label for="file">
                 <div class="newPostGetFile" style="font-size: small">
                   이미지 첨부
                 </div>
               </label>
-              <input type="file" id="file" />
+              <input type="file" id="file" multiple="multiple" name="fileList"/>
               <button type="submit" class="newPostGetFile">임시 저장</button>
               <button type="submit" class="newPostGetFile" style="width: 150px">
                 임시 저장 불러오기
@@ -48,14 +49,16 @@
             <button
               type="submit"
               class="newPostGetFile"
-              style="background-color: #ff6666"
+              style="background-color: white; color:#2f5597;
+                      border: 1px solid color:#2f5597"
             >
               작성 취소
             </button>
             <button
               type="submit"
               class="newPostGetFile"
-              style="background-color: #c2ff92; margin-left: 50px"
+              style="background-color: #2f5597; margin-left: 50px; color:white;
+                      border:none;"
             >
               글 등록
             </button>

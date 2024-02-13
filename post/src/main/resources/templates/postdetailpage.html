@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" th:href="@{/css/stylemain.css}" />
+    <title>Title</title>
+    <script th:inline="javascript">
+      function checkLogin(action) {
+          var sessionValue = /*[[${session.loginMember != null}]]*/ false;
+          if (!sessionValue) {
+              alert('로그인이 필요합니다!!');
+          }else {
+            document.getElementById('recommendForm').action = '/news/' + /*[[${newsId}]]*/;
+            document.getElementById('actionInput').value = action;
+            document.getElementById('recommendForm').submit();
+          }
+      }
+
+      function registerComment(){
+        var sessionValue = /*[[${session.loginMember != null}]]*/ false;
+        if(!sessionValue){
+          alert('로그인이 필요합니다!!');
+        } else {
+          document.getElementById('commentForm').action =  '/post/' + /*[[${newsId} + '/add']]*/;
+          document.getElementById('commentForm').submit();
+        }
+      }
+
+      function deleteComment(){
+        document.getElementById('deleteForm').action =  '/post/' + /*[[${newsId} + '/delete']]*/;
+        document.getElementById('deleteForm').submit();
+      }
+    </script>
+  </head>
+  <body
+    style="
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    "
+  >
+    <div class="center">
+      <div th:replace="head_fragment :: header"></div>
+      <div style="margin-left: 15%; margin-right: 15%; height: 100%">
+        <div class="newPostCategoryName" style="margin-top: 25px; width: 100px">게시판</div>
+        <div class="detailPostHead">
+          <div class="detailPostHeadContent" th:text="${content.title}">
+          </div>
+          <div class="detailPostHeadContent" th:text="${content.date}"></div>
+        </div>
+        <div class="detailPostSecond">
+          <div class="detailPostHeadContent" style="font-weight: 100" th:text="${content.nickname}"></div>
+          <div style="display: flex; justify-content: center">
+            <div class="detailPostHeadContent" style="font-weight: 100" th:text="'조회 수 ' + ${content.checkCount}"></div>
+            <div class="detailPostHeadContent" style="font-weight: 100" th:text="'추천 수 ' + ${content.likeCount}"></div>
+            <div class="detailPostHeadContent" style="font-weight: 100" th:text="'댓글 수 ' + ${postCommentList.size()}"></div>
+          </div>
+        </div>
+        <div class="imageContainer">
+          <img th:each="imageFile : ${postImageList}" class="postImage" th:src="|${imageFile.postImagePath}|"/>
+        </div>
+        <div class="detailPostContent" th:text="${content.content}" ></div>
+        <div class="detailRecommend">
+          <form method="post" class="detailRecommendLayout" id="recommendForm">
+            <button
+              class="detailRecommendBox"
+              style="color: #77d92b; width: 100px; border-color: #77d92b; cursor: pointer"
+              name="actionLike"
+              onclick="checkLogin('like')"
+              type="button"
+              th:text="${'추천'}"
+            ></button>
+            <div
+              class="detailRecommendBox"
+              style="
+                color: #b8b8b8;
+                border-radius: 2rem;
+                border: 2px solid #b8b8b8;
+                width: 50px;
+              "
+              th:text="${content.likeCount}"
+            ></div>
+            <button
+              class="detailRecommendBox"
+              style="color: #ff7474; width: 100px; border-color: #ff7474; cursor: pointer"
+              name="actionDisLike"
+              onclick="checkLogin('dislike')"
+              type="button"
+              th:text="${'비추천'}"
+            ></button>
+            <input type="hidden" id="actionInput" name="action" th:value="${null}" />
+          </form>
+        </div>
+        <div class="detailCommandHead" th:text="'댓글 수 ' + ${postCommentList.size()}"></div>
+        <div class="detailCommandLayout">
+          <div class="detailCommandDetail" th:each="postComment:${postCommentList}">
+            <div class="detailCommandLayoutName">
+              <div style="display:flex; justify-content:space-between; width:100%">
+                <div style="display:flex;">
+                  <div class="detailCommandNickname" th:text="${postComment.user.nickname}"></div>
+                  <div class="detailCommandDate" th:text="${postComment.postCommentDate}"></div>
+                </div>
+                <form th:if="${session.loginMember != null && viewUser.userId != null && postComment.user.userId == viewUser.userId}" method="post" id="deleteForm">
+                  <button type="button" class="deleteCommentButton" onclick="deleteComment()" th:text="${'삭제'}"></button>
+                  <input type="hidden" name="postCommentId" th:value="${postComment.postCommentId}"/>
+                </form>
+              </div>
+            </div>
+            <div class="detailCommandText" th:text="${postComment.postCommentContent}"></div>
+          </div>
+        </div>
+        <div class="commandRegister">
+          <div class="commandRegisterTitle">댓글 쓰기</div>
+          <form method="post" class="commandRegisterForm" id="commentForm" onsubmit="return false">
+            <input
+              th:placeholder="${session.loginMember != null} ? '' : '댓글 작성 하실려면 로그인이 필요합니다. 로그인하시겠습니까?'"
+              name="postCommentContent"
+              class="commandInput"
+              type="text"
+            />
+            <button
+              class="newPostCategoryName"
+              style="margin-top: 0; width: 80px; cursor:pointer"
+              onclick="registerComment()"
+              type="button"
+            >
+              등록하기
+            </button>
+          </form>
+        </div>
+        <div
+                style="
+          display: flex;
+          justify-content: end;
+          margin-top: 50px;
+          margin-right: 5%;
+        "
+        >
+          <form method="post">
+            <button type="submit" class="registerPickWord" style="width: 150px">
+              새 글 작성
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
