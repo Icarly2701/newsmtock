@@ -1,5 +1,6 @@
 package com.newstock.post.controller;
 
+import com.newstock.post.domain.news.News;
 import com.newstock.post.domain.post.Post;
 import com.newstock.post.domain.post.PostComment;
 import com.newstock.post.domain.post.PostImage;
@@ -17,9 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -38,7 +41,8 @@ public class PostController {
 
     @PostMapping("/post/add/{category}")
     public String addPost(@Login User user,
-                          @ModelAttribute("postItem") PostUpload postUpload,
+                          @PathVariable("category") String category,
+                          @Validated @ModelAttribute("postItem") PostUpload postUpload,
                           BindingResult bindingResult){
 
         if (bindingResult.hasErrors()) {
@@ -50,7 +54,7 @@ public class PostController {
         PostDto postDto = new PostDto();
         postDto.setTitle(postUpload.getTitle());
         postDto.setPostContent(postUpload.getContent());
-        postDto.setCategory("stock");
+        postDto.setCategory(category);
         Post post = Post.makePost(postDto, user);
         Long postId = postService.savePost(post);
 
@@ -67,10 +71,48 @@ public class PostController {
     }
 
     @GetMapping("/post/stock")
-    public String viewPost(Model model){
-        model.addAttribute("postList", postService.findAll());
+    public String viewPostStockBoard(@RequestParam(value = "target", required = false) String target,
+                                     Model model){
+
+        List<Post> postList = postService.findAboutTopic("stock");;
+
+        Comparator<Post> postComparator;
+
+        if(target != null) {
+            postComparator = switch (target) {
+                case "count" -> Comparator.comparingInt(Post::getPostCheckCount).reversed();
+                case "like" -> Comparator.comparingInt(Post::getPostLikeCount).reversed();
+                default -> Comparator.comparing(Post::getPostDate).reversed();
+            };
+            postList.sort(postComparator);
+        }
+
+        model.addAttribute("postList", postList);
         model.addAttribute("mainName", "주식");
         model.addAttribute("category", "stock");
+        return "postpage";
+    }
+
+    @GetMapping("/post/freeBoard")
+    public String viewPostFreeBoard(@RequestParam(value = "target", required = false) String target,
+                                    Model model){
+
+        List<Post> postList = postService.findAboutTopic("freeBoard");;
+
+        Comparator<Post> postComparator;
+
+        if(target != null) {
+            postComparator = switch (target) {
+                case "count" -> Comparator.comparingInt(Post::getPostCheckCount).reversed();
+                case "like" -> Comparator.comparingInt(Post::getPostLikeCount).reversed();
+                default -> Comparator.comparing(Post::getPostDate).reversed();
+            };
+            postList.sort(postComparator);
+        }
+
+        model.addAttribute("postList", postList);
+        model.addAttribute("mainName", "자유");
+        model.addAttribute("category", "freeBoard");
         return "postpage";
     }
 
@@ -95,7 +137,7 @@ public class PostController {
 
         if(isLike.isEmpty()) postService.checkCountAdd(post);
 
-        model.addAttribute("content",PostDetailDto.makePostDetailDto(post));
+        model.addAttribute("content",PostDetailDto.makePostDetailDto(post, user));
         model.addAttribute("postCommentList", postCommentList);
         model.addAttribute("postImageList", postImageList);
         model.addAttribute("viewUser", user);

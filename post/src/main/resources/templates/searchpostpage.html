@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" th:href="@{/css/stylemain.css}" />
+    <title>Title</title>
+    <script th:inline="javascript">
+      function clickContentTitle() {
+        updateQuery("target", "title_content");
+      }
+
+      function clickTitle() {
+        updateQuery("target", "title");
+      }
+
+      function clickContent() {
+        updateQuery("target", "content");
+      }
+
+      function updateQuery(key, value) {
+        var currentUrl = window.location.href;
+        var url = new URL(currentUrl);
+        url.searchParams.set(key, value);
+        window.location.href = url.href;
+      }
+    </script>
+  </head>
+  <body
+    style="
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    "
+  >
+    <div class="center">
+      <div th:replace="head_fragment :: header"></div>
+      <div
+        style="
+          display: flex;
+          margin-top: 25px;
+          margin-left: 5%;
+          margin-right: 5%;
+          flex-direction: column;
+        "
+      >
+        <div class="searchLabel">
+          <div class="searchLabelContent">
+            <div
+              class="searchLabelContenttext"
+              style="border-right: 1.5px solid black"
+              onclick="clickContentTitle()"
+            >
+              제목+내용
+            </div>
+            <div
+              class="searchLabelContenttext"
+              style="border-right: 1.5px solid black"
+              onclick="clickTitle()"
+            >
+              제목
+            </div>
+            <div class="searchLabelContenttext"
+                 onclick="clickContent()">내용</div>
+          </div>
+          <div class="searchLabelContent">
+            <div
+              class="searchLabelContenttext"
+              style="border-right: 1.5px solid black"
+            >
+              날짜순
+            </div>
+            <div class="searchLabelContenttext">정확도순</div>
+          </div>
+        </div>
+        <div class="searchContent" th:each="content : ${searchData}" >
+          <div class="searchContentTitle"><a style="justify-content: flex-start; color:black" th:text="${content.postTitle}" th:href="@{/post/{postId}(postId=${content.postId})}"></a></div>
+          <div class="searchContentContent" th:text="${content.postContent.postContentText}">
+          </div>
+          <div class="searchLabelContent">
+            <div
+              class="searchLabelContenttext"
+              style="border-right: 1.5px solid black"
+              th:text="${content.Category.categoryContent}"
+            ></div>
+            <div
+              class="searchLabelContenttext"
+              style="border-right: 1.5px solid black"
+              th:text="${content.postDate}"
+            ></div>
+            <div class="searchLabelContenttext" th:text="${content.postCheckCount}"></div>
+          </div>
+        </div>
+      </div>
+      <div
+              style="
+          display: flex;
+          justify-content: end;
+          margin-top: 30px;
+          margin-right: 5%;
+        "
+      >
+        <form method="post">
+          <button type="submit" class="registerPickWord" style="width: 150px">
+            새 글 작성
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

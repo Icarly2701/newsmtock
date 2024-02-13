@@ -39,8 +39,15 @@
           </div>
           <div style="overflow: auto; height: 87%">
             <ul>
-              <li th:each="post : ${myPost}">
-                <a class="aText" th:text="${post.postTitle}" th:href="@{/post/{postId}(postId=${post.postId})}"></a>
+              <li th:each="post : ${myPost}" style="display:flex; justify-content:space-between; align-content:center;">
+                <a class="aText" style="overflow:hidden; width:50%" th:text="${post.postTitle}" th:href="@{/post/{postId}(postId=${post.postId})}"></a>
+                <form method="post" id="deleteUpdateForm">
+                  <div style="display:flex; width:100%; justify-content:space-between">
+                  <button type="button" class="deleteCommentButton" onclick="deleteComment()" th:text="${'삭제'}"></button>
+                  <input type="hidden" name="postId" th:value="${post.postId}"/>
+                  <button type="button" class="deleteCommentButton" onclick="updateComment()" th:text="${'수정'}"></button>
+                  </div>
+                </form>
               </li>
             </ul>
           </div>

@@ -136,10 +136,18 @@
           margin-top: 50px;
         "
         >
-          <form method="post">
-            <button type="submit" class="registerPickWord" style="width: 150px">
+          <form method="post" style="width:100%">
+            <div style="display:flex; justify-content:space-between">
+            <button style="width:150px" th:if="${session.loginMember != null && viewUser.userId != null && content.user.userId == viewUser.userId}" class="registerPickWord">
+              작성 글 삭제
+            </button>
+            <button style="width:150px" th:if="${session.loginMember != null && viewUser.userId != null && content.user.userId == viewUser.userId}" class="registerPickWord">
+              작성 글 수정
+            </button>
+            <button type="submit" class="registerPickWord" style="width: 100px">
               새 글 작성
             </button>
+            </div>
           </form>
         </div>
       </div>

@@ -151,7 +151,7 @@ input {
   margin-left: 5%;
   margin-right: 5%;
   border: none;
-  margin-top: 1%;
+  margin-top: 50px;
   height: 450px;
 }
 
@@ -325,6 +325,7 @@ input {
   align-items: center;
   font-weight: bold;
   cursor: pointer;
+  border:none;
 }
 
 .searchLabel {
@@ -663,6 +664,7 @@ input:focus {
 
 button {
   cursor: pointer;
+  box-shadow: none;
 }
 
 tr:nth-child(odd) {
@@ -705,7 +707,7 @@ a {
 
 li {
   cursor: pointer;
-  padding-top: 5px;
+  padding-top: 15px;
   padding-bottom: 5px;
 }
 /* Webkit 브라우저에서만 동작 */

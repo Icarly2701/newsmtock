@@ -1,6 +1,7 @@
 package com.newstock.post.dto.post;
 
 import com.newstock.post.domain.post.Post;
+import com.newstock.post.domain.user.User;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -14,8 +15,9 @@ public class PostDetailDto {
     private int checkCount;
     private int likeCount;
     private String content;
+    private User user;
 
-    public static PostDetailDto makePostDetailDto(Post post){
+    public static PostDetailDto makePostDetailDto(Post post, User user){
         PostDetailDto postDetailDto = new PostDetailDto();
         postDetailDto.date = post.getPostDate();
         postDetailDto.title = post.getPostTitle();
@@ -23,6 +25,7 @@ public class PostDetailDto {
         postDetailDto.checkCount = post.getPostCheckCount();
         postDetailDto.likeCount = post.getPostLikeCount();
         postDetailDto.content = post.getPostContent().getPostContentText();
+        postDetailDto.user = user;
         return postDetailDto;
     }
 }

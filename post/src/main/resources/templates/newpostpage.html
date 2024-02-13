@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <link rel="stylesheet" th:href="@{/css/stylemain.css}" />
     <title>Title</title>
+    <script>
+      function goBack() {
+          window.history.back();
+      }
+    </script>
   </head>
   <body
     style="
@@ -47,10 +52,10 @@
             style="display: flex; justify-content: end; padding-bottom: 30px"
           >
             <button
-              type="submit"
+              type="button"
               class="newPostGetFile"
-              style="background-color: white; color:#2f5597;
-                      border: 1px solid color:#2f5597"
+              style="background-color: white; border:1px solid #2f5597; color: #2f5597"
+              onclick="goBack()"
             >
               작성 취소
             </button>

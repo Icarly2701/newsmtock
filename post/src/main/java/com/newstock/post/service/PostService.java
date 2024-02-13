@@ -22,8 +22,8 @@ public class PostService {
     private final LikeDislikePostRepository likeDislikePostRepository;
     private final RecentPostRepository recentPostRepository;
 
-    public List<Post> findAll(){
-        return postRepository.findAll();
+    public List<Post> findAboutTopic(String category){
+        return postRepository.findAboutTopic(category);
     }
 
     @Transactional
@@ -46,6 +46,18 @@ public class PostService {
 
     public Post findById(Long postId) {
         return postRepository.findById(postId);
+    }
+
+    public List<Post> findByTopic(String topic){
+        return postRepository.findByTopic(topic);
+    }
+
+    public List<Post> findByTopicTitle(String topic){
+        return postRepository.findByTopicTitle(topic);
+    }
+
+    public List<Post> findByTopicContent(String topic){
+        return postRepository.findByTopicContent(topic);
     }
 
     @Transactional
@@ -129,5 +141,17 @@ public class PostService {
     @Transactional
     public void updateRecentPost(RecentPost recentPost){
         recentPost.setRecentPostDate();
+    }
+
+    public List<Post> findAboutTopicCount(String stock) {
+        return postRepository.findAboutTopicCount(stock);
+    }
+
+    public List<Post> findAboutTopicLike(String stock) {
+        return postRepository.findAboutTopicLike(stock);
+    }
+
+    public List<Post> findAboutTopicDate(String stock) {
+        return postRepository.findAboutTopicDate(stock);
     }
 }

@@ -17,9 +17,10 @@ public class PostRepository {
 
     private final EntityManager em;
 
-    public List<Post> findAll(){
-        return em.createQuery("select p from Post p", Post.class)
-            .getResultList();
+    public List<Post> findAboutTopic(String category){
+        return em.createQuery("select p from Post p where p.category.categoryContent = :category", Post.class)
+                .setParameter("category", category)
+                .getResultList();
     }
 
     public Long save(Post post){
@@ -34,6 +35,43 @@ public class PostRepository {
     public List<Post> findByUser(User user) {
         return em.createQuery("select p from Post p where p.user.userId = :userId")
                 .setParameter("userId", user.getUserId())
+                .getResultList();
+    }
+
+    public List<Post> findByTopic(String topic){
+        return em.createQuery("select p from Post p join p.postContent pc where p.postTitle LIKE :title or pc.postContentText LIKE :contentText order by p.postDate DESC", Post.class)
+                .setParameter("title","%" + topic + "%")
+                .setParameter("contentText", "%" + topic + "%")
+                .getResultList();
+    }
+
+    public List<Post> findByTopicTitle(String topic){
+        return em.createQuery("select p from Post p join p.postContent pc where p.postTitle LIKE :title order by p.postDate DESC", Post.class)
+                .setParameter("title","%" + topic + "%")
+                .getResultList();
+    }
+
+    public List<Post> findByTopicContent(String topic){
+        return em.createQuery("select p from Post p join p.postContent pc where pc.postContentText LIKE :contentText order by p.postDate DESC", Post.class)
+                .setParameter("contentText", "%" + topic + "%")
+                .getResultList();
+    }
+
+    public List<Post> findAboutTopicCount(String stock) {
+        return em.createQuery("select p from Post p where p.category.categoryContent = :topic order by p.postCheckCount DESC", Post.class)
+                .setParameter("topic",stock)
+                .getResultList();
+    }
+
+    public List<Post> findAboutTopicLike(String stock) {
+        return em.createQuery("select p from Post p where p.category.categoryContent = :topic order by p.postLikeCount DESC", Post.class)
+                .setParameter("topic",stock)
+                .getResultList();
+    }
+
+    public List<Post> findAboutTopicDate(String stock) {
+        return em.createQuery("select p from Post p where p.category.categoryContent = :topic order by p.postDate DESC", Post.class)
+                .setParameter("topic",stock)
                 .getResultList();
     }
 }

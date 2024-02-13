@@ -4,6 +4,26 @@
     <meta charset="UTF-8" />
     <link rel="stylesheet" th:href="@{/css/stylemain.css}" />
     <title>Title</title>
+    <script th:inline="javascript">
+      function clickCount() {
+        updateQuery("target", "count");
+      }
+
+      function clickLike() {
+        updateQuery("target", "like");
+      }
+
+      function clickDate() {
+        updateQuery("target", "date");
+      }
+
+      function updateQuery(key, value) {
+        var currentUrl = window.location.href;
+        var url = new URL(currentUrl);
+        url.searchParams.set(key, value);
+        window.location.href = url.href;
+      }
+    </script>
   </head>
   <body
     style="
@@ -25,8 +45,8 @@
                 class="postConstruct"
                 style="margin-bottom: 10px; justify-content: end; width: 100%"
         >
-          <p style="font-size: medium; cursor: pointer">조회순</p>
-          <p style="font-size: medium; margin-left: 20px; cursor: pointer">
+          <p style="font-size: medium; cursor: pointer" onclick="clickCount()">조회순</p>
+          <p style="font-size: medium; margin-left: 20px; cursor: pointer" onclick="clickLike()">
             인기순
           </p>
           <p
@@ -36,6 +56,7 @@
               margin-right: 3%;
               cursor: pointer;
             "
+                  onclick="clickDate()"
           >
             날짜순
           </p>

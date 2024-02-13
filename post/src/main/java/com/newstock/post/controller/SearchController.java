@@ -2,7 +2,9 @@ package com.newstock.post.controller;
 
 import com.newstock.post.domain.Target;
 import com.newstock.post.domain.news.News;
+import com.newstock.post.domain.post.Post;
 import com.newstock.post.service.NewsService;
+import com.newstock.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -17,13 +19,18 @@ import java.util.List;
 public class SearchController {
 
     private final NewsService newsService;
+    private final PostService postService;
     @GetMapping("/search")
     public String searchDetail(@RequestParam("keyword") String keyword,
                                @RequestParam("type") String type,
                                @RequestParam(value = "target", required = false) Target target,
                                Model model){
 
-        if(type.equals("news") && !keyword.trim().isEmpty()){
+        if(keyword.trim().isEmpty()){
+            return "searchpage";
+        }
+
+        if(type.equals("news")){
             newsService.getNewsData(keyword);
             List<News> newsData;
             if(target != null){
@@ -36,8 +43,25 @@ public class SearchController {
                 newsData = newsService.getRecentNewsAboutTopic(keyword);
             }
             model.addAttribute("searchData", newsData);
-        }
+            return "searchpage";
+        }else if(type.equals("posts")){
+            log.info("post");
+            List<Post> postData;
+            if(target != null){
+                postData = switch (target) {
+                    case title_content -> postService.findByTopic(keyword);
+                    case title -> postService.findByTopicTitle(keyword);
+                    default -> postService.findByTopicContent(keyword);
+                };
+            }else{
+                postData = postService.findByTopic(keyword);
+            }
 
+
+            log.info("post = {}", postData);
+            model.addAttribute("searchData", postData);
+            return "searchpostpage";
+        }
         return "searchpage";
     }
 }

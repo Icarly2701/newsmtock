@@ -91,13 +91,24 @@ public class NewsController {
     }
 
     @GetMapping("/news/economic")
-    public String viewNews(Model model){
+    public String viewNews(@RequestParam(value = "target", required = false) String target,Model model){
         List<News> recentNewsAboutNasdaq = newsService.getRecentNewsAboutNasdaq();
         List<News> recentNewsAboutStock = newsService.getRecentNewsAboutStock();
 
         List<News> newsList = new ArrayList<>();
         newsList.addAll(recentNewsAboutNasdaq);
         newsList.addAll(recentNewsAboutStock);
+
+        Comparator<News> newsComparator;
+
+        if(target != null) {
+            newsComparator = switch (target) {
+                case "count" -> Comparator.comparingInt(News::getNewsCheckCount).reversed();
+                case "like" -> Comparator.comparingInt(News::getNewsLikeCount).reversed();
+                default -> Comparator.comparing(News::getNewsDate).reversed();
+            };
+            newsList.sort(newsComparator);
+        }
 
         model.addAttribute("newsList", newsList);
         return "newspage";
