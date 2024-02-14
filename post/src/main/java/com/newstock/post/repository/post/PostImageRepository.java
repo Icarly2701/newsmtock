@@ -30,4 +30,11 @@ public class PostImageRepository {
                 .setParameter("postContentId", postContentId)
                 .executeUpdate();
     }
+
+    public void deleteByPostContentIdExceptImagePath(Long postContentId, List<String> imagePath) {
+        int i = em.createQuery("DELETE FROM PostImage pi WHERE pi.postContent.id = :postContentId AND pi.postImagePath NOT IN :imagePath")
+                .setParameter("postContentId", postContentId)
+                .setParameter("imagePath", imagePath)
+                .executeUpdate();
+    }
 }

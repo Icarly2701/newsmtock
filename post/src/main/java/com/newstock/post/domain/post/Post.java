@@ -3,6 +3,8 @@ package com.newstock.post.domain.post;
 import com.newstock.post.domain.Category;
 import com.newstock.post.domain.user.User;
 import com.newstock.post.dto.post.PostDto;
+import com.newstock.post.dto.post.PostUpload;
+import com.newstock.post.dto.post.PostUploadUpdate;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.Cascade;
@@ -45,6 +47,11 @@ public class Post {
         post.postLikeCount = 0;
         post.postTitle  = postDto.getTitle();
         return post;
+    }
+
+    public void updatePost(PostUploadUpdate postUpload){
+        this.postTitle = postUpload.getTitle();
+        this.postContent.setPostContent(postUpload.getContent());
     }
 
     public void checkCount() {

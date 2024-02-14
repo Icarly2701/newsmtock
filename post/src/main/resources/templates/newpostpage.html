@@ -4,9 +4,24 @@
     <meta charset="UTF-8" />
     <link rel="stylesheet" th:href="@{/css/stylemain.css}" />
     <title>Title</title>
+    <style>
+      .preview-container {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .preview-img {
+        max-width: 150px;
+        max-height: 150px;
+        margin: 5px;
+      }
+
+    </style>
     <script>
       function goBack() {
           window.history.back();
+      }
+      function removeImage(element) {
+        element.parentElement.remove();
       }
     </script>
   </head>
@@ -41,15 +56,39 @@
                   이미지 첨부
                 </div>
               </label>
-              <input type="file" id="file" multiple="multiple" name="fileList"/>
+              <input type="file" id="file" multiple="multiple" name="fileList" onchange="previewFiles()"/>
               <button type="submit" class="newPostGetFile">임시 저장</button>
               <button type="submit" class="newPostGetFile" style="width: 150px">
                 임시 저장 불러오기
               </button>
             </div>
           </div>
+          <div class="preview-container" id="previewContainer"></div>
+          <script>
+            function previewFiles() {
+              const fileInput = document.getElementById("file");
+              const previewContainer = document.getElementById("previewContainer");
+              previewContainer.innerHTML = "";
+
+              const files = fileInput.files;
+
+              for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+
+                reader.onload = function (event) {
+                  const imgElement = document.createElement("img");
+                  imgElement.className = "preview-img";
+                  imgElement.src = event.target.result;
+                  previewContainer.appendChild(imgElement);
+                };
+
+                reader.readAsDataURL(file);
+              }
+            }
+          </script>
           <div
-            style="display: flex; justify-content: end; padding-bottom: 30px"
+                  style="display: flex; justify-content: end; padding-bottom: 30px"
           >
             <button
               type="button"

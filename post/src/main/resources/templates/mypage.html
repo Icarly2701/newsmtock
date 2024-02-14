@@ -41,9 +41,9 @@
             <ul>
               <li th:each="post : ${myPost}" style="display:flex; justify-content:space-between; align-content:center;">
                 <a class="aText" style="overflow:hidden; width:50%" th:text="${post.postTitle}" th:href="@{/post/{postId}(postId=${post.postId})}"></a>
-                <div style="display:flex; width:60%; justify-content:space-between">
-                    <button type="button" class="deleteCommentButton"><a style="color:black" th:href="@{/post/update/{postId}(postId=${post.postId})}">수정</a></button>
-                    <button type="button" class="deleteCommentButton"><a style="color:black" th:href="@{/post/delete/{postId}(postId=${post.postId})}">삭제</a></button>
+                <div style="display:flex; justify-content:end">
+                    <button type="button" class="deleteCommentButton" style="margin-right:10px"><a style="color:black" th:href="@{/post/update/{postId}(postId=${post.postId})}">수정</a></button>
+                    <button type="button" class="deleteCommentButton" style="margin-left:10px"><a style="color:black" th:href="@{/post/delete/{postId}(postId=${post.postId})}">삭제</a></button>
                 </div>
               </li>
             </ul>

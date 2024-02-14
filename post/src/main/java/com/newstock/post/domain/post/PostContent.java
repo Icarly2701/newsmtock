@@ -23,4 +23,8 @@ public class PostContent {
         postContent.post = post;
         return postContent;
     }
+
+    public void setPostContent(String content) {
+        this.postContentText = content;
+    }
 }

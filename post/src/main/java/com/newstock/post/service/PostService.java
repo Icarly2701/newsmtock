@@ -2,6 +2,7 @@ package com.newstock.post.service;
 
 import com.newstock.post.domain.post.*;
 import com.newstock.post.domain.user.User;
+import com.newstock.post.dto.post.PostUploadUpdate;
 import com.newstock.post.repository.post.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -165,5 +166,16 @@ public class PostService {
         postCommentRepository.deleteByPost(postId);
         postImageRepository.deleteByPostContentId(postContentId);
         postRepository.deletePost(post);
+    }
+
+    @Transactional
+    public void updatePost(Post post, PostUploadUpdate postUpload) {
+        post.updatePost(postUpload);
+
+    }
+
+    @Transactional
+    public void updatePostImage(Long postContentId, List<String> imagePath) {
+        postImageRepository.deleteByPostContentIdExceptImagePath(postContentId, imagePath);
     }
 }

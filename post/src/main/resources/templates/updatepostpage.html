@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" th:href="@{/css/stylemain.css}" />
+    <title>Title</title>
+
+    <script>
+      function goBack() {
+          window.history.back();
+      }
+      document.getElementById("myForm").addEventListener("submit", function(event) {
+        var imagePaths = document.getElementsByName("imagePaths");
+        for (var i = 0; i < imagePaths.length; i++) {
+            var imagePath = imagePaths[i].value;
+            var input = document.createElement("input");
+            input.setAttribute("type", "hidden");
+            input.setAttribute("name", "imagePaths[]");
+            input.setAttribute("value", imagePath);
+            this.appendChild(input);
+        }
+    });
+    </script>
+  </head>
+  <body
+    style="
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    "
+  >
+    <div class="center">
+      <div th:replace="head_fragment :: header"></div>
+      <div
+        style="
+          margin-left: 5%;
+          margin-right: 5%;
+          margin-bottom: 5%;
+          height: 100%;
+        "
+      >
+        <div class="newPostCategoryName" th:text="${post.category.categoryContent}"></div>
+        <form method="post" style="height: 80%; width: 100%" enctype="multipart/form-data">
+          <textarea class="posttitle" placeholder="제목을 입력해주세요." name="title" th:text="${post.postTitle}"></textarea>
+          <textarea placeholder="게시글을 작성해주세요." name="content" th:text="${post.postContent.postContentText}"></textarea>
+          <div style="width: 100%; margin-top: 20px; margin-bottom: 50px">
+            <div
+              style="width: 50%; display: flex; justify-content: space-between"
+            >
+              <label for="file">
+                <div class="newPostGetFile" style="font-size: small">
+                  이미지 첨부
+                </div>
+              </label>
+              <input type="file" id="file" multiple="multiple" name="fileList" onchange="previewFiles()"/>
+            </div>
+          </div>
+          <div class="imageBox">
+            <div th:each="imageFile : ${postImageList}" style="display:flex">
+              <img class="postImage" style="margin-right:10px; margin-left:10px" th:src="|${imageFile.postImagePath}|"/>
+              <input type="hidden" name="imagePaths" th:value="${imageFile.postImagePath}">
+              <button type="button" class="deleteCommentButton" onclick="removeImage(this)">삭제</button>
+              <input type="hidden" name="deleted_images[]" th:value="${imageFile.postImagePath}">
+              <script>
+                function removeImage(button) {
+                    var imageDiv = button.parentElement;
+                    var image = imageDiv.querySelector("img");
+                    var hiddenInput = imageDiv.querySelector("input[type=hidden]");
+                    hiddenInput.parentNode.removeChild(hiddenInput);
+                    imageDiv.parentNode.removeChild(imageDiv);
+                }
+              </script>
+            </div>
+          </div>
+          <div
+                  style="display: flex; justify-content: end; padding-bottom: 30px"
+          >
+            <button
+              type="button"
+              class="newPostGetFile"
+              style="background-color: white; border:1px solid #2f5597; color: #2f5597"
+              onclick="goBack()"
+            >
+              수정 취소
+            </button>
+            <button
+              type="submit"
+              class="newPostGetFile"
+              style="background-color: #2f5597; margin-left: 50px; color:white;
+                      border:none;"
+            >
+              글 수정
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

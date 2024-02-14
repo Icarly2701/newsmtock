@@ -9,6 +9,7 @@ import com.newstock.post.domain.user.User;
 import com.newstock.post.dto.post.PostDetailDto;
 import com.newstock.post.dto.post.PostDto;
 import com.newstock.post.dto.post.PostUpload;
+import com.newstock.post.dto.post.PostUploadUpdate;
 import com.newstock.post.repository.file.FileStore;
 import com.newstock.post.repository.file.UploadFile;
 import com.newstock.post.service.PostService;
@@ -182,9 +183,47 @@ public class PostController {
 
     @GetMapping("/post/delete/{postId}")
     public String deletePost(@PathVariable("postId") Long postId){
-        log.info("삭제");
         postService.deletePost(postId);
         return "redirect:/mypage";
+    }
+
+    @GetMapping("/post/update/{postId}")
+    public String viewUpdatePost(@PathVariable("postId") Long postId,
+                             Model model){
+        Post post = postService.findById(postId);
+        List<PostImage> postImageList = postService.findImageByPost(postId);
+
+        model.addAttribute("post", post);
+        model.addAttribute("postImageList", postImageList);
+
+        return "updatepostpage";
+    }
+
+    @PostMapping("/post/update/{postId}")
+    public String updatePost(@Login User user,
+                             @PathVariable("postId") Long postId,
+                             @Validated @ModelAttribute("postItem") PostUploadUpdate postUpload,
+                             BindingResult bindingResult){
+
+        Post post = postService.findById(postId);
+
+        if (bindingResult.hasErrors()) {
+            log.info("sadfsadf");
+            return "redirect:/post/update/" + postId;
+        }
+
+        postService.updatePost(post, postUpload);
+        postService.updatePostImage(post.getPostContent().getPostContentId(), postUpload.getImagePaths());
+        // 실제 파일 저장
+        List<UploadFile> uploadFiles = fileStore.storeFiles(postUpload.getFileList());
+
+        //데이터베이스에 파일 이름 저장
+        for(UploadFile uploadFile: uploadFiles){
+            PostImage postImage = PostImage.makePostImage(uploadFile.getFilePath(), post.getPostContent());
+            postService.savePostImage(postImage);
+        }
+
+        return "redirect:/post/" + postId;
     }
 
 }
