@@ -74,4 +74,8 @@ public class PostRepository {
                 .setParameter("topic",stock)
                 .getResultList();
     }
+
+    public void deletePost(Post post) {
+        em.remove(post);
+    }
 }

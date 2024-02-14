@@ -42,5 +42,17 @@ public class LikeDislikePostRepository {
                 .setParameter("postId", post.getPostId())
                 .getResultList();
     }
+
+    public void deleteDislikePost(Long postId) {
+        em.createQuery("delete from DislikePost d where d.post.postId = :postId")
+                .setParameter("postId", postId)
+                .executeUpdate();
+    }
+
+    public void deleteLikePost(Long postId) {
+        em.createQuery("delete from LikePost d where d.post.postId = :postId")
+                .setParameter("postId", postId)
+                .executeUpdate();
+    }
 }
 

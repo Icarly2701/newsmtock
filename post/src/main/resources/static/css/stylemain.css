@@ -190,11 +190,11 @@ input {
   width: 50px;
   margin-right: 15px;
   background-color: white;
-  border-radius: 1rem;
+  border-radius: 0.3rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid black;
+  border: 1px solid #2f5597;
   cursor: pointer;
 }
 

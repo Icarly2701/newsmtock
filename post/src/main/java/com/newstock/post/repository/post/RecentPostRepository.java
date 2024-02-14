@@ -35,4 +35,10 @@ public class RecentPostRepository {
                 .setParameter("userId", user.getUserId())
                 .getResultList();
     }
+
+    public void deleteByPost(Long postId) {
+        em.createQuery("delete from RecentPost r where r.post.postId = :postId")
+                .setParameter("postId", postId)
+                .executeUpdate();
+    }
 }

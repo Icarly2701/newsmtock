@@ -154,4 +154,16 @@ public class PostService {
     public List<Post> findAboutTopicDate(String stock) {
         return postRepository.findAboutTopicDate(stock);
     }
+
+    @Transactional
+    public void deletePost(Long postId) {
+        Post post = postRepository.findById(postId);
+        Long postContentId = post.getPostContent().getPostContentId();
+        likeDislikePostRepository.deleteLikePost(postId);
+        likeDislikePostRepository.deleteDislikePost(postId);
+        recentPostRepository.deleteByPost(postId);
+        postCommentRepository.deleteByPost(postId);
+        postImageRepository.deleteByPostContentId(postContentId);
+        postRepository.deletePost(post);
+    }
 }

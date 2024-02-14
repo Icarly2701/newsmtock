@@ -34,4 +34,10 @@ public class PostCommentRepository {
     public void deletePostComment(PostComment postComment) {
         em.remove(postComment);
     }
+
+    public void deleteByPost(Long postId) {
+        em.createQuery("delete from PostComment pc where pc.post.postId = :postId")
+                .setParameter("postId", postId)
+                .executeUpdate();
+    }
 }

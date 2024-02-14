@@ -180,4 +180,11 @@ public class PostController {
         return "redirect:/post/" + postId;
     }
 
+    @GetMapping("/post/delete/{postId}")
+    public String deletePost(@PathVariable("postId") Long postId){
+        log.info("삭제");
+        postService.deletePost(postId);
+        return "redirect:/mypage";
+    }
+
 }

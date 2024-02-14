@@ -24,4 +24,10 @@ public class PostImageRepository {
                 .setParameter("postId", postId)
                 .getResultList();
     }
+
+    public void deleteByPostContentId(Long postContentId) {
+        em.createQuery("DELETE FROM PostImage pi WHERE pi.postContent.id = :postContentId")
+                .setParameter("postContentId", postContentId)
+                .executeUpdate();
+    }
 }

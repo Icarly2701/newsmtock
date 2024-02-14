@@ -26,7 +26,7 @@ public class Post {
     @Cascade(CascadeType.PERSIST)
     private Category category;
 
-    @Cascade(CascadeType.PERSIST)
+    @Cascade({CascadeType.PERSIST, CascadeType.REMOVE})
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "post")
     private PostContent postContent;
 
