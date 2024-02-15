@@ -26,8 +26,8 @@ public class PostInitializer implements ApplicationRunner {
     }
 
     private void makeDummyUser() {
-        SignupDto signupDto1 = makeDummy(25, "dldbtjd", Gender.MALE, "dbtjd0127", "이유성", "테슬라, 축구");
-        SignupDto signupDto2 = makeDummy(23, "vkxkdi", Gender.FEMALE, "vkxkdi", "태국", "여행, 동남아");
+        SignupDto signupDto1 = makeDummy("25", "dldbtjd", Gender.MALE, "dbtjd0127", "이유성", "테슬라, 축구");
+        SignupDto signupDto2 = makeDummy("23", "vkxkdi", Gender.FEMALE, "vkxkdi", "태국", "여행, 동남아");
         User user1 = User.makeuser(signupDto1);
         User user2 = User.makeuser(signupDto2);
 
@@ -43,7 +43,7 @@ public class PostInitializer implements ApplicationRunner {
         }
     }
 
-    private SignupDto makeDummy(int age, String id, Gender gender, String password, String nickname, String interestWord) {
+    private SignupDto makeDummy(String age, String id, Gender gender, String password, String nickname, String interestWord) {
         SignupDto signupDto = new SignupDto();
         signupDto.setAge(age);
         signupDto.setId(id);

@@ -128,3 +128,10 @@ a{
     display:flex;
     justify-content:center
 }
+
+span {
+    color:red;
+    font-size:small;
+    padding-left:15px;
+    margin-bottom:20px;
+}

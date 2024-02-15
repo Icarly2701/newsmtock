@@ -38,4 +38,10 @@ public class UserRepository {
                 .getResultList();
     }
 
+    public boolean existsById(String id) {
+        Long count = em.createQuery("SELECT COUNT(u) FROM User u WHERE u.id = :id", Long.class)
+                .setParameter("id", id)
+                .getSingleResult();
+        return count > 0;
+    }
 }

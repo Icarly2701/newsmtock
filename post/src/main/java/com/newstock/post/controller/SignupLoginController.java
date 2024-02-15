@@ -2,6 +2,7 @@ package com.newstock.post.controller;
 
 import com.newstock.post.domain.user.PreferenceTitle;
 import com.newstock.post.service.NewsService;
+import com.newstock.post.web.Login;
 import com.newstock.post.web.SessionConst;
 import com.newstock.post.domain.user.User;
 import com.newstock.post.dto.auth.LoginDto;
@@ -12,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +33,13 @@ public class SignupLoginController {
     @PostMapping("/signup")
     public String signup(@Validated @ModelAttribute("signupData") SignupDto signupDto,
                          BindingResult bindingResult){
+
         if(!signupDto.getId().matches("^[a-zA-Z0-9]+$")){
-            bindingResult.reject("idValidate", "아이디는 영어와 숫자로 구성 되어야 합니다.");
+            bindingResult.rejectValue("id", "idInvalid");
+        }
+
+        if(userService.checkIdDuplicate(signupDto.getId())){
+            bindingResult.rejectValue("id", "idDuplicate");
         }
 
         if (bindingResult.hasErrors()) {
@@ -51,7 +58,8 @@ public class SignupLoginController {
     }
 
     @GetMapping("/signup")
-    public String viewSignupPage(){
+    public String viewSignupPage(Model model){
+        model.addAttribute("signupData", new SignupDto());
         return "signuppage";
     }
 
@@ -63,7 +71,7 @@ public class SignupLoginController {
         User user = userService.findByUserId(loginDto.getId(), loginDto.getPassword());
 
         if(user == null){
-            bindingResult.reject("loginFail", "아이디 또는 비밀번호가 일치하지 않습니다.");
+            bindingResult.rejectValue("id", "idFail");
             return "loginpage";
         }
 
@@ -79,7 +87,8 @@ public class SignupLoginController {
     }
 
     @GetMapping("/login")
-    public String viewLoginPage(){
+    public String viewLoginPage(Model model){
+        model.addAttribute("loginData", new LoginDto());
         return "loginpage";
     }
 

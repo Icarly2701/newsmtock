@@ -632,6 +632,12 @@ ul {
   flex-direction: column;
 }
 
+span {
+    color:red;
+    font-size:small;
+    padding-left:5px;
+}
+
 li:nth-child(odd) {
   background-color: #f3f3f3;
 }

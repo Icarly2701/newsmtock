@@ -34,7 +34,7 @@ public class User {
 
     public static User makeuser(SignupDto signupDto){
         User user = new User();
-        user.age = signupDto.getAge();
+        user.age = Integer.parseInt(signupDto.getAge());
         user.id = signupDto.getId();
         user.nickname = signupDto.getNickname();
         user.password = signupDto.getPassword();

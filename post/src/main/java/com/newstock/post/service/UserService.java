@@ -56,4 +56,8 @@ public class UserService {
         PreferenceTitle preferenceTitle = PreferenceTitle.preferenceTitle(userRepository.findById(userId), interestWord);
         preferenceTitleRepository.save(preferenceTitle);
     }
+
+    public boolean checkIdDuplicate(String id) {
+        return userRepository.existsById(id);
+    }
 }

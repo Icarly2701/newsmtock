@@ -7,15 +7,15 @@ import lombok.Data;
 @Data
 public class SignupDto {
 
-    @NotBlank
+    @NotBlank(message = "아이디는 공백일 수 없습니다.")
     private String id;
-    @NotBlank
+    @NotBlank(message = "비밀번호는 공백일 수 없습니다.")
     private String password;
-    @NotBlank
+    @NotBlank(message = "닉네임은 공백일 수 없습니다.")
     private String nickname;
 
     private Gender gender;
-    private int age;
+    private String age;
 
     private String interestWord;
 }

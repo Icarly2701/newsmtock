@@ -14,61 +14,37 @@
           style="width: 125px; height: 125px"
         />
         <form method="post" class="loginForm" th:action="@{/signup}" th:object="${signupData}" style="margin-top: 30px">
-          <input
-            type="text"
-            placeholder="ID"
-            name="id"
-            class="loginInputForm"
-          />
-          <input
-            type="password"
-            placeholder="PASSWORD"
-            name="password"
-            class="loginInputForm"
-          />
-          <input
-            type="text"
-            placeholder="NICKNAME"
-            name="nickname"
-            class="loginInputForm"
-          />
+          <input type="text" placeholder="ID" th:field="*{id}" class="loginInputForm" />
+          <span th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></span>
+          <input type="password" placeholder="PASSWORD" th:field="*{password}" class="loginInputForm" />
+          <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+
+          <input type="text" placeholder="NICKNAME" th:field="*{nickname}" class="loginInputForm" />
+          <span th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}"></span>
+
           <div style="display: flex; justify-content: space-between">
-            <select
-              name="gender"
-              required
-              class="loginInputForm"
-              style="width: 130px"
-              id="gender"
-            >
+            <select name="gender" required class="loginInputForm" style="width: 130px" id="gender" th:field="*{gender}">
               <option value="" disabled selected hidden>성별</option>
               <option value="MALE">남자</option>
               <option value="FEMALE">여자</option>
               <option value="NONE">그 외</option>
             </select>
-            <select
-              name="age"
-              class="loginInputForm"
-              id="age"
-              style="width: 130px"
-            >
+
+            <select name="age" class="loginInputForm" id="age" style="width: 130px" th:field="*{age}">
               <option value="" disabled selected hidden>나이</option>
             </select>
             <script>
               var ageSelect = document.getElementById("age");
               for (var i = 1; i <= 100; i++) {
-                var option = document.createElement("option");
-                option.value = i;
-                option.text = i;
-                ageSelect.add(option);
+                  var option = document.createElement("option");
+                  option.value = i;
+                  option.text = i;
+                  ageSelect.add(option);
               }
             </script>
           </div>
-          <input
-            type="text"
-            placeholder="관심사 설정 ','로 구분"
-            name="interestWord"
-            class="loginInputForm"
-          />
+
+          <input type="text" placeholder="관심사 설정 ','로 구분" th:field="*{interestWord}" class="loginInputForm" />
           <input class="loginEnterForm" value="회원가입" type="submit" />
         </form>
 
