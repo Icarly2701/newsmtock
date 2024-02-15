@@ -49,6 +49,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align : center;
   margin-right: 30px;
   font-weight: bold;
   cursor: pointer;
@@ -118,15 +119,17 @@ input {
     border-radius: 0.3rem;
     border:none;
     background-color:lightGray;
+    display:flex;
     overflow:auto;
     width:100%;
+    margin-bottom:30px;
 }
 
 .searchInputForm {
   width: 70%;
   height: 30px;
   border-radius: 0.3rem;
-  border: 2px solid black;
+  border: 1px solid #2f5597;
   text-indent: 15px;
   display: flex;
   justify-content: center;
@@ -224,7 +227,7 @@ input {
 .postNewsMain {
   width: 90%;
   height: 80%;
-  border: 2px solid black;
+  border: 1px solid #2f5597;
   border-radius: 1.5rem;
   margin-left: 5%;
   margin-right: 4.5%;
@@ -236,7 +239,7 @@ input {
 .postNewsCategory {
   width: 100%;
   height: 10%;
-  border-bottom: 2px solid black;
+  border-bottom: 1px solid #2f5597;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -437,10 +440,12 @@ input {
 }
 
 .detailCommandHead {
+  display:flex;
   text-indent: 15px;
-  border: 2px solid black;
+  border: 1px solid #2f5597;
   border-radius: 0.3rem;
   height: 25px;
+  align-items:center;
 }
 
 .detailCommandLayout {
@@ -478,7 +483,7 @@ input {
 }
 
 .commandRegister {
-  border: 2px solid black;
+  border: 1px solid #2f5597;
   border-radius: 0.3rem;
   background-color: #dae3f3;
   margin-top: 20px;
@@ -571,7 +576,7 @@ a.aSpecial:active {
 
 .posttitle{
   border-radius: 0.3rem;
-  border: 2px solid black;
+  border: 1px solid #2f5597;
   height:15px;
   width:96%;
   padding-top: 10px;
@@ -593,9 +598,16 @@ a.aSpecial:active {
     margin:15px;
 }
 
+.postUpdateImage{
+    width: 200px;
+    height: 100px;
+    object-fit: contain;
+    margin: 15px;
+}
+
 textarea {
   border-radius: 0.3rem;
-  border: 2px solid black;
+  border: 1px solid #2f5597;
   height: 80%;
   width: 96%;
   padding-top: 15px;
@@ -674,6 +686,7 @@ input:focus {
 button {
   cursor: pointer;
   box-shadow: none;
+  height: 25px;
 }
 
 tr:nth-child(odd) {
@@ -694,6 +707,7 @@ a:active {
 
 a.loginB {
   color: #2f5597;
+  padding-top:1.5px;
 }
 
 a.aText {

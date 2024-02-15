@@ -134,21 +134,27 @@
           display: flex;
           justify-content: end;
           margin-top: 50px;
+          width:100%
         "
         >
-          <form method="post" style="width:100%">
-            <div style="display:flex; justify-content:space-between">
-            <button style="width:150px" th:if="${session.loginMember != null && viewUser.userId != null && content.user.userId == viewUser.userId}" class="registerPickWord">
-              작성 글 삭제
-            </button>
-            <button style="width:150px" th:if="${session.loginMember != null && viewUser.userId != null && content.user.userId == viewUser.userId}" class="registerPickWord">
-              작성 글 수정
-            </button>
-            <button type="submit" class="registerPickWord" style="width: 100px">
-              새 글 작성
+            <div style="display:flex; justify-content:space-between; width:100%" th:if="${session.loginMember != null && viewUser.userId != null && content.user.userId == viewUser.userId}">
+              <div style="width:40%; display:flex; justify-content:space-between">
+                <button style="width:180px; margin-right:30px"  class="registerPickWord" type="button">
+                  <a th:href="@{/post/delete/{postId}(postId=${content.postId})}">작성 글 삭제</a>
+                </button>
+                <button style="width:200px" class="registerPickWord" type="button">
+                  <a th:href="@{/post/update/{postId}(postId=${content.postId})}">작성 글 수정</a>
+                </button>
+              </div>
+              <button type="button" class="registerPickWord" style="width: 100px">
+                <a th:href="@{/post/add/{category}(category=${category})}">새 글 작성</a>
+              </button>
+            </div>
+            <div style="display:flex; justify-content:end">
+            <button type="button" class="registerPickWord" style="width: 100px" th:if="${session.loginMember == null || viewUser.userId == null || content.user.userId != viewUser.userId}">
+              <a th:href="@{/post/add/{category}(category=${category})}">새 글 작성</a>
             </button>
             </div>
-          </form>
         </div>
       </div>
     </div>

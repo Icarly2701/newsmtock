@@ -1,8 +1,10 @@
 package com.newstock.post.web;
 
+import com.newstock.post.domain.Category;
 import com.newstock.post.domain.Gender;
 import com.newstock.post.domain.user.User;
 import com.newstock.post.dto.auth.SignupDto;
+import com.newstock.post.service.PostService;
 import com.newstock.post.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
@@ -14,11 +16,13 @@ import org.springframework.stereotype.Component;
 public class PostInitializer implements ApplicationRunner {
 
     private final UserService userService;
+    private final PostService postService;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         makeDummyUser();
-
+        postService.saveCategory(Category.makeCategory("stock"));
+        postService.saveCategory(Category.makeCategory("freeBoard"));
     }
 
     private void makeDummyUser() {

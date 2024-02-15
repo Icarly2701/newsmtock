@@ -1,5 +1,6 @@
 package com.newstock.post.dto.post;
 
+import com.newstock.post.domain.Category;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -9,7 +10,7 @@ import java.util.List;
 public class PostDto {
     private String title;
     private String postContent;
-    private String category;
+    private Category category;
     private List<String> postImageList;
 
 }

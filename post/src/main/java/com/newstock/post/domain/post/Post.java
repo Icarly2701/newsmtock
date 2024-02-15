@@ -40,7 +40,7 @@ public class Post {
     public static Post makePost(PostDto postDto, User user){
         Post post = new Post();
         post.user = user;
-        post.category = Category.makeCategory(postDto.getCategory());
+        post.category = postDto.getCategory();
         post.postContent = PostContent.makePostContent(postDto, post);
         post.postDate = LocalDateTime.now();
         post.postCheckCount = 0;

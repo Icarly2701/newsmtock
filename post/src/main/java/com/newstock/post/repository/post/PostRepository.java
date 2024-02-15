@@ -1,5 +1,6 @@
 package com.newstock.post.repository.post;
 
+import com.newstock.post.domain.Category;
 import com.newstock.post.domain.news.News;
 import com.newstock.post.domain.post.Post;
 import com.newstock.post.domain.user.User;
@@ -77,5 +78,15 @@ public class PostRepository {
 
     public void deletePost(Post post) {
         em.remove(post);
+    }
+
+    public void saveCategory(Category category) {
+        em.persist(category);
+    }
+
+    public Category findCategory(String category){
+        return (Category) em.createQuery("select c from Category c where c.categoryContent = :category")
+                .setParameter("category", category)
+                .getSingleResult();
     }
 }

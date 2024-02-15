@@ -1,5 +1,6 @@
 package com.newstock.post.service;
 
+import com.newstock.post.domain.Category;
 import com.newstock.post.domain.post.*;
 import com.newstock.post.domain.user.User;
 import com.newstock.post.dto.post.PostUploadUpdate;
@@ -22,6 +23,7 @@ public class PostService {
     private final PostImageRepository postImageRepository;
     private final LikeDislikePostRepository likeDislikePostRepository;
     private final RecentPostRepository recentPostRepository;
+    private final TempPostRepository tempPostRepository;
 
     public List<Post> findAboutTopic(String category){
         return postRepository.findAboutTopic(category);
@@ -177,5 +179,28 @@ public class PostService {
     @Transactional
     public void updatePostImage(Long postContentId, List<String> imagePath) {
         postImageRepository.deleteByPostContentIdExceptImagePath(postContentId, imagePath);
+    }
+
+    @Transactional
+    public void saveCategory(Category category){
+        postRepository.saveCategory(category);
+    }
+
+    @Transactional
+    public void saveTempPost(TempPost tempPost) {
+        tempPostRepository.save(tempPost);
+    }
+
+    public Category findCategory(String category) {
+        return postRepository.findCategory(category);
+    }
+
+    public TempPost findByUser(User user){
+        return tempPostRepository.findByUser(user);
+    }
+
+    @Transactional
+    public void deleteTempPost(TempPost tempPost){
+        tempPostRepository.deletePost(tempPost);
     }
 }

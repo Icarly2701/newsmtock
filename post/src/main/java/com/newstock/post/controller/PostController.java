@@ -1,10 +1,8 @@
 package com.newstock.post.controller;
 
+import com.newstock.post.domain.Category;
 import com.newstock.post.domain.news.News;
-import com.newstock.post.domain.post.Post;
-import com.newstock.post.domain.post.PostComment;
-import com.newstock.post.domain.post.PostImage;
-import com.newstock.post.domain.post.RecentPost;
+import com.newstock.post.domain.post.*;
 import com.newstock.post.domain.user.User;
 import com.newstock.post.dto.post.PostDetailDto;
 import com.newstock.post.dto.post.PostDto;
@@ -35,7 +33,8 @@ public class PostController {
     private final FileStore fileStore;
 
     @GetMapping("/post/add/{category}")
-    public String viewAddPost(@Login User user, @PathVariable("category") String category, Model model){
+    public String viewAddPost(@Login User user, @PathVariable("category") String category, @ModelAttribute("tempData") TempPost tempData ,Model model){
+        model.addAttribute("tempData", tempData);
         model.addAttribute("category", category);
         return "newpostpage";
     }
@@ -55,7 +54,7 @@ public class PostController {
         PostDto postDto = new PostDto();
         postDto.setTitle(postUpload.getTitle());
         postDto.setPostContent(postUpload.getContent());
-        postDto.setCategory(category);
+        postDto.setCategory(postService.findCategory(category));
         Post post = Post.makePost(postDto, user);
         Long postId = postService.savePost(post);
 
@@ -139,6 +138,7 @@ public class PostController {
         if(isLike.isEmpty()) postService.checkCountAdd(post);
 
         model.addAttribute("content",PostDetailDto.makePostDetailDto(post, user));
+        model.addAttribute("category", post.getCategory().getCategoryContent());
         model.addAttribute("postCommentList", postCommentList);
         model.addAttribute("postImageList", postImageList);
         model.addAttribute("viewUser", user);
@@ -173,7 +173,7 @@ public class PostController {
     }
 
     @PostMapping("/post/{postId}/delete")
-    public String postAddComment(@PathVariable("postId") Long postId,
+    public String postDeleteComment(@PathVariable("postId") Long postId,
                                  @RequestParam("postCommentId") Long postCommentId,
                                  RedirectAttributes redirectAttributes){
         postService.deletePostComment(postCommentId);
@@ -226,4 +226,33 @@ public class PostController {
         return "redirect:/post/" + postId;
     }
 
+    @PostMapping("/post/add/{category}/temp")
+    public String saveTempPost(@Login User user,
+                               @PathVariable("category") String category,
+                               @ModelAttribute("postItem") PostUploadUpdate postUpload){
+
+        // 기본적인 post 저장
+        PostDto postDto = new PostDto();
+        postDto.setTitle(postUpload.getTitle());
+        postDto.setPostContent(postUpload.getContent());
+        postDto.setCategory(postService.findCategory(category));
+
+        TempPost tempPost = TempPost.tempPost(postDto,user);
+        TempPost findTempPost = postService.findByUser(user);
+
+        if(findTempPost != null){
+            postService.deleteTempPost(findTempPost);
+        }
+
+        postService.saveTempPost(tempPost);
+        return "redirect:/post/add/" + category;
+    }
+
+    @GetMapping("/post/add/temp/{category}")
+    public String viewTempPost(@Login User user,
+                               @PathVariable("category") String category,
+                               RedirectAttributes redirectAttributes){
+        redirectAttributes.addFlashAttribute("tempData", postService.findByUser(user));
+        return "redirect:/post/add/" + category;
+    }
 }

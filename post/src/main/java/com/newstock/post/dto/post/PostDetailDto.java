@@ -16,6 +16,7 @@ public class PostDetailDto {
     private int likeCount;
     private String content;
     private User user;
+    private Long postId;
 
     public static PostDetailDto makePostDetailDto(Post post, User user){
         PostDetailDto postDetailDto = new PostDetailDto();
@@ -26,6 +27,7 @@ public class PostDetailDto {
         postDetailDto.likeCount = post.getPostLikeCount();
         postDetailDto.content = post.getPostContent().getPostContentText();
         postDetailDto.user = user;
+        postDetailDto.postId = post.getPostId();
         return postDetailDto;
     }
 }

@@ -29,7 +29,7 @@ public class TempPost {
         tempPost.user = user;
         tempPost.tempPostTitle = postDto.getTitle();
         tempPost.tempPostText = postDto.getPostContent();
-        tempPost.category = Category.makeCategory(postDto.getCategory());
+        tempPost.category = postDto.getCategory();
         return tempPost;
     }
 }

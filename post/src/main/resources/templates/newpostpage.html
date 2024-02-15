@@ -23,6 +23,11 @@
       function removeImage(element) {
         element.parentElement.remove();
       }
+      function saveTempPost() {
+        alert('이미지는 저장되지 않습니다.');
+        const form = document.getElementById('postFile');
+        form.action = window.location.href + "/temp";
+      }
     </script>
   </head>
   <body
@@ -44,9 +49,9 @@
         "
       >
         <div class="newPostCategoryName" th:text="${category}"></div>
-        <form method="post" style="height: 80%; width: 100%" enctype="multipart/form-data">
-          <textarea class="posttitle" placeholder="제목을 입력해주세요." name="title"></textarea>
-          <textarea placeholder="게시글을 작성해주세요." name="content"></textarea>
+        <form method="post" style="height: 80%; width: 100%" enctype="multipart/form-data" id="postFile">
+          <textarea class="posttitle" placeholder="제목을 입력해주세요." name="title" th:text="${tempData.tempPostTitle != null ? tempData.tempPostTitle : ''}"></textarea>
+          <textarea placeholder="게시글을 작성해주세요." name="content" th:text="${tempData.tempPostText != null ? tempData.tempPostText : ''}"></textarea>
           <div style="width: 100%; margin-top: 20px; margin-bottom: 50px">
             <div
               style="width: 50%; display: flex; justify-content: space-between"
@@ -57,9 +62,11 @@
                 </div>
               </label>
               <input type="file" id="file" multiple="multiple" name="fileList" onchange="previewFiles()"/>
-              <button type="submit" class="newPostGetFile">임시 저장</button>
-              <button type="submit" class="newPostGetFile" style="width: 150px">
-                임시 저장 불러오기
+              <button type="submit" class="newPostGetFile" onclick="saveTempPost()">임시 저장</button>
+              <button type="button" class="newPostGetFile" style="width: 150px">
+                <a th:href="@{/post/add/temp/{category}(category=${category})}">
+                  임시 저장 불러오기
+                </a>
               </button>
             </div>
           </div>
