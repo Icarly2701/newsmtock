@@ -35,25 +35,107 @@ public class NewsService {
     private final RecentNewsRepository recentNewsRepository;
     private final LikeDislikeNewsRepository likeDislikeNewsRepository;
 
+    public void getNewsData(String topic){
+        getNewsDataUseApi(topic);
+    }
+
+    public List<News> getPopularNews(){ return newsRepository.findPopularNews();}
+
+    public List<News> getUserPreferenceNews(List<PreferenceTitle> userPreferenceTitle) {
+        return userPreferenceTitle.stream()
+                .map(preferenceTitle -> this.getRecentNewsAboutTopic(preferenceTitle.getPreferenceTitle()))
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+    }
+
+    public List<News> getSearchData(String keyword, Target target) {
+        this.getNewsData(keyword);
+        return target == null ? this.getRecentNewsAboutTopic(keyword) : switch (target) {
+            case title_content -> this.getRecentNewsAboutTopic(keyword);
+            case content -> this.getRecentNewsAboutTitle(keyword);
+            default -> this.getRecentNewsAboutContent(keyword);
+        };
+    }
+
+    public List<News> getEconomicNewsList(String target) {
+        return Stream.concat(this.getRecentNewsAboutNasdaq().stream(), this.getRecentNewsAboutStock().stream())
+                .sorted(target == null ? Comparator.comparing(News::getNewsDate) : switch (target) {
+                    case "count" -> Comparator.comparingInt(News::getNewsCheckCount).reversed();
+                    case "like" -> Comparator.comparingInt(News::getNewsLikeCount).reversed();
+                    default -> Comparator.comparing(News::getNewsDate).reversed();
+                })
+                .toList();
+    }
+
     public List<News> getRecentNewsAboutStock(){
         return newsRepository.findRecentNewsAboutStock();
-    };
+    }
+
     public List<News> getRecentNewsAboutNasdaq() {
         return newsRepository.findRecentNewsAboutNasdaq();
     }
 
-    public List<News> getRecentNewsAboutTopic(String topic){
+    public List<RecentNews> getRecentNewsList(User user){
+        return recentNewsRepository.getRecentNews(user);
+    }
+
+    @Transactional
+    public void addNewsComment(Long newsId, User user, String newsCommentContent) {
+        News news = newsRepository.findById(newsId);
+        NewsComment newsComment = NewsComment.makeNewsCommentItem(news, user, newsCommentContent);
+        newsCommentRepository.save(newsComment);
+    }
+
+    @Transactional
+    public void deleteNewsComment(Long newsCommentId) {
+        NewsComment newsComment = newsCommentRepository.findById(newsCommentId);
+        newsCommentRepository.deleteNewsComment(newsComment);
+    }
+
+    public List<NewsComment> findCommentById(Long newsId) {
+        return newsCommentRepository.findAll(newsId);
+    }
+
+    @Transactional
+    public News processDetailPageNews(Long newsId, User user, String isLike) {
+        News news = this.findById(newsId);
+        if(user != null) this.processRecentNews(news, user);
+        if(isLike.isEmpty()) this.checkCountAdd(news);
+        return news;
+    }
+
+    @Transactional
+    public void processRecommend(Long newsId,User user,String action) {
+        News news = this.findById(newsId);
+        if(action.equals("like")){
+            this.addLikeCount(news, user);
+            return;
+        }
+        this.subLikeCount(news, user);
+    }
+
+    @Scheduled(fixedDelay = 300000000)
+    public void getKospiNewsData(){
+        getNewsDataUseApi("코스피");
+    }
+
+    @Scheduled(fixedDelay = 300000000)
+    public void getNasdaqNewsData(){
+        getNewsDataUseApi("나스닥");
+    }
+
+    private List<News> getRecentNewsAboutTopic(String topic){
         return newsRepository.findRecentNewsAboutTopic(topic);
     }
-    public List<News> getRecentNewsAboutTitle(String topic){
+    private List<News> getRecentNewsAboutTitle(String topic){
         return newsRepository.findRecentNewsAboutTopicTitle(topic);
     }
-    public List<News> getRecentNewsAboutContent(String topic){
+
+    private List<News> getRecentNewsAboutContent(String topic){
         return newsRepository.findRecentNewsAboutTopicContent(topic);
     }
 
-    public List<News> getPopularNews(){ return newsRepository.findPopularNews();}
-    public News findById(Long newsId){
+    private News findById(Long newsId){
         return newsRepository.findById(newsId);
     }
 
@@ -95,19 +177,6 @@ public class NewsService {
 
         news.addLike();
         likeDislikeNewsRepository.deleteDislikeNews(dislikeNews.get(0));
-    }
-
-    public void getNewsData(String topic){
-        getNewsDataUseApi(topic);
-    }
-
-    @Scheduled(fixedDelay = 300000000)
-    public void getKospiNewsData(){
-        getNewsDataUseApi("코스피");
-    }
-    @Scheduled(fixedDelay = 300000000)
-    public void getNasdaqNewsData(){
-        getNewsDataUseApi("나스닥");
     }
 
     private String getApiUrl(String topic) {
@@ -165,23 +234,6 @@ public class NewsService {
         }
     }
 
-    public List<NewsComment> findCommentById(Long newsId) {
-        return newsCommentRepository.findAll(newsId);
-    }
-
-    @Transactional
-    public void addNewsComment(Long newsId, User user, String newsCommentContent) {
-        News news = newsRepository.findById(newsId);
-        NewsComment newsComment = NewsComment.makeNewsCommentItem(news, user, newsCommentContent);
-        newsCommentRepository.save(newsComment);
-    }
-
-    @Transactional
-    public void deleteNewsComment(Long newsCommentId) {
-        NewsComment newsComment = newsCommentRepository.findById(newsCommentId);
-        newsCommentRepository.deleteNewsComment(newsComment);
-    }
-
     private void addRecentNews(News news, User user) {
         RecentNews recentNews = RecentNews.makeRecentNews(news,user);
         recentNewsRepository.save(recentNews);
@@ -191,23 +243,12 @@ public class NewsService {
         recentNews.setRecentNewsDate();
     }
 
-    public RecentNews getRecentNewsAlreadySeen(News news, User user) {
+    private RecentNews getRecentNewsAlreadySeen(News news, User user) {
         List<RecentNews> recentNews = recentNewsRepository.getRecentNewsAlreadySeen(news, user);
         if(recentNews.isEmpty()){
             return null;
         }
         return recentNews.get(0);
-    }
-
-    public List<RecentNews> getRecentNewsList(User user){
-        return recentNewsRepository.getRecentNews(user);
-    }
-
-    public List<News> getUserPreferenceNews(List<PreferenceTitle> userPreferenceTitle) {
-        return userPreferenceTitle.stream()
-                .map(preferenceTitle -> this.getRecentNewsAboutTopic(preferenceTitle.getPreferenceTitle()))
-                .flatMap(List::stream)
-                .collect(Collectors.toList());
     }
 
     private void processRecentNews(News news, User user) {
@@ -217,42 +258,5 @@ public class NewsService {
             return;
         }
         this.updateRecentNews(recentNews);
-    }
-
-    @Transactional
-    public News processDetailPageNews(Long newsId, User user, String isLike) {
-        News news = this.findById(newsId);
-        if(user != null) this.processRecentNews(news, user);
-        if(isLike.isEmpty()) this.checkCountAdd(news);
-        return news;
-    }
-
-    @Transactional
-    public void processRecommend(Long newsId,User user,String action) {
-        News news = this.findById(newsId);
-        if(action.equals("like")){
-            this.addLikeCount(news, user);
-            return;
-        }
-        this.subLikeCount(news, user);
-    }
-
-    public List<News> getEconomicNewsList(String target) {
-        return Stream.concat(this.getRecentNewsAboutNasdaq().stream(), this.getRecentNewsAboutStock().stream())
-                .sorted(target == null ? Comparator.comparing(News::getNewsDate) : switch (target) {
-                    case "count" -> Comparator.comparingInt(News::getNewsCheckCount).reversed();
-                    case "like" -> Comparator.comparingInt(News::getNewsLikeCount).reversed();
-                    default -> Comparator.comparing(News::getNewsDate).reversed();
-                })
-                .toList();
-    }
-
-    public List<News> getSearchData(String keyword, Target target) {
-        this.getNewsData(keyword);
-        return target == null ? this.getRecentNewsAboutTopic(keyword) : switch (target) {
-            case title_content -> this.getRecentNewsAboutTopic(keyword);
-            case content -> this.getRecentNewsAboutTitle(keyword);
-            default -> this.getRecentNewsAboutContent(keyword);
-        };
     }
 }

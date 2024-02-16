@@ -30,14 +30,14 @@ public class LikeDislikePostRepository {
     public void deleteDislikePost(DislikePost dislikePost){ em.remove(dislikePost);}
 
     public List<LikePost> findLikePost(Post post, User user){
-        return em.createQuery("select r from LikePost r where r.user.userId = :userId and r.post.postId = :postId")
+        return em.createQuery("select r from LikePost r where r.user.userId = :userId and r.post.postId = :postId", LikePost.class)
                 .setParameter("userId", user.getUserId())
                 .setParameter("postId", post.getPostId())
                 .getResultList();
     }
 
     public List<DislikePost> findDislikePost(Post post, User user){
-        return em.createQuery("select d from DislikePost d where d.user.userId = :userId and d.post.postId = :postId")
+        return em.createQuery("select d from DislikePost d where d.user.userId = :userId and d.post.postId = :postId", DislikePost.class)
                 .setParameter("userId", user.getUserId())
                 .setParameter("postId", post.getPostId())
                 .getResultList();

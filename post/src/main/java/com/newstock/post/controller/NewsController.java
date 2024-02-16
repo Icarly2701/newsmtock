@@ -1,27 +1,15 @@
 package com.newstock.post.controller;
 
-import com.newstock.post.domain.news.News;
-import com.newstock.post.domain.news.NewsComment;
-import com.newstock.post.domain.news.RecentNews;
-import com.newstock.post.domain.user.PreferenceTitle;
 import com.newstock.post.domain.user.User;
 import com.newstock.post.dto.news.NewsDetailDto;
 import com.newstock.post.service.NewsService;
 import com.newstock.post.web.Login;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Controller
 @RequiredArgsConstructor

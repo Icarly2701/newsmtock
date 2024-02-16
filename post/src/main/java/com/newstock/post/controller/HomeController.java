@@ -1,7 +1,5 @@
 package com.newstock.post.controller;
 
-import com.newstock.post.domain.news.News;
-import com.newstock.post.domain.user.PreferenceTitle;
 import com.newstock.post.domain.user.User;
 import com.newstock.post.dto.news.HomeDto;
 import com.newstock.post.service.NewsService;
@@ -12,10 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor

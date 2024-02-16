@@ -3,7 +3,6 @@ package com.newstock.post.domain.post;
 import com.newstock.post.domain.Category;
 import com.newstock.post.domain.user.User;
 import com.newstock.post.dto.post.PostDto;
-import com.newstock.post.dto.post.PostUpload;
 import com.newstock.post.dto.post.PostUploadUpdate;
 import jakarta.persistence.*;
 import lombok.Getter;

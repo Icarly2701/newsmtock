@@ -22,14 +22,14 @@ public class RecentNewsRepository {
     }
 
     public List<RecentNews> getRecentNewsAlreadySeen(News news, User user) {
-        return em.createQuery("select r from RecentNews r where r.user.userId = :userId and r.news.newsId = :newsId")
+        return em.createQuery("select r from RecentNews r where r.user.userId = :userId and r.news.newsId = :newsId", RecentNews.class)
                 .setParameter("userId", user.getUserId())
                 .setParameter("newsId", news.getNewsId())
                 .getResultList();
     }
 
     public List<RecentNews> getRecentNews(User user) {
-        return em.createQuery("select r from RecentNews r where r.user.userId = :userId order by r.recentNewsDate desc")
+        return em.createQuery("select r from RecentNews r where r.user.userId = :userId order by r.recentNewsDate desc", RecentNews.class)
                 .setParameter("userId", user.getUserId())
                 .getResultList();
     }

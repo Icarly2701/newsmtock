@@ -16,7 +16,7 @@ public class NewsCommentRepository {
     private final EntityManager em;
 
     public List<NewsComment> findAll(Long newsId) {
-        return em.createQuery("select n from NewsComment n where n.news.newsId = :news")
+        return em.createQuery("select n from NewsComment n where n.news.newsId = :news", NewsComment.class)
                 .setParameter("news", newsId)
                 .getResultList();
     }

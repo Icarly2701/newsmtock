@@ -1,15 +1,11 @@
 package com.newstock.post.controller;
 
-import com.newstock.post.domain.user.PreferenceTitle;
 import com.newstock.post.service.NewsService;
-import com.newstock.post.web.Login;
-import com.newstock.post.web.SessionConst;
 import com.newstock.post.domain.user.User;
 import com.newstock.post.dto.auth.LoginDto;
 import com.newstock.post.dto.auth.SignupDto;
 import com.newstock.post.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -19,8 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor

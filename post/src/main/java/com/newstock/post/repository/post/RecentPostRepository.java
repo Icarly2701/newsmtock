@@ -24,14 +24,14 @@ public class RecentPostRepository {
     }
 
     public List<RecentPost> getRecentPostAlreadySeen(Post post, User user) {
-        return em.createQuery("select r from RecentPost r where r.user.userId = :userId and r.post.postId = :postId")
+        return em.createQuery("select r from RecentPost r where r.user.userId = :userId and r.post.postId = :postId", RecentPost.class)
                 .setParameter("userId", user.getUserId())
                 .setParameter("postId", post.getPostId())
                 .getResultList();
     }
 
     public List<RecentPost> getRecentPost(User user) {
-        return em.createQuery("select r from RecentPost r where r.user.userId = :userId order by r.recentPostDate desc")
+        return em.createQuery("select r from RecentPost r where r.user.userId = :userId order by r.recentPostDate desc", RecentPost.class)
                 .setParameter("userId", user.getUserId())
                 .getResultList();
     }

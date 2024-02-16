@@ -21,7 +21,7 @@ public class TempPostRepository {
     }
 
     public TempPost findByUser(User user){
-        List <TempPost> postList = em.createQuery("select tp from TempPost tp where tp.user.userId = :userId")
+        List <TempPost> postList = em.createQuery("select tp from TempPost tp where tp.user.userId = :userId", TempPost.class)
                 .setParameter("userId", user.getUserId())
                 .getResultList();
 

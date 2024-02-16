@@ -1,6 +1,5 @@
 package com.newstock.post.domain.post;
 
-import com.newstock.post.domain.news.News;
 import com.newstock.post.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;

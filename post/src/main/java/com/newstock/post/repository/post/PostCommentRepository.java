@@ -18,7 +18,7 @@ public class PostCommentRepository {
     private final EntityManager em;
 
     public List<PostComment> findByPost(Long postId){
-        return em.createQuery("select p from PostComment p where p.post.postId = :postId")
+        return em.createQuery("select p from PostComment p where p.post.postId = :postId", PostComment.class)
                 .setParameter("postId", postId)
                 .getResultList();
     }

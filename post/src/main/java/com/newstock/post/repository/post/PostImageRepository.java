@@ -20,7 +20,7 @@ public class PostImageRepository {
     }
 
     public List<PostImage> findByPost(Long postId){
-        return em.createQuery("select i from PostImage i where i.postContent.post.postId = :postId")
+        return em.createQuery("select i from PostImage i where i.postContent.post.postId = :postId", PostImage.class)
                 .setParameter("postId", postId)
                 .getResultList();
     }
@@ -32,7 +32,7 @@ public class PostImageRepository {
     }
 
     public void deleteByPostContentIdExceptImagePath(Long postContentId, List<String> imagePath) {
-        int i = em.createQuery("DELETE FROM PostImage pi WHERE pi.postContent.id = :postContentId AND pi.postImagePath NOT IN :imagePath")
+        em.createQuery("DELETE FROM PostImage pi WHERE pi.postContent.id = :postContentId AND pi.postImagePath NOT IN :imagePath")
                 .setParameter("postContentId", postContentId)
                 .setParameter("imagePath", imagePath)
                 .executeUpdate();

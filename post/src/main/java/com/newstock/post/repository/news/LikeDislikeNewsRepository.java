@@ -35,14 +35,14 @@ public class LikeDislikeNewsRepository {
     }
 
     public List<LikeNews> findLikeNews(News news, User user){
-        return em.createQuery("select r from LikeNews r where r.user.userId = :userId and r.news.newsId = :newsId")
+        return em.createQuery("select r from LikeNews r where r.user.userId = :userId and r.news.newsId = :newsId", LikeNews.class)
                 .setParameter("userId", user.getUserId())
                 .setParameter("newsId", news.getNewsId())
                 .getResultList();
     }
 
     public List<DislikeNews> findDislikeNews(News news, User user){
-        return em.createQuery("select d from DislikeNews d where d.user.userId = :userId and d.news.newsId = :newsId")
+        return em.createQuery("select d from DislikeNews d where d.user.userId = :userId and d.news.newsId = :newsId", DislikeNews.class)
                 .setParameter("userId", user.getUserId())
                 .setParameter("newsId", news.getNewsId())
                 .getResultList();

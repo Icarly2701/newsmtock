@@ -1,12 +1,8 @@
 package com.newstock.post.controller;
 
-import com.newstock.post.domain.Category;
-import com.newstock.post.domain.news.News;
 import com.newstock.post.domain.post.*;
 import com.newstock.post.domain.user.User;
 import com.newstock.post.dto.post.*;
-import com.newstock.post.repository.file.FileStore;
-import com.newstock.post.repository.file.UploadFile;
 import com.newstock.post.service.PostService;
 import com.newstock.post.web.Login;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Comparator;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor

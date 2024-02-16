@@ -1,8 +1,6 @@
 package com.newstock.post.controller;
 
 import com.newstock.post.domain.Target;
-import com.newstock.post.domain.news.News;
-import com.newstock.post.domain.post.Post;
 import com.newstock.post.service.NewsService;
 import com.newstock.post.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor

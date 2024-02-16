@@ -34,7 +34,7 @@ public class PostRepository {
     }
 
     public List<Post> findByUser(User user) {
-        return em.createQuery("select p from Post p where p.user.userId = :userId")
+        return em.createQuery("select p from Post p where p.user.userId = :userId", Post.class)
                 .setParameter("userId", user.getUserId())
                 .getResultList();
     }

@@ -4,8 +4,6 @@ import com.newstock.post.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 public class LikeNews {

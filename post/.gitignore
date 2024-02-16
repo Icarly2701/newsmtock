@@ -37,4 +37,4 @@ out/
 .vscode/
 
 ### image ###
-post_image/
+/post_image/
