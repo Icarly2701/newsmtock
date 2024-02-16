@@ -1,14 +1,22 @@
 package com.newstock.post.service;
 
 import com.newstock.post.domain.Category;
+import com.newstock.post.domain.Target;
+import com.newstock.post.domain.news.News;
+import com.newstock.post.domain.news.RecentNews;
 import com.newstock.post.domain.post.*;
 import com.newstock.post.domain.user.User;
+import com.newstock.post.dto.post.PostDto;
+import com.newstock.post.dto.post.PostUpload;
 import com.newstock.post.dto.post.PostUploadUpdate;
+import com.newstock.post.repository.file.FileStore;
+import com.newstock.post.repository.file.UploadFile;
 import com.newstock.post.repository.post.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,13 +32,13 @@ public class PostService {
     private final LikeDislikePostRepository likeDislikePostRepository;
     private final RecentPostRepository recentPostRepository;
     private final TempPostRepository tempPostRepository;
+    private final FileStore fileStore;
 
     public List<Post> findAboutTopic(String category){
         return postRepository.findAboutTopic(category);
     }
 
-    @Transactional
-    public Long savePost(Post post){
+    private Long savePost(Post post){
         return postRepository.save(post);
     }
 
@@ -63,13 +71,11 @@ public class PostService {
         return postRepository.findByTopicContent(topic);
     }
 
-    @Transactional
-    public void checkCountAdd(Post post) {
+    private void checkCountAdd(Post post) {
         post.checkCount();
     }
 
-    @Transactional
-    public void addLikeCount(Post post, User user) {
+    private void addLikeCount(Post post, User user) {
         List<LikePost> likePost = likeDislikePostRepository.findLikePost(post, user);
         List<DislikePost> dislikePost = likeDislikePostRepository.findDislikePost(post, user);
 
@@ -87,8 +93,7 @@ public class PostService {
         likeDislikePostRepository.deleteLikePost(likePost.get(0));
     }
 
-    @Transactional
-    public void subLikeCount(Post post, User user){
+    private void subLikeCount(Post post, User user){
         List<DislikePost> dislikePost = likeDislikePostRepository.findDislikePost(post, user);
         List<LikePost> likePost = likeDislikePostRepository.findLikePost(post, user);
 
@@ -170,14 +175,11 @@ public class PostService {
         postRepository.deletePost(post);
     }
 
-    @Transactional
-    public void updatePost(Post post, PostUploadUpdate postUpload) {
+    private void updatePost(Post post, PostUploadUpdate postUpload) {
         post.updatePost(postUpload);
-
     }
 
-    @Transactional
-    public void updatePostImage(Long postContentId, List<String> imagePath) {
+    private void updatePostImage(Long postContentId, List<String> imagePath) {
         postImageRepository.deleteByPostContentIdExceptImagePath(postContentId, imagePath);
     }
 
@@ -186,8 +188,7 @@ public class PostService {
         postRepository.saveCategory(category);
     }
 
-    @Transactional
-    public void saveTempPost(TempPost tempPost) {
+    private void saveTempPost(TempPost tempPost) {
         tempPostRepository.save(tempPost);
     }
 
@@ -199,8 +200,85 @@ public class PostService {
         return tempPostRepository.findByUser(user);
     }
 
-    @Transactional
-    public void deleteTempPost(TempPost tempPost){
+    private void deleteTempPost(TempPost tempPost){
         tempPostRepository.deletePost(tempPost);
+    }
+
+    public List<Post> getSearchData(String keyword, Target target) {
+        return target == null ? this.findByTopic(keyword) : switch (target) {
+            case title_content -> this.findByTopic(keyword);
+            case title -> this.findByTopicTitle(keyword);
+            default -> this.findByTopicContent(keyword);
+        };
+    }
+
+    @Transactional
+    public Long processAddPost(User user, String category, PostUpload postUpload) {
+        Post post = Post.makePost(new PostDto(postUpload.getTitle(),
+                postUpload.getContent(),
+                this.findCategory(category)), user);
+        this.saveImage(postUpload.getFileList(), post);
+        return this.savePost(post);
+    }
+
+    @Transactional
+    public void processUpdatePost(Long postId, PostUploadUpdate postUpload) {
+        Post post = this.findById(postId);
+        this.updatePost(post, postUpload);
+        this.updatePostImage(post.getPostContent().getPostContentId(), postUpload.getImagePaths());
+        saveImage(postUpload.getFileList(), post);
+    }
+
+    private void saveImage(List<MultipartFile> fileList, Post post) {
+        // 실제 파일 저장
+        List<UploadFile> uploadFiles = fileStore.storeFiles(fileList);
+        //데이터베이스에 파일 이름 저장
+        for(UploadFile uploadFile: uploadFiles){
+            PostImage postImage = PostImage.makePostImage(uploadFile.getFilePath(), post.getPostContent());
+            this.savePostImage(postImage);
+        }
+    }
+
+    @Transactional
+    public void processRecommend(Long postId, User user, String action) {
+        Post post = this.findById(postId);
+        if(action.equals("like")){
+            this.addLikeCount(post, user);
+            return;
+        }
+        this.subLikeCount(post, user);
+    }
+
+    @Transactional
+    public void processTempPost(User user, String category, PostUploadUpdate postUpload) {
+        // 기본적인 post 저장
+        PostDto postDto = new PostDto(
+                postUpload.getTitle(),
+                postUpload.getContent(),
+                this.findCategory(category));
+
+        TempPost tempPost = TempPost.tempPost(postDto,user);
+        TempPost findTempPost = this.findByUser(user);
+        if(findTempPost != null){
+            this.deleteTempPost(findTempPost);
+        }
+        this.saveTempPost(tempPost);
+    }
+
+    @Transactional
+    public Post processDetailPagePost(Long postId, User user, String isLike) {
+        Post post = this.findById(postId);
+        if(user != null) this.processRecentPost(post, user);
+        if(isLike.isEmpty()) this.checkCountAdd(post);
+        return post;
+    }
+
+    private void processRecentPost(Post post, User user) {
+        RecentPost recentPost = this.getRecentPostAlreadySeen(post, user);
+        if(recentPost == null) {
+            this.addRecentPost(post, user);
+            return;
+        }
+        this.updateRecentPost(recentPost);
     }
 }

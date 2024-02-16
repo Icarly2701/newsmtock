@@ -43,24 +43,24 @@
     <div class="center">
       <div th:replace="head_fragment :: header"></div>
       <div style="margin-left: 15%; margin-right: 15%; height: 100%">
-        <div class="newPostCategoryName" style="margin-top: 25px; width: 100px">게시판</div>
+        <div class="newPostCategoryName" style="margin-top: 25px; width: 100px" th:text="${postDetailData.category}"></div>
         <div class="detailPostHead">
-          <div class="detailPostHeadContent" th:text="${content.title}">
+          <div class="detailPostHeadContent" th:text="${postDetailData.title}">
           </div>
-          <div class="detailPostHeadContent" th:text="${content.date}"></div>
+          <div class="detailPostHeadContent" th:text="${postDetailData.date}"></div>
         </div>
         <div class="detailPostSecond">
-          <div class="detailPostHeadContent" style="font-weight: 100" th:text="${content.nickname}"></div>
+          <div class="detailPostHeadContent" style="font-weight: 100" th:text="${postDetailData.nickname}"></div>
           <div style="display: flex; justify-content: center">
-            <div class="detailPostHeadContent" style="font-weight: 100" th:text="'조회 수 ' + ${content.checkCount}"></div>
-            <div class="detailPostHeadContent" style="font-weight: 100" th:text="'추천 수 ' + ${content.likeCount}"></div>
-            <div class="detailPostHeadContent" style="font-weight: 100" th:text="'댓글 수 ' + ${postCommentList.size()}"></div>
+            <div class="detailPostHeadContent" style="font-weight: 100" th:text="'조회 수 ' + ${postDetailData.checkCount}"></div>
+            <div class="detailPostHeadContent" style="font-weight: 100" th:text="'추천 수 ' + ${postDetailData.likeCount}"></div>
+            <div class="detailPostHeadContent" style="font-weight: 100" th:text="'댓글 수 ' + ${postDetailData.postCommentList.size()}"></div>
           </div>
         </div>
         <div class="imageContainer">
-          <img th:each="imageFile : ${postImageList}" class="postImage" th:src="|${imageFile.postImagePath}|"/>
+          <img th:each="imageFile : ${postDetailData.postImageList}" class="postImage" th:src="|${imageFile.postImagePath}|"/>
         </div>
-        <div class="detailPostContent" th:text="${content.content}" ></div>
+        <div class="detailPostContent" th:text="${postDetailData.content}" ></div>
         <div class="detailRecommend">
           <form method="post" class="detailRecommendLayout" id="recommendForm">
             <button
@@ -79,7 +79,7 @@
                 border: 2px solid #b8b8b8;
                 width: 50px;
               "
-              th:text="${content.likeCount}"
+              th:text="${postDetailData.likeCount}"
             ></div>
             <button
               class="detailRecommendBox"
@@ -92,16 +92,16 @@
             <input type="hidden" id="actionInput" name="action" th:value="${null}" />
           </form>
         </div>
-        <div class="detailCommandHead" th:text="'댓글 수 ' + ${postCommentList.size()}"></div>
+        <div class="detailCommandHead" th:text="'댓글 수 ' + ${postDetailData.postCommentList.size()}"></div>
         <div class="detailCommandLayout">
-          <div class="detailCommandDetail" th:each="postComment:${postCommentList}">
+          <div class="detailCommandDetail" th:each="postComment:${postDetailData.postCommentList}">
             <div class="detailCommandLayoutName">
               <div style="display:flex; justify-content:space-between; width:100%">
                 <div style="display:flex;">
                   <div class="detailCommandNickname" th:text="${postComment.user.nickname}"></div>
                   <div class="detailCommandDate" th:text="${postComment.postCommentDate}"></div>
                 </div>
-                <form th:if="${session.loginMember != null && viewUser.userId != null && postComment.user.userId == viewUser.userId}" method="post" id="deleteForm">
+                <form th:if="${session.loginMember != null && postDetailData.viewUser.userId != null && postComment.user.userId == postDetailData.viewUser.userId}" method="post" id="deleteForm">
                   <button type="button" class="deleteCommentButton" onclick="deleteComment()" th:text="${'삭제'}"></button>
                   <input type="hidden" name="postCommentId" th:value="${postComment.postCommentId}"/>
                 </form>
@@ -137,22 +137,22 @@
           width:100%
         "
         >
-            <div style="display:flex; justify-content:space-between; width:100%" th:if="${session.loginMember != null && viewUser.userId != null && content.user.userId == viewUser.userId}">
+            <div style="display:flex; justify-content:space-between; width:100%" th:if="${session.loginMember != null && postDetailData.viewUser.userId != null && postDetailData.user.userId == postDetailData.viewUser.userId}">
               <div style="width:40%; display:flex; justify-content:space-between">
                 <button style="width:180px; margin-right:30px"  class="registerPickWord" type="button">
-                  <a th:href="@{/post/delete/{postId}(postId=${content.postId})}">작성 글 삭제</a>
+                  <a th:href="@{/post/delete/{postId}(postId=${postDetailData.postId})}">작성 글 삭제</a>
                 </button>
                 <button style="width:200px" class="registerPickWord" type="button">
-                  <a th:href="@{/post/update/{postId}(postId=${content.postId})}">작성 글 수정</a>
+                  <a th:href="@{/post/update/{postId}(postId=${postDetailData.postId})}">작성 글 수정</a>
                 </button>
               </div>
               <button type="button" class="registerPickWord" style="width: 100px">
-                <a th:href="@{/post/add/{category}(category=${category})}">새 글 작성</a>
+                <a th:href="@{/post/add/{category}(category=${postDetailData.category})}">새 글 작성</a>
               </button>
             </div>
             <div style="display:flex; justify-content:end">
-            <button type="button" class="registerPickWord" style="width: 100px" th:if="${session.loginMember == null || viewUser.userId == null || content.user.userId != viewUser.userId}">
-              <a th:href="@{/post/add/{category}(category=${category})}">새 글 작성</a>
+            <button type="button" class="registerPickWord" style="width: 100px" th:if="${session.loginMember == null || postDetailData.viewUser.userId == null || postDetailData.user.userId != postDetailData.viewUser.userId}">
+              <a th:href="@{/post/add/{category}(category=${postDetailData.category})}">새 글 작성</a>
             </button>
             </div>
         </div>

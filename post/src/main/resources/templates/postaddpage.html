@@ -48,10 +48,10 @@
           height: 100%;
         "
       >
-        <div class="newPostCategoryName" th:text="${category}"></div>
+        <div class="newPostCategoryName" th:text="${postAddDto.category}"></div>
         <form method="post" style="height: 80%; width: 100%" enctype="multipart/form-data" id="postFile">
-          <textarea class="posttitle" placeholder="제목을 입력해주세요." name="title" th:text="${tempData.tempPostTitle != null ? tempData.tempPostTitle : ''}"></textarea>
-          <textarea placeholder="게시글을 작성해주세요." name="content" th:text="${tempData.tempPostText != null ? tempData.tempPostText : ''}"></textarea>
+          <textarea class="posttitle" placeholder="제목을 입력해주세요." name="title" th:text="${postAddDto.tempData.tempPostTitle != null ? postAddDto.tempData.tempPostTitle : ''}"></textarea>
+          <textarea placeholder="게시글을 작성해주세요." name="content" th:text="${postAddDto.tempData.tempPostText != null ? postAddDto.tempData.tempPostText : ''}"></textarea>
           <div style="width: 100%; margin-top: 20px; margin-bottom: 50px">
             <div
               style="width: 50%; display: flex; justify-content: space-between"

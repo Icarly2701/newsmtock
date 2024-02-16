@@ -22,7 +22,7 @@
             <p>최신 뉴스</p></div>
           <div style="overflow: auto; height: 87%">
             <ul>
-              <li th:each="news : ${newsList}">
+              <li th:each="news : ${homeDto.newsList}">
                 <a class="aText" th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
               </li>
             </ul>
@@ -34,7 +34,7 @@
             <p>뉴스</p></div>
           <div style="overflow: auto; height: 87%">
             <ul>
-              <li th:each="news : ${popularNewsList}">
+              <li th:each="news : ${homeDto.popularNewsList}">
                 <a class="aText" th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
               </li>
             </ul>
@@ -46,10 +46,10 @@
             <p>뉴스</p></div>
           <div style="overflow: auto; height: 87%">
             <ul>
-              <li th:unless="${session.loginMember != null}" th:each="news : ${nasdaqList}">
+              <li th:unless="${session.loginMember != null}" th:each="news : ${homeDto.nasdaqList}">
                 <a class="aText" th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
               </li>
-              <li th:if="${session.loginMember != null}" th:each="news : ${preferenceNews}" class="interestWord">
+              <li th:if="${session.loginMember != null}" th:each="news : ${homeDto.preferenceNews}" class="interestWord">
                 <a class="aText" th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
               </li>
             </ul>

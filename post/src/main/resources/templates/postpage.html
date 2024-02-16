@@ -38,7 +38,7 @@
 
       <div class="postMainContent">
         <div class="containerHead">
-          <p class="postTitleStyle" style="font-weight: 800" th:text="${mainName + '&nbsp;'}"></p>
+          <p class="postTitleStyle" style="font-weight: 800" th:text="${postBoardData.mainName + '&nbsp;'}"></p>
           <p class="postTitleStyle">게시판</p>
         </div>
         <div
@@ -89,7 +89,7 @@
               padding-right: 0;
               cursor: auto;
             "
-                  th:each="post:${postList}"
+                  th:each="post:${postBoardData.postList}"
           >
             <a
                     class="td_title aSpecial"
@@ -129,7 +129,7 @@
         "
       >
           <button type="button" class="registerPickWord" style="width: 100px">
-            <a th:href="@{'/post/add/' + ${category}}">새 글 작성</a>
+            <a th:href="@{'/post/add/' + ${postBoardData.category}}">새 글 작성</a>
           </button>
       </div>
     </div>

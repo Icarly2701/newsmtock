@@ -73,10 +73,10 @@
           height: 100%;
         "
       >
-        <div class="newPostCategoryName" th:text="${post.category.categoryContent}"></div>
+        <div class="newPostCategoryName" th:text="${postUpdateData.post.category.categoryContent}"></div>
         <form method="post" style="height: 80%; width: 100%" enctype="multipart/form-data">
-          <textarea class="posttitle" placeholder="제목을 입력해주세요." name="title" th:text="${post.postTitle}"></textarea>
-          <textarea placeholder="게시글을 작성해주세요." name="content" th:text="${post.postContent.postContentText}"></textarea>
+          <textarea class="posttitle" placeholder="제목을 입력해주세요." name="title" th:text="${postUpdateData.post.postTitle}"></textarea>
+          <textarea placeholder="게시글을 작성해주세요." name="content" th:text="${postUpdateData.post.postContent.postContentText}"></textarea>
           <div style="width: 100%; margin-top: 20px; margin-bottom: 50px">
             <div
               style="width: 50%; display: flex; justify-content: space-between"
@@ -91,7 +91,7 @@
           </div>
           <div class="preview-container" id="previewContainer"></div>
           <div class="imageBox">
-            <div th:each="imageFile : ${postImageList}" style="display:flex">
+            <div th:each="imageFile : ${postUpdateData.postImageList}" style="display:flex">
               <img class="postUpdateImage" style="margin-right:10px; margin-left:10px" th:src="|${imageFile.postImagePath}|"/>
               <input type="hidden" name="imagePaths" th:value="${imageFile.postImagePath}">
               <button type="button" class="deleteCommentButton" style="margin-top:20px" onclick="removeImage(this)">삭제</button>

@@ -33,27 +33,11 @@ public class SignupLoginController {
     @PostMapping("/signup")
     public String signup(@Validated @ModelAttribute("signupData") SignupDto signupDto,
                          BindingResult bindingResult){
-
-        if(!signupDto.getId().matches("^[a-zA-Z0-9]+$")){
-            bindingResult.rejectValue("id", "idInvalid");
-        }
-
-        if(userService.checkIdDuplicate(signupDto.getId())){
-            bindingResult.rejectValue("id", "idDuplicate");
-        }
-
+        userService.validateLoginData(signupDto, bindingResult);
         if (bindingResult.hasErrors()) {
-            log.info("errors={}", bindingResult);
             return "signuppage";
         }
-
-        User user = User.makeuser(signupDto);
-        Long userId = userService.save(user);
-
-        for(String interestWord: signupDto.getInterestWord().split(",")){
-            userService.savePreferenceTitle(userId, interestWord.trim());
-        }
-
+        userService.processSignup(signupDto);
         return "redirect:/login";
     }
 
@@ -67,22 +51,13 @@ public class SignupLoginController {
     public String login(@ModelAttribute("loginData") LoginDto loginDto,
                         BindingResult bindingResult,
                         HttpServletRequest request){
-
         User user = userService.findByUserId(loginDto.getId(), loginDto.getPassword());
-
         if(user == null){
             bindingResult.rejectValue("id", "idFail");
             return "loginpage";
         }
-
-        HttpSession session = request.getSession();
-        session.setAttribute(SessionConst.LOGIN_MEMBER, user);
-
-        List<PreferenceTitle> userPreferenceTitle = userService.findUserPreferenceTitle(user.getUserId());
-        for(PreferenceTitle preferenceTitle: userPreferenceTitle){
-            newsService.getNewsData(preferenceTitle.getPreferenceTitle());
-        }
-
+        userService.processLogin(request,user)
+                .forEach(newsService::getNewsData);
         return "redirect:/";
     }
 
@@ -94,11 +69,7 @@ public class SignupLoginController {
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request) {
-        //세션을 삭제한다.
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
+        userService.removeSession(request);
         return "redirect:/";
     }
 }

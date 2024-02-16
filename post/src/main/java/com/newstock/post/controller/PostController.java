@@ -4,10 +4,7 @@ import com.newstock.post.domain.Category;
 import com.newstock.post.domain.news.News;
 import com.newstock.post.domain.post.*;
 import com.newstock.post.domain.user.User;
-import com.newstock.post.dto.post.PostDetailDto;
-import com.newstock.post.dto.post.PostDto;
-import com.newstock.post.dto.post.PostUpload;
-import com.newstock.post.dto.post.PostUploadUpdate;
+import com.newstock.post.dto.post.*;
 import com.newstock.post.repository.file.FileStore;
 import com.newstock.post.repository.file.UploadFile;
 import com.newstock.post.service.PostService;
@@ -30,13 +27,11 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
-    private final FileStore fileStore;
 
     @GetMapping("/post/add/{category}")
     public String viewAddPost(@Login User user, @PathVariable("category") String category, @ModelAttribute("tempData") TempPost tempData ,Model model){
-        model.addAttribute("tempData", tempData);
-        model.addAttribute("category", category);
-        return "newpostpage";
+        model.addAttribute("postAddDto", new PostAddDto(category,tempData,new PostUpload()));
+        return "postaddpage";
     }
 
     @PostMapping("/post/add/{category}")
@@ -44,52 +39,26 @@ public class PostController {
                           @PathVariable("category") String category,
                           @Validated @ModelAttribute("postItem") PostUpload postUpload,
                           BindingResult bindingResult){
-
         if (bindingResult.hasErrors()) {
-            log.info("errors={}", bindingResult);
-            return "newpostpage";
+            return "postaddpage";
         }
-
-        // 기본적인 post 저장
-        PostDto postDto = new PostDto();
-        postDto.setTitle(postUpload.getTitle());
-        postDto.setPostContent(postUpload.getContent());
-        postDto.setCategory(postService.findCategory(category));
-        Post post = Post.makePost(postDto, user);
-        Long postId = postService.savePost(post);
-
-        // 실제 파일 저장
-        List<UploadFile> uploadFiles = fileStore.storeFiles(postUpload.getFileList());
-
-        //데이터베이스에 파일 이름 저장
-        for(UploadFile uploadFile: uploadFiles){
-            PostImage postImage = PostImage.makePostImage(uploadFile.getFilePath(), post.getPostContent());
-            postService.savePostImage(postImage);
-        }
-
-        return "redirect:/post/" + postId;
+        return "redirect:/post/" + postService.processAddPost(user,category, postUpload);
     }
 
     @GetMapping("/post/stock")
     public String viewPostStockBoard(@RequestParam(value = "target", required = false) String target,
                                      Model model){
 
-        List<Post> postList = postService.findAboutTopic("stock");;
+        model.addAttribute("postBoardData", new PostBoardDto(postService.findAboutTopic("stock")
+                .stream()
+                .sorted(target == null ? Comparator.comparing(Post::getPostDate).reversed() : switch(target){
+                    case "count" -> Comparator.comparingInt(Post::getPostCheckCount).reversed();
+                    case "like" -> Comparator.comparingInt(Post::getPostLikeCount).reversed();
+                    default -> Comparator.comparing(Post::getPostDate).reversed();})
+                .toList(),
+                "주식",
+                "stock"));
 
-        Comparator<Post> postComparator;
-
-        if(target != null) {
-            postComparator = switch (target) {
-                case "count" -> Comparator.comparingInt(Post::getPostCheckCount).reversed();
-                case "like" -> Comparator.comparingInt(Post::getPostLikeCount).reversed();
-                default -> Comparator.comparing(Post::getPostDate).reversed();
-            };
-            postList.sort(postComparator);
-        }
-
-        model.addAttribute("postList", postList);
-        model.addAttribute("mainName", "주식");
-        model.addAttribute("category", "stock");
         return "postpage";
     }
 
@@ -97,22 +66,16 @@ public class PostController {
     public String viewPostFreeBoard(@RequestParam(value = "target", required = false) String target,
                                     Model model){
 
-        List<Post> postList = postService.findAboutTopic("freeBoard");;
+        model.addAttribute("postBoardData", new PostBoardDto(postService.findAboutTopic("freeBoard")
+                .stream()
+                .sorted(target == null ? Comparator.comparing(Post::getPostDate).reversed() : switch(target){
+                    case "count" -> Comparator.comparingInt(Post::getPostCheckCount).reversed();
+                    case "like" -> Comparator.comparingInt(Post::getPostLikeCount).reversed();
+                    default -> Comparator.comparing(Post::getPostDate).reversed();})
+                .toList(),
+                "자유",
+                "freeBoard"));
 
-        Comparator<Post> postComparator;
-
-        if(target != null) {
-            postComparator = switch (target) {
-                case "count" -> Comparator.comparingInt(Post::getPostCheckCount).reversed();
-                case "like" -> Comparator.comparingInt(Post::getPostLikeCount).reversed();
-                default -> Comparator.comparing(Post::getPostDate).reversed();
-            };
-            postList.sort(postComparator);
-        }
-
-        model.addAttribute("postList", postList);
-        model.addAttribute("mainName", "자유");
-        model.addAttribute("category", "freeBoard");
         return "postpage";
     }
 
@@ -121,27 +84,11 @@ public class PostController {
                                  @PathVariable("postId") Long postId,
                                  @ModelAttribute("isLike") String isLike,
                                  Model model){
-
-        Post post = postService.findById(postId);
-        List<PostComment> postCommentList = postService.findCommentByPost(postId);
-        List<PostImage> postImageList = postService.findImageByPost(postId);
-
-        if(user != null){
-            RecentPost recentPost = postService.getRecentPostAlreadySeen(post, user);
-            if(recentPost == null){
-                postService.addRecentPost(post,user);
-            }else{
-                postService.updateRecentPost(recentPost);
-            }
-        }
-
-        if(isLike.isEmpty()) postService.checkCountAdd(post);
-
-        model.addAttribute("content",PostDetailDto.makePostDetailDto(post, user));
-        model.addAttribute("category", post.getCategory().getCategoryContent());
-        model.addAttribute("postCommentList", postCommentList);
-        model.addAttribute("postImageList", postImageList);
-        model.addAttribute("viewUser", user);
+        model.addAttribute("postDetailData",PostDetailDto.makePostDetailDto(
+                postService.processDetailPagePost(postId, user, isLike),
+                user,
+                postService.findCommentByPost(postId),
+                postService.findImageByPost(postId)));
         return "postdetailpage";
     }
 
@@ -150,14 +97,7 @@ public class PostController {
                            @RequestParam String action,
                            @PathVariable("postId") Long postId,
                            RedirectAttributes redirectAttributes){
-        Post post = postService.findById(postId);
-
-        if(action.equals("like")){
-            postService.addLikeCount(post, user);
-        }else if(action.equals("dislike")){
-            postService.subLikeCount(post, user);
-        }
-
+        postService.processRecommend(postId, user, action);
         redirectAttributes.addFlashAttribute("isLike", "notCount");
         return "redirect:/post/" + postId;
     }
@@ -189,14 +129,11 @@ public class PostController {
 
     @GetMapping("/post/update/{postId}")
     public String viewUpdatePost(@PathVariable("postId") Long postId,
-                             Model model){
-        Post post = postService.findById(postId);
-        List<PostImage> postImageList = postService.findImageByPost(postId);
-
-        model.addAttribute("post", post);
-        model.addAttribute("postImageList", postImageList);
-
-        return "updatepostpage";
+                                 Model model){
+        model.addAttribute("postUpdateData", new PostUpdateDto(
+                postService.findById(postId),
+                postService.findImageByPost(postId)));
+        return "postupdatepage";
     }
 
     @PostMapping("/post/update/{postId}")
@@ -204,25 +141,10 @@ public class PostController {
                              @PathVariable("postId") Long postId,
                              @Validated @ModelAttribute("postItem") PostUploadUpdate postUpload,
                              BindingResult bindingResult){
-
-        Post post = postService.findById(postId);
-
         if (bindingResult.hasErrors()) {
-            log.info("sadfsadf");
             return "redirect:/post/update/" + postId;
         }
-
-        postService.updatePost(post, postUpload);
-        postService.updatePostImage(post.getPostContent().getPostContentId(), postUpload.getImagePaths());
-        // 실제 파일 저장
-        List<UploadFile> uploadFiles = fileStore.storeFiles(postUpload.getFileList());
-
-        //데이터베이스에 파일 이름 저장
-        for(UploadFile uploadFile: uploadFiles){
-            PostImage postImage = PostImage.makePostImage(uploadFile.getFilePath(), post.getPostContent());
-            postService.savePostImage(postImage);
-        }
-
+        postService.processUpdatePost(postId, postUpload);
         return "redirect:/post/" + postId;
     }
 
@@ -230,21 +152,7 @@ public class PostController {
     public String saveTempPost(@Login User user,
                                @PathVariable("category") String category,
                                @ModelAttribute("postItem") PostUploadUpdate postUpload){
-
-        // 기본적인 post 저장
-        PostDto postDto = new PostDto();
-        postDto.setTitle(postUpload.getTitle());
-        postDto.setPostContent(postUpload.getContent());
-        postDto.setCategory(postService.findCategory(category));
-
-        TempPost tempPost = TempPost.tempPost(postDto,user);
-        TempPost findTempPost = postService.findByUser(user);
-
-        if(findTempPost != null){
-            postService.deleteTempPost(findTempPost);
-        }
-
-        postService.saveTempPost(tempPost);
+        postService.processTempPost(user, category,postUpload);
         return "redirect:/post/add/" + category;
     }
 

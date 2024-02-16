@@ -13,4 +13,9 @@ public class PostDto {
     private Category category;
     private List<String> postImageList;
 
+    public PostDto(String title, String postContent, Category category) {
+        this.title = title;
+        this.postContent = postContent;
+        this.category = category;
+    }
 }

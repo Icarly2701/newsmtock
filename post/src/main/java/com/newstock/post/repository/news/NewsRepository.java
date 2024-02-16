@@ -19,24 +19,15 @@ public class NewsRepository {
         em.persist(news);
     }
 
-    public News findOne(Long id){
-        return em.find(News.class, id);
-    }
-
-    public List<News> findAll(){
-        return em.createQuery("select m from Member m", News.class)
-                .getResultList();
-    }
-
     public List<News> findRecentNewsAboutStock(){
-        return em.createQuery("select n from News n where n.newsTopic = :topic order by n.newsDate desc")
+        return em.createQuery("select n from News n where n.newsTopic = :topic order by n.newsDate desc", News.class)
                 .setParameter("topic", "코스피")
                 .setMaxResults(10)
                 .getResultList();
     }
     
     public List<News> findRecentNewsAboutNasdaq() {
-        return em.createQuery("SELECT n FROM News n WHERE n.newsTopic = :topic ORDER BY n.newsDate DESC")
+        return em.createQuery("SELECT n FROM News n WHERE n.newsTopic = :topic ORDER BY n.newsDate DESC", News.class)
                 .setParameter("topic", "나스닥")
                 .setMaxResults(10)
                 .getResultList();
@@ -66,7 +57,7 @@ public class NewsRepository {
     }
 
     public List<News> findAllNewsAboutTopic(){
-        return em.createQuery("select n from News n")
+        return em.createQuery("select n from News n", News.class)
                 .getResultList();
     }
 
@@ -75,7 +66,7 @@ public class NewsRepository {
     }
 
     public List<News> findPopularNews() {
-        return em.createQuery("select n from News n order by n.newsCheckCount desc")
+        return em.createQuery("select n from News n order by n.newsCheckCount desc", News.class)
                 .setMaxResults(10)
                 .getResultList();
     }

@@ -22,7 +22,7 @@
             <p style="font-weight: 800">검색어</p>
           </div>
           <div style="overflow: auto; height: 87%; background-color:#DAE3F3; border-radius:0.3rem; border:none">
-            <div class="pickWordList" th:each="interestWord : ${preferenceTitle}">
+            <div class="pickWordList" th:each="interestWord : ${myPage.preferenceTitle}">
               <div style="display: flex; justify-content:center">
                 <div class="pickWord" th:text="${interestWord.preferenceTitle}"></div>
                 <form method="post" th:action="@{/mypage/delete/{preferenceTitleId}(preferenceTitleId=${interestWord.preferenceTitleId})}">
@@ -39,7 +39,7 @@
           </div>
           <div style="overflow: auto; height: 87%">
             <ul>
-              <li th:each="post : ${myPost}" style="display:flex; justify-content:space-between; align-content:center;">
+              <li th:each="post : ${myPage.myPost}" style="display:flex; justify-content:space-between; align-content:center;">
                 <a class="aText" style="overflow:hidden; width:50%" th:text="${post.postTitle}" th:href="@{/post/{postId}(postId=${post.postId})}"></a>
                 <div style="display:flex; justify-content:end">
                     <button type="button" class="deleteCommentButton" style="margin-right:10px"><a style="color:black" th:href="@{/post/update/{postId}(postId=${post.postId})}">수정</a></button>
@@ -56,7 +56,7 @@
           </div>
           <div style="overflow: auto; height: 87%">
             <ul>
-              <li th:each="post : ${recentPost}">
+              <li th:each="post : ${myPage.recentPost}">
                 <a class="aText" th:text="${post.post.postTitle}" th:href="@{/post/{postId}(postId=${post.post.postId})}"></a>
               </li>
             </ul>
@@ -79,7 +79,7 @@
           </div>
           <div style="overflow: auto; height: 87%">
             <ul>
-              <li th:each="news : ${preferenceNews}">
+              <li th:each="news : ${myPage.preferenceNews}">
                 <a class="aText" th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
               </li>
             </ul>
@@ -92,7 +92,7 @@
           </div>
           <div style="overflow: auto; height: 87%">
             <ul>
-              <li th:each="news : ${recentNews}">
+              <li th:each="news : ${myPage.recentNews}">
                 <a class="aText" th:text="${news.news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.news.newsId})}"></a>
               </li>
             </ul>

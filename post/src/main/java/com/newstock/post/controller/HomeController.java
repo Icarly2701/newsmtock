@@ -3,6 +3,7 @@ package com.newstock.post.controller;
 import com.newstock.post.domain.news.News;
 import com.newstock.post.domain.user.PreferenceTitle;
 import com.newstock.post.domain.user.User;
+import com.newstock.post.dto.news.HomeDto;
 import com.newstock.post.service.NewsService;
 import com.newstock.post.service.UserService;
 import com.newstock.post.web.Login;
@@ -26,24 +27,14 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(@Login User user, Model model){
-        List<News> recentNewsAboutStock = newsService.getRecentNewsAboutStock();
-        List<News> popularNews = newsService.getPopularNews();
-
-        model.addAttribute("newsList",recentNewsAboutStock);
-        model.addAttribute("popularNewsList", popularNews);
-
+        HomeDto homeDto = new HomeDto(newsService.getRecentNewsAboutStock(),
+                newsService.getPopularNews());
         if(user != null){
-            List<PreferenceTitle> userPreferenceTitle = userService.findUserPreferenceTitle(user.getUserId());
-            List<News> aboutPreferenceTitle = new ArrayList<>();
-            for(PreferenceTitle preferenceTitle: userPreferenceTitle){
-                aboutPreferenceTitle.addAll(newsService.getRecentNewsAboutTopic(preferenceTitle.getPreferenceTitle()));
-            }
-            model.addAttribute("preferenceNews", aboutPreferenceTitle);
-            return "mainpage";
+            homeDto.setPreferenceNews(newsService.getUserPreferenceNews(userService.findUserPreferenceTitle(user.getUserId())));
+        }else{
+            homeDto.setNasdaqList(newsService.getRecentNewsAboutNasdaq());
         }
-
-        List<News> recentNewsAboutNasdaq = newsService.getRecentNewsAboutNasdaq();
-        model.addAttribute("nasdaqList", recentNewsAboutNasdaq);
+        model.addAttribute("homeDto", homeDto);
         return "mainpage";
     }
 }

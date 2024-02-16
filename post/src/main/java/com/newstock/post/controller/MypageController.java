@@ -3,6 +3,7 @@ package com.newstock.post.controller;
 import com.newstock.post.domain.news.News;
 import com.newstock.post.domain.user.PreferenceTitle;
 import com.newstock.post.domain.user.User;
+import com.newstock.post.dto.MypageDto;
 import com.newstock.post.service.NewsService;
 import com.newstock.post.service.PostService;
 import com.newstock.post.service.UserService;
@@ -31,18 +32,12 @@ public class MypageController {
     @GetMapping("/mypage")
     public String viewMypage(@Login User user, Model model){
         List<PreferenceTitle> userPreferenceTitle = userService.findUserPreferenceTitle(user.getUserId());
-
-        List<News> aboutPreferenceTitle = new ArrayList<>();
-        for(PreferenceTitle preferenceTitle: userPreferenceTitle){
-            aboutPreferenceTitle.addAll(newsService.getRecentNewsAboutTopic(preferenceTitle.getPreferenceTitle()));
-        }
-
-        model.addAttribute("preferenceTitle", userPreferenceTitle);
-        model.addAttribute("preferenceNews", aboutPreferenceTitle);
-        model.addAttribute("recentNews", newsService.getRecentNewsList(user));
-        model.addAttribute("recentPost", postService.getRecentPostList(user));
-        model.addAttribute("myPost", postService.getMyPostList(user));
-
+        model.addAttribute("myPage", new MypageDto(
+                userPreferenceTitle,
+                newsService.getUserPreferenceNews(userPreferenceTitle),
+                newsService.getRecentNewsList(user),
+                postService.getRecentPostList(user),
+                postService.getMyPostList(user)));
         return "mypage";
     }
 

@@ -2,7 +2,9 @@ package com.newstock.post.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newstock.post.api.Item;
+import com.newstock.post.domain.Target;
 import com.newstock.post.domain.news.*;
+import com.newstock.post.domain.user.PreferenceTitle;
 import com.newstock.post.domain.user.User;
 import com.newstock.post.repository.news.LikeDislikeNewsRepository;
 import com.newstock.post.repository.news.NewsCommentRepository;
@@ -10,6 +12,7 @@ import com.newstock.post.repository.news.NewsRepository;
 import com.newstock.post.repository.news.RecentNewsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -17,9 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -54,13 +57,11 @@ public class NewsService {
         return newsRepository.findById(newsId);
     }
 
-    @Transactional
-    public void checkCountAdd(News news){
+    private void checkCountAdd(News news){
         news.checkCount();
     }
 
-    @Transactional
-    public void addLikeCount(News news, User user){
+    private void addLikeCount(News news, User user){
         List<LikeNews> likeNews = likeDislikeNewsRepository.findLikeNews(news, user);
         List<DislikeNews> dislikeNews = likeDislikeNewsRepository.findDislikeNews(news, user);
 
@@ -78,8 +79,7 @@ public class NewsService {
         likeDislikeNewsRepository.deleteLikeNews(likeNews.get(0));
     }
 
-    @Transactional
-    public void subLikeCount(News news, User user){
+    private void subLikeCount(News news, User user){
         List<DislikeNews> dislikeNews = likeDislikeNewsRepository.findDislikeNews(news, user);
         List<LikeNews> likeNews = likeDislikeNewsRepository.findLikeNews(news, user);
 
@@ -142,7 +142,7 @@ public class NewsService {
         Map<String, Object> newsData = webClient.get()
                 .uri(apiUrl)
                 .retrieve()
-                .bodyToMono(Map.class)
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
                 .block();
 
         List<Item> items = (List<Item>) newsData.get("items");
@@ -182,14 +182,12 @@ public class NewsService {
         newsCommentRepository.deleteNewsComment(newsComment);
     }
 
-    @Transactional
-    public void addRecentNews(News news, User user) {
+    private void addRecentNews(News news, User user) {
         RecentNews recentNews = RecentNews.makeRecentNews(news,user);
         recentNewsRepository.save(recentNews);
     }
 
-    @Transactional
-    public void updateRecentNews(RecentNews recentNews){
+    private void updateRecentNews(RecentNews recentNews){
         recentNews.setRecentNewsDate();
     }
 
@@ -203,5 +201,58 @@ public class NewsService {
 
     public List<RecentNews> getRecentNewsList(User user){
         return recentNewsRepository.getRecentNews(user);
+    }
+
+    public List<News> getUserPreferenceNews(List<PreferenceTitle> userPreferenceTitle) {
+        return userPreferenceTitle.stream()
+                .map(preferenceTitle -> this.getRecentNewsAboutTopic(preferenceTitle.getPreferenceTitle()))
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+    }
+
+    private void processRecentNews(News news, User user) {
+        RecentNews recentNews = this.getRecentNewsAlreadySeen(news, user);
+        if(recentNews == null) {
+            this.addRecentNews(news, user);
+            return;
+        }
+        this.updateRecentNews(recentNews);
+    }
+
+    @Transactional
+    public News processDetailPageNews(Long newsId, User user, String isLike) {
+        News news = this.findById(newsId);
+        if(user != null) this.processRecentNews(news, user);
+        if(isLike.isEmpty()) this.checkCountAdd(news);
+        return news;
+    }
+
+    @Transactional
+    public void processRecommend(Long newsId,User user,String action) {
+        News news = this.findById(newsId);
+        if(action.equals("like")){
+            this.addLikeCount(news, user);
+            return;
+        }
+        this.subLikeCount(news, user);
+    }
+
+    public List<News> getEconomicNewsList(String target) {
+        return Stream.concat(this.getRecentNewsAboutNasdaq().stream(), this.getRecentNewsAboutStock().stream())
+                .sorted(target == null ? Comparator.comparing(News::getNewsDate) : switch (target) {
+                    case "count" -> Comparator.comparingInt(News::getNewsCheckCount).reversed();
+                    case "like" -> Comparator.comparingInt(News::getNewsLikeCount).reversed();
+                    default -> Comparator.comparing(News::getNewsDate).reversed();
+                })
+                .toList();
+    }
+
+    public List<News> getSearchData(String keyword, Target target) {
+        this.getNewsData(keyword);
+        return target == null ? this.getRecentNewsAboutTopic(keyword) : switch (target) {
+            case title_content -> this.getRecentNewsAboutTopic(keyword);
+            case content -> this.getRecentNewsAboutTitle(keyword);
+            default -> this.getRecentNewsAboutContent(keyword);
+        };
     }
 }

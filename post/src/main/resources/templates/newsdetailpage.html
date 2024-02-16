@@ -43,24 +43,21 @@
     <div class="center">
       <div th:replace="head_fragment :: header"></div>
       <div style="margin-left: 15%; margin-right: 15%; height: 100%">
-        <div th:if="${type eq 'news'}" class="newPostCategoryName" style="margin-top: 25px; width: 100px">뉴스</div>
-        <div th:if="${type eq 'post'}" class="newPostCategoryName" style="margin-top: 25px; width: 100px">게시판</div>
+        <div class="newPostCategoryName" style="margin-top: 25px; width: 100px">뉴스</div>
         <div class="detailPostHead">
-          <div class="detailPostHeadContent" th:text="${content.newsHeadline}">
+          <div class="detailPostHeadContent" th:text="${newsDetail.content.newsHeadline}">
           </div>
-          <div class="detailPostHeadContent" th:text="${content.newsDate}"></div>
+          <div class="detailPostHeadContent" th:text="${newsDetail.content.newsDate}"></div>
         </div>
         <div class="detailPostSecond">
-          <div class="detailPostHeadContent" style="font-weight: 100" th:if="${type eq 'news'}" th:text="${content.newsURL}"></div>
-          <div class="detailPostHeadContent" style="font-weight: 100" th:if="${type eq 'post'}" th:text="${content.nickname}"></div>
+          <div class="detailPostHeadContent" style="font-weight: 100"  th:text="${newsDetail.content.newsURL}"></div>
           <div style="display: flex; justify-content: center">
-            <div class="detailPostHeadContent" style="font-weight: 100" th:if="${type eq 'news'}" th:text="'조회 수 ' + ${content.newsCheckCount}"></div>
-            <div class="detailPostHeadContent" style="font-weight: 100" th:if="${type eq 'news'}" th:text="'추천 수 ' + ${content.newsLikeCount}"></div>
-            <div class="detailPostHeadContent" style="font-weight: 100" th:if="${type eq 'news'}" th:text="'댓글 수 ' + ${newsCommentList.size()}"></div>
+            <div class="detailPostHeadContent" style="font-weight: 100" th:text="'조회 수 ' + ${newsDetail.content.newsCheckCount}"></div>
+            <div class="detailPostHeadContent" style="font-weight: 100" th:text="'추천 수 ' + ${newsDetail.content.newsLikeCount}"></div>
+            <div class="detailPostHeadContent" style="font-weight: 100" th:text="'댓글 수 ' + ${newsDetail.newsCommentList.size()}"></div>
           </div>
         </div>
-        <div class="detailPostContent" th:if="${type eq 'news'}" th:text="${content.newsContent.newsContentText}" ></div>
-        <div class="detailPostContent" th:if="${type eq 'post'}" th:text="${content.content}" ></div>
+        <div class="detailPostContent" th:text="${newsDetail.content.newsContent.newsContentText}" ></div>
         <div class="detailRecommend">
           <form method="post" class="detailRecommendLayout" id="recommendForm">
             <button
@@ -79,7 +76,7 @@
                 border: 2px solid #b8b8b8;
                 width: 50px;
               "
-              th:if="${type eq 'news'}" th:text="${content.newsLikeCount}"
+              th:text="${newsDetail.content.newsLikeCount}"
             ></div>
             <button
               class="detailRecommendBox"
@@ -92,16 +89,16 @@
             <input type="hidden" id="actionInput" name="action" th:value="${null}" />
           </form>
         </div>
-        <div class="detailCommandHead" th:text="'댓글 수 ' + ${newsCommentList.size()}"></div>
+        <div class="detailCommandHead" th:text="'댓글 수 ' + ${newsDetail.newsCommentList.size()}"></div>
         <div class="detailCommandLayout">
-          <div class="detailCommandDetail" th:each="newsComment:${newsCommentList}">
+          <div class="detailCommandDetail" th:each="newsComment:${newsDetail.newsCommentList}">
             <div class="detailCommandLayoutName">
               <div style="display:flex; justify-content:space-between; width:100%">
                 <div style="display:flex;">
                   <div class="detailCommandNickname" th:text="${newsComment.user.nickname}"></div>
                   <div class="detailCommandDate" th:text="${newsComment.newsCommentDate}"></div>
                 </div>
-                <form th:if="${session.loginMember != null && viewUser.userId != null && newsComment.user.userId == viewUser.userId}" method="post" id="deleteForm">
+                <form th:if="${session.loginMember != null && newsDetail.viewUser.userId != null && newsComment.user.userId == newsDetail.viewUser.userId}" method="post" id="deleteForm">
                   <button type="button" class="deleteCommentButton" onclick="deleteComment()" th:text="${'삭제'}"></button>
                   <input type="hidden" name="newsCommentId" th:value="${newsComment.newsCommentId}"/>
                 </form>
@@ -129,20 +126,6 @@
             </button>
           </form>
         </div>
-      </div>
-      <div
-        style="
-          display: flex;
-          justify-content: end;
-          margin-top: 50px;
-          margin-right: 5%;
-        "
-      >
-        <form method="post">
-          <button type="submit" class="registerPickWord" style="width: 150px">
-            새 글 작성
-          </button>
-        </form>
       </div>
     </div>
   </body>
