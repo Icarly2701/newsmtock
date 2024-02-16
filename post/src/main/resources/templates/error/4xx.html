@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" th:href="@{/css/stylemain.css}" />
+    <link rel="icon" th:href="@{/image/favicon.png}">
+    <title>NEWSTOCK</title>
+</head>
+<body
+        style="
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    "
+>
+<div class="center">
+    <div th:replace="head_fragment :: header"></div>
+    <div class="mainContent">
+        에러가 발생했습니다. 이전페이지로 돌아가세요
+    </div>
+</div>
+</body>
+</html>

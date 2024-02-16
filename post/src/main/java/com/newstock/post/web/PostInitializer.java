@@ -20,9 +20,7 @@ public class PostInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        makeDummyUser();
-        postService.saveCategory(Category.makeCategory("stock"));
-        postService.saveCategory(Category.makeCategory("freeBoard"));
+
     }
 
     private void makeDummyUser() {

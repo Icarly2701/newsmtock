@@ -82,30 +82,21 @@
             <div
               class="searchLabelContenttext"
               style="border-right: 1.5px solid black"
-              th:text="${content.Category.categoryContent}"
+              th:text="${content.user.nickname}"
             ></div>
             <div
               class="searchLabelContenttext"
               style="border-right: 1.5px solid black"
               th:text="${content.postDate}"
             ></div>
+            <div
+                    class="searchLabelContenttext"
+                    style="border-right: 1.5px solid black"
+                    th:text="${content.Category.categoryContent}"
+            ></div>
             <div class="searchLabelContenttext" th:text="${content.postCheckCount}"></div>
           </div>
         </div>
-      </div>
-      <div
-              style="
-          display: flex;
-          justify-content: end;
-          margin-top: 30px;
-          margin-right: 5%;
-        "
-      >
-        <form method="post">
-          <button type="submit" class="registerPickWord" style="width: 150px">
-            새 글 작성
-          </button>
-        </form>
       </div>
     </div>
   </body>

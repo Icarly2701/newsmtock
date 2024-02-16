@@ -14,13 +14,14 @@ public class RecentNews {
     private Long recentNewsId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "news_id")
+    @JoinColumn(name = "news_id", nullable = false)
     private News news;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id",nullable = false)
     private User user;
 
+    @Column(nullable = false)
     private LocalDateTime recentNewsDate;
 
     public static RecentNews makeRecentNews(News news, User user){

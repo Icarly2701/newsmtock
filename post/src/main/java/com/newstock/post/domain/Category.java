@@ -1,9 +1,6 @@
 package com.newstock.post.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
@@ -13,6 +10,7 @@ public class Category {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;
 
+    @Column(nullable = false, length = 50)
     private String categoryContent;
 
     public static Category makeCategory(String categoryContent){

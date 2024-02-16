@@ -12,11 +12,11 @@ public class DislikeNews {
     private Long dislikeNewsId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "news_id")
+    @JoinColumn(name = "news_id", nullable = false)
     private News news;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public static DislikeNews makeDislikeNews(News news, User user){

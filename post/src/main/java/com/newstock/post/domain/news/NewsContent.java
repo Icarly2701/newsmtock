@@ -10,9 +10,10 @@ public class NewsContent {
     private Long newsContentId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "news_id")
+    @JoinColumn(name = "news_id", nullable = false)
     private News news;
 
+    @Column(nullable = false, length = 1000)
     private String newsContentText;
 
     public static NewsContent makeNewsContent(String newsContentText, News news){

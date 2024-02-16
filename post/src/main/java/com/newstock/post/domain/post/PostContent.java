@@ -12,9 +12,10 @@ public class PostContent {
     private Long postContentId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
+    @Column(nullable = false, length = 1000)
     private String postContentText;
 
     public static PostContent makePostContent(PostDto postDto, Post post){

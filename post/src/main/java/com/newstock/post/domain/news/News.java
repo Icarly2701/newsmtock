@@ -24,13 +24,19 @@ public class News {
     @OneToOne(fetch = FetchType.LAZY,mappedBy = "news")
     private NewsContent newsContent;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false, length = 100)
     private String newsURL;
 
+    @Column(nullable = false, length = 150)
     private String newsHeadline;
+
+    @Column(nullable = false)
     private LocalDateTime newsDate;
+    @Column(nullable = false)
     private int newsCheckCount;
+    @Column(nullable = false)
     private int newsLikeCount;
+    @Column(nullable = false)
     private String newsTopic;
 
     public static News makeNewsItem(Item item, String topic){

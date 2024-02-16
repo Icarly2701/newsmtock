@@ -14,15 +14,18 @@ public class NewsComment {
     private Long newsCommentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "news_id")
+    @JoinColumn(name = "news_id", nullable = false)
     private News news;
 
+    @Column(nullable = false)
     private LocalDateTime newsCommentDate;
+    @Column(nullable = false)
     private String newsCommentContent;
+    @Column(nullable = false)
     private int newsCommentLikeCount;
 
     public static NewsComment makeNewsCommentItem(News news, User user, String newsCommentContent) {

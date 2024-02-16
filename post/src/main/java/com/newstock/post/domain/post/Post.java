@@ -19,11 +19,11 @@ public class Post {
     private Long postId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     @Cascade(CascadeType.PERSIST)
     private Category category;
 
@@ -31,9 +31,13 @@ public class Post {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "post")
     private PostContent postContent;
 
+    @Column(nullable = false)
     private LocalDateTime postDate;
+    @Column(nullable = false)
     private int postCheckCount;
+    @Column(nullable = false)
     private int postLikeCount;
+    @Column(nullable = false, length = 100)
     private String postTitle;
 
     public static Post makePost(PostDto postDto, User user){

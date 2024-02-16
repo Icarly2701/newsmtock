@@ -11,9 +11,10 @@ public class PostImage {
     private Long postImageId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_content_id")
+    @JoinColumn(name = "post_content_id", nullable = false)
     private PostContent postContent;
 
+    @Column(nullable = false, length = 600)
     private String postImagePath;
 
     public static PostImage makePostImage(String postImagePath, PostContent postContent){

@@ -32,6 +32,6 @@ public class WebConfig  implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/post_image/**")
-                .addResourceLocations("file:///C:\\newsmtock\\post_image\\");
+                .addResourceLocations("file:///C:\\newsmtock\\post\\post_image\\");
     }
 }

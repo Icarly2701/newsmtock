@@ -12,9 +12,10 @@ public class PreferenceTitle {
     private Long preferenceTitleId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(length = 1000)
     private String preferenceTitle;
 
     public static PreferenceTitle preferenceTitle(User user, String preferenceTitle){

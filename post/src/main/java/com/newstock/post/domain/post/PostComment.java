@@ -15,15 +15,18 @@ public class PostComment {
     private Long postCommentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
+    @Column(nullable = false)
     private LocalDateTime postCommentDate;
+    @Column(nullable = false)
     private String postCommentContent;
+    @Column(nullable = false)
     private int postCommentLikeCount;
 
     public static PostComment makePostComment(Post post, User user, String postCommentContent) {

@@ -13,15 +13,17 @@ public class TempPost {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tempPostId;
 
+    @Column(nullable = false, length = 100)
     private String tempPostTitle;
+    @Column(nullable = false, length = 1000)
     private String tempPostText;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     public static TempPost tempPost(PostDto postDto, User user){

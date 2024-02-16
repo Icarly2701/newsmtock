@@ -18,6 +18,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.*;
@@ -205,32 +206,36 @@ public class NewsService {
     }
 
     private void getNewsDataUseApi(String topic) {
-        WebClient webClient = getWebClient();
-        String apiUrl = getApiUrl(topic);
+        try{
+            WebClient webClient = getWebClient();
+            String apiUrl = getApiUrl(topic);
 
-        Map<String, Object> newsData = webClient.get()
-                .uri(apiUrl)
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
-                .block();
+            Map<String, Object> newsData = webClient.get()
+                    .uri(apiUrl)
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+                    .block();
 
-        List<Item> items = (List<Item>) newsData.get("items");
-        List<News> compareTopic = newsRepository.findAllNewsAboutTopic();
+            List<Item> items = (List<Item>) newsData.get("items");
+            List<News> compareTopic = newsRepository.findAllNewsAboutTopic();
 
-        for (int i = 0; i < items.size(); i++) {
-            ObjectMapper mapper = new ObjectMapper();
+            for (int i = 0; i < items.size(); i++) {
+                ObjectMapper mapper = new ObjectMapper();
 
-            Item item = mapper.convertValue(items.get(i), Item.class);
-            item.cleanHtmlCode();
+                Item item = mapper.convertValue(items.get(i), Item.class);
+                item.cleanHtmlCode();
 
-            String newsLink = item.getLink() != null ? item.getLink() : item.getOriginallink();
-            Optional<News> existingNews = compareTopic.stream()
-                    .filter(v -> ((v.getNewsURL().equals(newsLink))))
-                    .findAny();
+                String newsLink = item.getLink() != null ? item.getLink() : item.getOriginallink();
+                Optional<News> existingNews = compareTopic.stream()
+                        .filter(v -> ((v.getNewsURL().equals(newsLink))))
+                        .findAny();
 
-            if(existingNews.isEmpty()){
-                newsRepository.save(News.makeNewsItem(item, topic));
+                if(existingNews.isEmpty()){
+                    newsRepository.save(News.makeNewsItem(item, topic));
+                }
             }
+        } catch (WebClientResponseException.BadRequest ex){
+            log.error("error = {}", ex.toString());
         }
     }
 

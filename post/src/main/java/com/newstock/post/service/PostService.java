@@ -100,8 +100,9 @@ public class PostService {
         Post post = Post.makePost(new PostDto(postUpload.getTitle(),
                 postUpload.getContent(),
                 this.findCategory(category)), user);
+        Long postId = savePost(post);
         this.saveImage(postUpload.getFileList(), post);
-        return this.savePost(post);
+        return postId;
     }
 
     @Transactional
