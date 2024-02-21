@@ -96,14 +96,17 @@
               <img class="postUpdateImage" style="margin-right:10px; margin-left:10px" th:src="|${imageFile.postImagePath}|"/>
               <input type="hidden" name="imagePaths" th:value="${imageFile.postImagePath}">
               <button type="button" class="deleteCommentButton" style="margin-top:20px" onclick="removeImage(this)">삭제</button>
-              <input type="hidden" name="deleted_images[]" th:value="${imageFile.postImagePath}">
+              <input type="hidden" name="deletePaths" th:value="${imageFile.postImagePath}">
               <script>
                 function removeImage(button) {
                     var imageDiv = button.parentElement;
                     var image = imageDiv.querySelector("img");
-                    var hiddenInput = imageDiv.querySelector("input[type=hidden]");
+
+                    var hiddenInput = imageDiv.querySelector("input[name='imagePaths']");
                     hiddenInput.parentNode.removeChild(hiddenInput);
-                    imageDiv.parentNode.removeChild(imageDiv);
+
+                    imageDiv.removeChild(button);
+                    imageDiv.removeChild(imageDiv.querySelector("img"));
                 }
               </script>
             </div>

@@ -14,11 +14,13 @@ import com.newstock.post.repository.file.UploadFile;
 import com.newstock.post.repository.post.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +35,8 @@ public class PostService {
     private final RecentPostRepository recentPostRepository;
     private final TempPostRepository tempPostRepository;
     private final FileStore fileStore;
+    @Value("${aws.bucket-name}")
+    private String bucketName;
 
     public List<RecentPost> getRecentPostList(User user) {
         return recentPostRepository.getRecentPost(user);
@@ -109,7 +113,7 @@ public class PostService {
     public void processUpdatePost(Long postId, PostUploadUpdate postUpload) {
         Post post = this.findById(postId);
         this.updatePost(post, postUpload);
-        this.updatePostImage(post.getPostContent().getPostContentId(), postUpload.getImagePaths());
+        this.updatePostImage(post.getPostContent().getPostContentId(), postUpload.getDeletePaths());
         saveImage(postUpload.getFileList(), post);
     }
 

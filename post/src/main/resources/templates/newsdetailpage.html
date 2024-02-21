@@ -51,7 +51,9 @@
           <div class="detailPostHeadContent" th:text="${newsDetail.content.newsDate}"></div>
         </div>
         <div class="detailPostSecond">
-          <div class="detailPostHeadContent" style="font-weight: 100"  th:text="${newsDetail.content.newsURL}"></div>
+          <div class="detailPostHeadContent" style="font-weight: 100" >
+            <a style="color:black; cursor:pointer" th:text="${newsDetail.content.newsURL}" th:href="${newsDetail.content.newsURL}"></a>
+          </div>
           <div style="display: flex; justify-content: center">
             <div class="detailPostHeadContent" style="font-weight: 100" th:text="'조회 수 ' + ${newsDetail.content.newsCheckCount}"></div>
             <div class="detailPostHeadContent" style="font-weight: 100" th:text="'추천 수 ' + ${newsDetail.content.newsLikeCount}"></div>

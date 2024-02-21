@@ -13,8 +13,7 @@ public class PostUploadUpdate {
     private String title;
     @NotBlank
     private String content;
-
     private List<String> imagePaths;
-
+    private List<String> deletePaths;
     private List<MultipartFile> fileList;
 }

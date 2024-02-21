@@ -36,6 +36,13 @@
             </select>
             <script>
               var ageSelect = document.getElementById("age");
+              var optionNone = document.createElement("option");
+              optionNone.text = "나이";
+              optionNone.value = "";
+              optionNone.disabled = true;
+              optionNone.selected = true;
+              optionNone.hidden = true;
+              ageSelect.add(optionNone);
               for (var i = 1; i <= 100; i++) {
                   var option = document.createElement("option");
                   option.value = i;

@@ -115,12 +115,12 @@ public class NewsService {
         this.subLikeCount(news, user);
     }
 
-    @Scheduled(fixedDelay = 300000000)
+    @Scheduled(cron = "0 0 9,15 * * *")
     public void getKospiNewsData(){
         getNewsDataUseApi("코스피");
     }
 
-    @Scheduled(fixedDelay = 300000000)
+    @Scheduled(cron = "0 0 6,22 * * *")
     public void getNasdaqNewsData(){
         getNewsDataUseApi("나스닥");
     }

@@ -139,6 +139,9 @@ public class PostController {
         if (bindingResult.hasErrors()) {
             return "redirect:/post/update/" + postId;
         }
+        log.info("postupload = {}", postUpload.getImagePaths());
+        log.info("postupload = {}", postUpload.getDeletePaths());
+
         postService.processUpdatePost(postId, postUpload);
         return "redirect:/post/" + postId;
     }
