@@ -1,6 +1,7 @@
 # :newspaper: NEWS & STOCK
 
 > 경제 뉴스 및 자유롭게 토론하는 게시판
+> <br> 배포 사이트 : http://newstock.site
 
 ## :post_office: 프로젝트 소개
 
