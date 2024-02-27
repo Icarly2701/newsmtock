@@ -7,6 +7,7 @@ import com.newstock.post.domain.post.TempPost;
 import com.newstock.post.dto.auth.SignupDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +36,12 @@ public class User {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
     private TempPost tempPost;
 
-    public static User makeuser(SignupDto signupDto){
+    public static User makeuser(SignupDto signupDto, BCryptPasswordEncoder bCryptPasswordEncoder){
         User user = new User();
         user.age = Integer.parseInt(signupDto.getAge());
         user.id = signupDto.getId();
         user.nickname = signupDto.getNickname();
-        user.password = signupDto.getPassword();
+        user.password = bCryptPasswordEncoder.encode(signupDto.getPassword());
         user.gender = signupDto.getGender();
         return user;
     }

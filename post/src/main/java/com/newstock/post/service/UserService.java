@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -25,10 +26,11 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PreferenceTitleRepository preferenceTitleRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional
     public void processSignup(SignupDto signupDto) {
-        Long userId = this.save(User.makeuser(signupDto));
+        Long userId = this.save(User.makeuser(signupDto, bCryptPasswordEncoder));
         for(String interestWord: signupDto.getInterestWord().split(",")){
             this.savePreferenceTitle(userId, interestWord.trim());
         }
