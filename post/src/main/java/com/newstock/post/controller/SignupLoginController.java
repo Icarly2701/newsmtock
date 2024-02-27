@@ -46,6 +46,7 @@ public class SignupLoginController {
                         BindingResult bindingResult,
                         HttpServletRequest request){
         User user = userService.findByUserId(loginDto.getId(), loginDto.getPassword());
+
         if(user == null){
             bindingResult.rejectValue("id", "idFail");
             return "loginpage";

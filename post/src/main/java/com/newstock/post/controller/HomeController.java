@@ -19,15 +19,22 @@ public class HomeController {
     private final NewsService newsService;
     private final UserService userService;
 
+
+    @GetMapping("/healthcheck")
+    public String healthCheck(){
+        return "ok";
+    }
+
     @GetMapping("/")
     public String home(@Login User user, Model model){
-        HomeDto homeDto = new HomeDto(newsService.getRecentNewsAboutStock(),
-                newsService.getPopularNews());
+        HomeDto homeDto = new HomeDto(newsService.getRecentNewsAboutStock(), newsService.getPopularNews());
+
         if(user != null){
             homeDto.setPreferenceNews(newsService.getUserPreferenceNews(userService.findUserPreferenceTitle(user.getUserId())));
-        }else{
+        }else {
             homeDto.setNasdaqList(newsService.getRecentNewsAboutNasdaq());
         }
+
         model.addAttribute("homeDto", homeDto);
         return "mainpage";
     }

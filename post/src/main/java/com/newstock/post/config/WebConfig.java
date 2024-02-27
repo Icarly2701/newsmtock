@@ -1,4 +1,4 @@
-package com.newstock.post;
+package com.newstock.post.config;
 
 import com.newstock.post.web.LoginArgumentResolver;
 import com.newstock.post.web.LoginCheckInterceptor;
