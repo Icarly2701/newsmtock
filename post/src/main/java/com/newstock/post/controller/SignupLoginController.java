@@ -45,7 +45,7 @@ public class SignupLoginController {
     public String login(@ModelAttribute("loginData") LoginDto loginDto,
                         BindingResult bindingResult,
                         HttpServletRequest request){
-        User user = userService.findByUserId(loginDto.getId(), loginDto.getPassword());
+        User user = userService.findByUserId(loginDto.getUsername(), loginDto.getPassword());
 
         if(user == null){
             bindingResult.rejectValue("id", "idFail");

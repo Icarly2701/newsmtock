@@ -14,16 +14,18 @@
           <input
             type="text"
             placeholder="ID"
-            th:field="*{id}"
+            name="username"
+            th:field="*{username}"
             class="loginInputForm"
           />
          <input
             type="password"
+            name="password"
             placeholder="PASSWORD"
             th:field="*{password}"
             class="loginInputForm"
           />
-          <span th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></span>
+          <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
           <input class="loginEnterForm" value="로그인" type="submit" />
 
         </form>
