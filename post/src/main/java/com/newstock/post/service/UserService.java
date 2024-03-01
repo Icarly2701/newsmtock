@@ -44,12 +44,10 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public User findByUserId(String userId, String userPassword){
+    public User findByUserId(String userId){
         List<User> temp = userRepository.findByUserId(userId);
         if(temp.isEmpty()) return null;
-        User user = temp.get(0);
-        if(!user.getPassword().equals(userPassword)) return null;
-        return user;
+        return temp.get(0);
     }
 
     public List<PreferenceTitle> findUserPreferenceTitle(Long userId){

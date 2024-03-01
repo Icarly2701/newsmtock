@@ -9,7 +9,7 @@
   >
     <div class="logoSign">
       <a th:href="@{/}" style="display:initial; width:auto;">
-      <img th:src="@{/image/MainLogo.png}" class="logoImage" />
+      <img th:src="@{/images/MainLogo.png}" class="logoImage" />
       </a>
       <form method="get" class="mainSearch" th:action="@{/search}">
         <div class="searchForm">
@@ -63,7 +63,7 @@
           <a th:href="@{/mypage}">마이 페이지</a>
         </div>
       </div>
-      <div class="buttons" th:unless="${session.loginMember != null}">
+      <div class="buttons" sec:authorize="isAuthenticated()">
         <div
                 class="whiteButton"
                 style="
@@ -82,7 +82,7 @@
         </div>
       </div>
 
-      <div class="buttons" th:if="${session.loginMember != null}">
+      <div class="buttons" sec:authorize="isAuthenticated()">
         <div
                 class="whiteButton"
                 style="

@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org"/>
     <link rel="stylesheet" th:href="@{/css/stylecss.css}" />
-    <link rel="icon" th:href="@{/image/favicon.png}">
+    <link rel="icon" th:href="@{/images/favicon.png}">
     <title>NEWSTOCK</title>
   </head>
   <body>
     <div class="center">
       <div class="loginBox">
-        <img src="../image/LoginSignupLogo.png" class="imageBox" />
+        <img src="../images/LoginSignupLogo.png" class="imageBox" />
         <form method="post" class="loginForm" th:action="@{/login}" th:object="${loginData}">
           <input
             type="text"

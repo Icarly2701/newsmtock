@@ -45,4 +45,11 @@ public class User {
         user.gender = signupDto.getGender();
         return user;
     }
+
+    public static User makeTempUser(String userId){
+        User user = new User();
+        user.id = userId;
+        user.password = "temppassword";
+        return user;
+    }
 }
