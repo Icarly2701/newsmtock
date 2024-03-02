@@ -18,7 +18,7 @@
     <div class="center">
       <div th:replace="head_fragment :: header"></div>
       <div class="mainContent">
-        <div class="basicContainer" th:style="${#authentication.isAuthenticated() ? 'width:25%' : ''}">
+        <div class="basicContainer" sec:authorize="isAnonymous()">
           <div class="containerHead">
             <p style="font-weight: 800">주식 관련&nbsp;</p>
             <p>최신 뉴스</p></div>
@@ -30,7 +30,21 @@
             </ul>
           </div>
         </div>
-        <div class="basicContainer" th:style="${#authentication.principal != null ? 'width:25%' : ''}">
+        <div class="basicContainer" style="width:25%" sec:authorize="hasRole('USER')">
+          <div class="containerHead">
+            <p style="font-weight: 800">주식 관련&nbsp;</p>
+            <p>최신 뉴스</p></div>
+          <div style="overflow: auto; height: 87%">
+            <ul>
+              <li th:each="news : ${homeDto.newsList}">
+                <a class="aText" th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+
+        <div class="basicContainer" sec:authorize="isAnonymous()">
           <div class="containerHead">
             <p style="font-weight: 800">인기&nbsp;</p>
             <p>뉴스</p></div>
@@ -42,16 +56,40 @@
             </ul>
           </div>
         </div>
-        <div class="basicContainer" th:style="${#authentication.isAuthenticated() ? 'width:40%' : ''}">
-          <div class="containerHead"  th:style="${#authentication.isAuthenticated() ? 'color: #2f5597' : ''}" >
-            <p style="font-weight: 800" th:text="${isLogin} ? '관심어&nbsp;' : '나스닥&nbsp;'"></p>
+
+        <div class="basicContainer" sec:authorize="hasRole('USER')">
+          <div class="containerHead">
+            <p style="font-weight: 800">인기&nbsp;</p>
             <p>뉴스</p></div>
           <div style="overflow: auto; height: 87%">
             <ul>
-              <li sec:authorize="isAuthenticated()" th:each="news : ${homeDto.nasdaqList}">
+              <li th:each="news : ${homeDto.popularNewsList}">
                 <a class="aText" th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
               </li>
-              <li sec:authorize="isAuthenticated()" th:each="news : ${homeDto.preferenceNews}" class="interestWord">
+            </ul>
+          </div>
+        </div>
+
+        <div class="basicContainer" sec:authorize="isAnonymous()">
+          <div class="containerHead">
+            <p style="font-weight: 800">나스닥&nbsp;</p>
+            <p>뉴스</p></div>
+          <div style="overflow: auto; height: 87%">
+            <ul>
+              <li th:each="news : ${homeDto.nasdaqList}">
+                <a class="aText" th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="basicContainer" sec:authorize="hasRole('USER')" style="width:40%">
+          <div class="containerHead" style="color:#2f5597" >
+            <p style="font-weight: 800" >관심어&nbsp;</p>
+            <p>뉴스</p></div>
+          <div style="overflow: auto; height: 87%">
+            <ul>
+              <li th:each="news : ${homeDto.preferenceNews}" class="interestWord">
                 <a class="aText" th:text="${news.newsHeadline}" th:href="@{/news/{newsId}(newsId=${news.newsId})}"></a>
               </li>
             </ul>

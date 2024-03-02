@@ -1,10 +1,6 @@
 package com.newstock.post.config;
 
-import com.newstock.post.JWTFilter;
 import com.newstock.post.JWTUtil;
-import com.newstock.post.domain.user.User;
-import com.newstock.post.security_filter.LoginFilter;
-import jakarta.servlet.http.HttpServlet;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -13,13 +9,11 @@ import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.thymeleaf.extras.springsecurity6.dialect.SpringSecurityDialect;
 
 @Configuration
 @EnableSpringConfigured
@@ -27,11 +21,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SpringConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
-    private final JWTUtil jwtUtil;
 
-    public SpringConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) {
+    public SpringConfig(AuthenticationConfiguration authenticationConfiguration) {
         this.authenticationConfiguration = authenticationConfiguration;
-        this.jwtUtil = jwtUtil;
     }
 
     @Bean
@@ -49,32 +41,36 @@ public class SpringConfig {
 
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable);
 
-        httpSecurity.logout((logout) -> logout
-                .logoutUrl("/logout")
-                .permitAll());
 
         httpSecurity
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/signup", "/", "/error",
+                        .requestMatchers("/signup", "/", "/error",
                                 "/search/**", "/news/**", "/post/stock", "/post/freeBoard", "/post/*").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().hasRole("user")
                 )
                 .logout((logout) -> logout.logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
                 );
 
+        httpSecurity.formLogin((auth) -> auth.loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .permitAll());
 
-        httpSecurity
-                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
+        httpSecurity.logout((logout) -> logout
+                .logoutUrl("/logout")
+                .permitAll());
 
-        httpSecurity
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
-        httpSecurity
-                .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+//        httpSecurity
+//                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
+//
+//        httpSecurity
+//                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+//
+//        httpSecurity
+//                .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return httpSecurity.build();
     }
@@ -83,5 +79,10 @@ public class SpringConfig {
     public WebSecurityCustomizer webSecurityCustomizer(){
         return (web) -> web.ignoring()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+    }
+
+    @Bean
+    public SpringSecurityDialect springSecurityDialect(){
+        return new SpringSecurityDialect();
     }
 }
