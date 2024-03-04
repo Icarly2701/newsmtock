@@ -24,7 +24,7 @@ public class News {
     @OneToOne(fetch = FetchType.LAZY,mappedBy = "news")
     private NewsContent newsContent;
 
-    @Column(unique = true, nullable = false, length = 100)
+    @Column(unique = true, nullable = false, length = 300)
     private String newsURL;
 
     @Column(nullable = false, length = 150)

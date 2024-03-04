@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<html lang="kr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
   <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" th:href="@{/css/stylemain.css}" />
     <link rel="icon" th:href="@{/images/favicon.png}">
     <title>NEWSTOCK</title>
     <script th:inline="javascript">
-      function checkLogin(action) {
-          var sessionValue = /*[[${session.loginMember != null}]]*/ false;
-          if (!sessionValue) {
+      function checkLogin(action, user) {
+          if (!user) {
               alert('로그인이 필요합니다!!');
           }else {
             document.getElementById('recommendForm').action = '/news/' + /*[[${newsId}]]*/;
@@ -17,19 +17,13 @@
           }
       }
 
-      function registerComment(){
-        var sessionValue = /*[[${session.loginMember != null}]]*/ false;
-        if(!sessionValue){
+      function registerComment(user){
+        if(!user){
           alert('로그인이 필요합니다!!');
         } else {
           document.getElementById('commentForm').action =  '/news/' + /*[[${newsId} + '/add']]*/;
           document.getElementById('commentForm').submit();
         }
-      }
-
-      function deleteComment(){
-        document.getElementById('deleteForm').action =  '/news/' + /*[[${newsId} + '/delete']]*/;
-        document.getElementById('deleteForm').submit();
       }
     </script>
   </head>
@@ -42,7 +36,7 @@
     "
   >
     <div class="center">
-      <div th:replace="head_fragment :: header"></div>
+      <div th:replace="~{head_fragment :: header}"></div>
       <div style="margin-left: 15%; margin-right: 15%; height: 100%">
         <div class="newPostCategoryName" style="margin-top: 25px; width: 100px">뉴스</div>
         <div class="detailPostHead">
@@ -67,9 +61,19 @@
               class="detailRecommendBox"
               style="color: #77d92b; width: 100px; border-color: #77d92b; cursor: pointer"
               name="actionLike"
-              onclick="checkLogin('like')"
+              th:onclick="checkLogin('like')"
               type="button"
               th:text="${'추천'}"
+              th:if="${newsDetail.viewUser == null}"
+            ></button>
+            <button
+                    class="detailRecommendBox"
+                    style="color: #77d92b; width: 100px; border-color: #77d92b; cursor: pointer"
+                    name="actionLike"
+                    th:onclick="checkLogin('like', 'notnull')"
+                    type="button"
+                    th:text="${'추천'}"
+                    th:if="${newsDetail.viewUser != null}"
             ></button>
             <div
               class="detailRecommendBox"
@@ -85,9 +89,19 @@
               class="detailRecommendBox"
               style="color: #ff7474; width: 100px; border-color: #ff7474; cursor: pointer"
               name="actionDisLike"
-              onclick="checkLogin('dislike')"
+              th:onclick="checkLogin('dislike')"
               type="button"
               th:text="${'비추천'}"
+              th:if="${newsDetail.viewUser == null}"
+            ></button>
+            <button
+                    class="detailRecommendBox"
+                    style="color: #ff7474; width: 100px; border-color: #ff7474; cursor: pointer"
+                    name="actionDisLike"
+                    th:onclick="checkLogin('dislike', 'notnull')"
+                    type="button"
+                    th:text="${'비추천'}"
+                    th:if="${newsDetail.viewUser != null}"
             ></button>
             <input type="hidden" id="actionInput" name="action" th:value="${null}" />
           </form>
@@ -101,8 +115,9 @@
                   <div class="detailCommandNickname" th:text="${newsComment.user.nickname}"></div>
                   <div class="detailCommandDate" th:text="${newsComment.newsCommentDate}"></div>
                 </div>
-                <form th:if="${session.loginMember != null && newsDetail.viewUser.userId != null && newsComment.user.userId == newsDetail.viewUser.userId}" method="post" id="deleteForm">
-                  <button type="button" class="deleteCommentButton" onclick="deleteComment()" th:text="${'삭제'}"></button>
+                <form th:if="${newsDetail.viewUser != null && newsComment.user.userId == newsDetail.viewUser.userId}" method="post" id="deleteForm"
+                      th:action="@{'/news/' + ${newsId} + '/delete/comment/' + ${newsComment.newsCommentId}}">
+                  <button type="submit" class="deleteCommentButton" th:text="${'삭제'}"></button>
                   <input type="hidden" name="newsCommentId" th:value="${newsComment.newsCommentId}"/>
                 </form>
               </div>
@@ -114,16 +129,33 @@
           <div class="commandRegisterTitle">댓글 쓰기</div>
           <form method="post" class="commandRegisterForm" id="commentForm" onsubmit="return false">
             <input
-              th:placeholder="${session.loginMember != null} ? '' : '댓글 작성 하실려면 로그인이 필요합니다. 로그인하시겠습니까?'"
+              placeholder="댓글 작성 하실려면 로그인이 필요합니다. 로그인하시겠습니까?"
               name="newsCommentContent"
               class="commandInput"
               type="text"
+              sec:authorize="isAnonymous()"
+            />
+            <input
+                    name="newsCommentContent"
+                    class="commandInput"
+                    type="text"
+                    sec:authorize="hasRole('USER')"
             />
             <button
               class="newPostCategoryName"
               style="margin-top: 0; width: 80px; cursor:pointer"
-              onclick="registerComment()"
+              th:onclick="registerComment('notnull')"
+              th:if="${newsDetail.viewUser != null}"
               type="button"
+            >
+              등록하기
+            </button>
+            <button
+                    class="newPostCategoryName"
+                    style="margin-top: 0; width: 80px; cursor:pointer"
+                    th:onclick="registerComment()"
+                    th:if="${newsDetail.viewUser == null}"
+                    type="button"
             >
               등록하기
             </button>

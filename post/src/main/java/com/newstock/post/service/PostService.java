@@ -55,15 +55,17 @@ public class PostService {
     }
 
     @Transactional
-    public void addPostComment(Long postId, User user, String postCommentContent) {
+    public Long addPostComment(Long postId, User user, String postCommentContent) {
         Post post = postRepository.findById(postId);
         PostComment postComment = PostComment.makePostComment(post, user, postCommentContent);
-        postCommentRepository.save(postComment);
+        return postCommentRepository.save(postComment);
     }
 
     @Transactional
     public void deletePostComment(Long postCommentId) {
         PostComment postComment = postCommentRepository.findById(postCommentId);
+        log.info("postComment = {}" , postComment.getPostCommentId());
+        log.info("id = {}", postCommentId);
         postCommentRepository.deletePostComment(postComment);
     }
 

@@ -16,7 +16,7 @@
     "
   >
     <div class="center">
-      <div th:replace="head_fragment :: header"></div>
+      <div th:replace="~{head_fragment :: header}"></div>
       <div class="mainContent">
         <div class="basicContainer" sec:authorize="isAnonymous()">
           <div class="containerHead">

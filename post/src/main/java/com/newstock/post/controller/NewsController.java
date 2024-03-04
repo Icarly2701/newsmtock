@@ -50,9 +50,9 @@ public class NewsController {
         return "redirect:/news/" + newsId;
     }
 
-    @PostMapping("/news/{newsId}/delete")
+    @PostMapping("/news/{newsId}/delete/comment/{newsCommentId}")
     public String newDeleteComment(@PathVariable("newsId") Long newsId,
-                                   @RequestParam("newsCommentId") Long newsCommentId,
+                                   @PathVariable("newsCommentId") Long newsCommentId,
                                    RedirectAttributes redirectAttributes){
         newsService.deleteNewsComment(newsCommentId);
         redirectAttributes.addFlashAttribute("isLike", "notCount");

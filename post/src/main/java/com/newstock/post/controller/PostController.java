@@ -102,15 +102,15 @@ public class PostController {
                                  @PathVariable("postId") Long postId,
                                  @RequestParam("postCommentContent") String postCommentContent,
                                  RedirectAttributes redirectAttributes){
-        postService.addPostComment(postId, user, postCommentContent);
+        Long id = postService.addPostComment(postId, user, postCommentContent);
         redirectAttributes.addFlashAttribute("isLike", "notCount");
         return "redirect:/post/" + postId;
     }
 
-    @PostMapping("/post/{postId}/delete")
+    @PostMapping("/post/{postId}/delete/comment/{commentId}")
     public String postDeleteComment(@PathVariable("postId") Long postId,
-                                 @RequestParam("postCommentId") Long postCommentId,
-                                 RedirectAttributes redirectAttributes){
+                                    @PathVariable("commentId") Long postCommentId,
+                                    RedirectAttributes redirectAttributes){
         postService.deletePostComment(postCommentId);
         redirectAttributes.addFlashAttribute("isLike", "notCount");
         return "redirect:/post/" + postId;
@@ -139,9 +139,6 @@ public class PostController {
         if (bindingResult.hasErrors()) {
             return "redirect:/post/update/" + postId;
         }
-        log.info("postupload = {}", postUpload.getImagePaths());
-        log.info("postupload = {}", postUpload.getDeletePaths());
-
         postService.processUpdatePost(postId, postUpload);
         return "redirect:/post/" + postId;
     }

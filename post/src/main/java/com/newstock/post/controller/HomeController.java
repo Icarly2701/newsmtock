@@ -34,8 +34,7 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String home(@Login String userId, Model model){
-        User user = userService.findByUserId(userId);
+    public String home(@Login User user, Model model){
         HomeDto homeDto = new HomeDto(newsService.getRecentNewsAboutStock(), newsService.getPopularNews());
         if(user != null){
             homeDto.setPreferenceNews(newsService.getUserPreferenceNews(userService.findUserPreferenceTitle(user.getUserId())));

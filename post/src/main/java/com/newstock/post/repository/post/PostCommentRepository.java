@@ -1,7 +1,5 @@
 package com.newstock.post.repository.post;
 
-import com.newstock.post.domain.news.NewsComment;
-import com.newstock.post.domain.post.Post;
 import com.newstock.post.domain.post.PostComment;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +21,9 @@ public class PostCommentRepository {
                 .getResultList();
     }
 
-    public void save(PostComment postComment) {
+    public Long save(PostComment postComment) {
         em.persist(postComment);
+        return postComment.getPostCommentId();
     }
 
     public PostComment findById(Long postCommentId) {
