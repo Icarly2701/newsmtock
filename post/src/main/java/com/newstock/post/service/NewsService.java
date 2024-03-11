@@ -276,4 +276,10 @@ public class NewsService {
         }
         this.updateRecentNews(recentNews);
     }
+
+    public void loadInterestWordNews(String interestWord) {
+        for(String word : interestWord.split(",")){
+            getNewsData(word.trim());
+        }
+    }
 }

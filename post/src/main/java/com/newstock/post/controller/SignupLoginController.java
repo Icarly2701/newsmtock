@@ -41,6 +41,7 @@ public class SignupLoginController {
             return "signuppage";
         }
         userService.processSignup(signupDto);
+        newsService.loadInterestWordNews(signupDto.getInterestWord());
         return "redirect:/login";
     }
 
@@ -51,9 +52,7 @@ public class SignupLoginController {
     }
 
     @GetMapping("/loginSuccess")
-    public String login(@Login User user, HttpServletRequest request) throws UnsupportedEncodingException {
-        userService.processLogin(request,user)
-                .forEach(newsService::getNewsData);
+    public String login() throws UnsupportedEncodingException {
         return "redirect:/";
     }
 

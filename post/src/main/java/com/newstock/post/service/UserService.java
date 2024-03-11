@@ -30,9 +30,10 @@ public class UserService {
 
     @Transactional
     public void processSignup(SignupDto signupDto) {
-        Long userId = this.save(User.makeuser(signupDto, bCryptPasswordEncoder));
+        User user = User.makeuser(signupDto, bCryptPasswordEncoder);
+        save(user);
         for(String interestWord: signupDto.getInterestWord().split(",")){
-            this.savePreferenceTitle(userId, interestWord.trim());
+            savePreferenceTitle(user, interestWord.trim());
         }
     }
 
@@ -80,9 +81,8 @@ public class UserService {
         }
     }
 
-    public void savePreferenceTitle(Long userId, String preferenceWord){
+    public void savePreferenceTitle(User user, String preferenceWord){
         if(!preferenceWord.trim().isEmpty()){
-            User user = userRepository.findById(userId);
             PreferenceTitle preferenceTitle = PreferenceTitle.preferenceTitle(user, preferenceWord);
             preferenceTitleRepository.save(preferenceTitle);
         }
