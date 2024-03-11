@@ -40,6 +40,15 @@ public class NewsService {
         getNewsDataUseApi(topic);
     }
 
+    public void saveNews(Item item, String topic){
+        if(topic.equals("코스피") || topic.equals("나스닥")){
+            newsRepository.save(News.makeNewsItem(item, topic));
+            return;
+        }
+
+        // 그 외의 뉴스는 redis로 저장 후 보여줌
+    }
+
     public List<News> getPopularNews(){ return newsRepository.findPopularNews();}
 
     public List<News> getUserPreferenceNews(List<PreferenceTitle> userPreferenceTitle) {
@@ -234,7 +243,7 @@ public class NewsService {
                         .findAny();
 
                 if(existingNews.isEmpty()){
-                    newsRepository.save(News.makeNewsItem(item, topic));
+                    saveNews(item, topic);
                 }
             }
         } catch (WebClientResponseException.BadRequest ex){

@@ -37,8 +37,6 @@ public class UserService {
     }
 
     public List<String> processLogin(HttpServletRequest request, User user) {
-        HttpSession session = request.getSession();
-        session.setAttribute(SessionConst.LOGIN_MEMBER, user);
         return this.findUserPreferenceTitle(user.getUserId()).stream()
                 .map(PreferenceTitle::getPreferenceTitle)
                 .collect(Collectors.toList());

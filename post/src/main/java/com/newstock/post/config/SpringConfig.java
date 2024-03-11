@@ -55,7 +55,7 @@ public class SpringConfig {
                 );
 
         httpSecurity.formLogin((auth) -> auth.loginPage("/login")
-                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/loginSuccess")
                         .permitAll());
 
         httpSecurity.logout((logout) -> logout

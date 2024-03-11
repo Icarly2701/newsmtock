@@ -5,6 +5,7 @@ import com.newstock.post.domain.user.User;
 import com.newstock.post.dto.auth.LoginDto;
 import com.newstock.post.dto.auth.SignupDto;
 import com.newstock.post.service.UserService;
+import com.newstock.post.web.Login;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -49,27 +50,10 @@ public class SignupLoginController {
         return "signuppage";
     }
 
-    @PostMapping("/login")
-    public String login(@ModelAttribute("loginData") LoginDto loginDto,
-                        BindingResult bindingResult,
-                        HttpServletRequest request,
-                        HttpServletResponse response) throws UnsupportedEncodingException {
-
-        User user = userService.findByUserId(loginDto.getUsername());
-
-        Cookie cookie = new Cookie("token", response.getHeader("Authorization"));
-        cookie.setMaxAge(3600); // 쿠키의 만료 시간 설정 (초 단위)
-        cookie.setPath("/"); // 쿠키의 유효 경로 설정
-        response.addCookie(cookie);
-
-        if(user == null){
-            bindingResult.rejectValue("id", "idFail");
-            return "loginpage";
-        }
-
+    @GetMapping("/loginSuccess")
+    public String login(@Login User user, HttpServletRequest request) throws UnsupportedEncodingException {
         userService.processLogin(request,user)
                 .forEach(newsService::getNewsData);
-        log.info("login success");
         return "redirect:/";
     }
 

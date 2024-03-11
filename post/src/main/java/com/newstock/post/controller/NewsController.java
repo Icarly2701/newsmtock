@@ -23,6 +23,7 @@ public class NewsController {
                              @PathVariable("newsId") Long newsId,
                              @ModelAttribute("isLike") String isLike,
                              Model model){
+
         model.addAttribute("newsDetail", new NewsDetailDto(
                 newsService.processDetailPageNews(newsId, user, isLike),
                 newsService.findCommentById(newsId),
