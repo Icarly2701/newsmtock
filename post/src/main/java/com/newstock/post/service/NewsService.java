@@ -10,6 +10,7 @@ import com.newstock.post.repository.news.LikeDislikeNewsRepository;
 import com.newstock.post.repository.news.NewsCommentRepository;
 import com.newstock.post.repository.news.NewsRepository;
 import com.newstock.post.repository.news.RecentNewsRepository;
+import com.newstock.post.repository.user.PreferenceTitleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -35,9 +36,15 @@ public class NewsService {
     private final NewsCommentRepository newsCommentRepository;
     private final RecentNewsRepository recentNewsRepository;
     private final LikeDislikeNewsRepository likeDislikeNewsRepository;
+    private final PreferenceTitleRepository preferenceTitleRepository;
 
     public void getNewsData(String topic){
         getNewsDataUseApi(topic);
+    }
+
+    public void getNewsData(Long userId){
+        preferenceTitleRepository.findByUserId(userId)
+                .forEach(v -> getNewsDataUseApi(v.getPreferenceTitle()));
     }
 
     public void saveNews(Item item, String topic){
@@ -137,7 +144,7 @@ public class NewsService {
         getNewsDataUseApi("나스닥");
     }
 
-    private List<News> getRecentNewsAboutTopic(String topic){
+    public List<News> getRecentNewsAboutTopic(String topic){
         return newsRepository.findRecentNewsAboutTopic(topic);
     }
     private List<News> getRecentNewsAboutTitle(String topic){

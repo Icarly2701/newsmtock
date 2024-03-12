@@ -47,7 +47,7 @@ public class SpringConfig {
         httpSecurity
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/signup", "/", "/error",
-                                "/search/**", "/news/**", "/post/stock", "/post/freeBoard", "/post/*").permitAll()
+                                "/search/**", "/news/**", "/post/stock", "/post/freeBoard", "/post/*", "/refresh").permitAll()
                         .anyRequest().hasRole("USER")
                 )
                 .logout((logout) -> logout.logoutSuccessUrl("/")

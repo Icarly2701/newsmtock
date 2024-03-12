@@ -84,9 +84,15 @@
         </div>
 
         <div class="basicContainer" sec:authorize="hasRole('USER')" style="width:40%">
-          <div class="containerHead" style="color:#2f5597" >
-            <p style="font-weight: 800" >관심어&nbsp;</p>
-            <p>뉴스</p></div>
+          <div class="containerHead" style="color:#2f5597; justify-content:space-between;" >
+            <div class="containerHead" style="margin-bottom:0px">
+              <p style="font-weight: 800" >관심어&nbsp;</p>
+              <p>뉴스</p>
+            </div>
+            <a href="/refresh" style="display:inline; width:auto">
+              <img th:src="@{/images/renew.png}" class="logoImage" style="height:30px; width:30px"/>
+            </a>
+          </div>
           <div style="overflow: auto; height: 87%">
             <ul>
               <li th:each="news : ${homeDto.preferenceNews}" class="interestWord">
