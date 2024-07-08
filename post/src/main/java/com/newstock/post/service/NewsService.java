@@ -6,10 +6,8 @@ import com.newstock.post.domain.Target;
 import com.newstock.post.domain.news.*;
 import com.newstock.post.domain.user.PreferenceTitle;
 import com.newstock.post.domain.user.User;
-import com.newstock.post.repository.news.LikeDislikeNewsRepository;
-import com.newstock.post.repository.news.NewsCommentRepository;
-import com.newstock.post.repository.news.NewsRepository;
-import com.newstock.post.repository.news.RecentNewsRepository;
+import com.newstock.post.repository.news.*;
+import com.newstock.post.repository.news.newsrep.NewsRepository;
 import com.newstock.post.repository.user.PreferenceTitleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,17 +31,18 @@ import java.util.stream.Stream;
 public class NewsService {
 
     private final NewsRepository newsRepository;
-    private final NewsCommentRepository newsCommentRepository;
     private final RecentNewsRepository recentNewsRepository;
-    private final LikeDislikeNewsRepository likeDislikeNewsRepository;
+    private final LikeNewsRepository likeNewsRepository;
+    private final DisLikeNewsRepository disLikeNewsRepository;
     private final PreferenceTitleRepository preferenceTitleRepository;
+    private final NewsCommentRepository newsCommentRepository;
 
     public void getNewsData(String topic){
         getNewsDataUseApi(topic);
     }
 
     public void getNewsData(Long userId){
-        preferenceTitleRepository.findByUserId(userId)
+        preferenceTitleRepository.findByUserUserId(userId)
                 .forEach(v -> getNewsDataUseApi(v.getPreferenceTitle()));
     }
 
@@ -56,7 +55,10 @@ public class NewsService {
         // 그 외의 뉴스는 redis로 저장 후 보여줌
     }
 
-    public List<News> getPopularNews(){ return newsRepository.findPopularNews();}
+    public List<News> getPopularNews(){
+        return newsRepository.findByNewsOrderByNewsCheckCount();
+//        return newsRepository.findPopularNews();
+    }
 
     public List<News> getUserPreferenceNews(List<PreferenceTitle> userPreferenceTitle) {
         return userPreferenceTitle.stream()
@@ -85,32 +87,35 @@ public class NewsService {
     }
 
     public List<News> getRecentNewsAboutStock(){
-        return newsRepository.findRecentNewsAboutStock();
+        return newsRepository.findByNewsTopicOrderByNewsDateDesc("코스피");
+//        return newsRepository.findRecentNewsAboutStock();
     }
 
     public List<News> getRecentNewsAboutNasdaq() {
-        return newsRepository.findRecentNewsAboutNasdaq();
+        return newsRepository.findByNewsTopicOrderByNewsDateDesc("나스닥");
+//        return newsRepository.findRecentNewsAboutNasdaq();
     }
 
     public List<RecentNews> getRecentNewsList(User user){
-        return recentNewsRepository.getRecentNews(user);
+        return recentNewsRepository.findByUserUserIdOrderByRecentNewsDateDesc(user.getUserId());
     }
 
     @Transactional
     public void addNewsComment(Long newsId, User user, String newsCommentContent) {
-        News news = newsRepository.findById(newsId);
+        News news = newsRepository.findById(newsId).orElse(null);
+//        News news = newsRepository.findById(newsId);
         NewsComment newsComment = NewsComment.makeNewsCommentItem(news, user, newsCommentContent);
         newsCommentRepository.save(newsComment);
     }
 
     @Transactional
     public void deleteNewsComment(Long newsCommentId) {
-        NewsComment newsComment = newsCommentRepository.findById(newsCommentId);
-        newsCommentRepository.deleteNewsComment(newsComment);
+        NewsComment newsComment = newsCommentRepository.findById(newsCommentId).orElse(null);
+        newsCommentRepository.delete(newsComment);
     }
 
     public List<NewsComment> findCommentById(Long newsId) {
-        return newsCommentRepository.findAll(newsId);
+        return newsCommentRepository.findByNewsNewsId(newsId);
     }
 
     @Transactional
@@ -156,7 +161,9 @@ public class NewsService {
     }
 
     private News findById(Long newsId){
-        return newsRepository.findById(newsId);
+        return newsRepository.findById(newsId)
+                .orElse(null);
+//        return newsRepository.findById(newsId);
     }
 
     private void checkCountAdd(News news){
@@ -164,39 +171,39 @@ public class NewsService {
     }
 
     private void addLikeCount(News news, User user){
-        List<LikeNews> likeNews = likeDislikeNewsRepository.findLikeNews(news, user);
-        List<DislikeNews> dislikeNews = likeDislikeNewsRepository.findDislikeNews(news, user);
+        List<LikeNews> likeNews = likeNewsRepository.findByUserUserIdAndNewsNewsId(user.getUserId(), news.getNewsId());
+        List<DislikeNews> dislikeNews = disLikeNewsRepository.findByUserUserIdAndNewsNewsId(user.getUserId(), news.getNewsId());
 
         if(likeNews.isEmpty() && dislikeNews.isEmpty()){
             news.addLike();
-            likeDislikeNewsRepository.saveLikeNews(LikeNews.makeLikeNews(news, user));
+            likeNewsRepository.save(LikeNews.makeLikeNews(news, user));
             return;
         }else if(likeNews.isEmpty()){
             news.addLike();
-            likeDislikeNewsRepository.deleteDislikeNews(dislikeNews.get(0));
+            disLikeNewsRepository.delete(dislikeNews.get(0));
             return;
         }
 
         news.subLike();
-        likeDislikeNewsRepository.deleteLikeNews(likeNews.get(0));
+        likeNewsRepository.delete(likeNews.get(0));
     }
 
     private void subLikeCount(News news, User user){
-        List<DislikeNews> dislikeNews = likeDislikeNewsRepository.findDislikeNews(news, user);
-        List<LikeNews> likeNews = likeDislikeNewsRepository.findLikeNews(news, user);
+        List<LikeNews> likeNews = likeNewsRepository.findByUserUserIdAndNewsNewsId(user.getUserId(), news.getNewsId());
+        List<DislikeNews> dislikeNews = disLikeNewsRepository.findByUserUserIdAndNewsNewsId(user.getUserId(), news.getNewsId());
 
         if(dislikeNews.isEmpty() && likeNews.isEmpty()){
             news.subLike();
-            likeDislikeNewsRepository.saveDislikeNews(DislikeNews.makeDislikeNews(news, user));
+            disLikeNewsRepository.save(DislikeNews.makeDislikeNews(news, user));
             return;
         }else if(dislikeNews.isEmpty()){
             news.subLike();
-            likeDislikeNewsRepository.deleteLikeNews(likeNews.get(0));
+            likeNewsRepository.save(likeNews.get(0));
             return;
         }
 
         news.addLike();
-        likeDislikeNewsRepository.deleteDislikeNews(dislikeNews.get(0));
+        disLikeNewsRepository.delete(dislikeNews.get(0));
     }
 
     private String getApiUrl(String topic) {
@@ -236,7 +243,8 @@ public class NewsService {
                     .block();
 
             List<Item> items = (List<Item>) newsData.get("items");
-            List<News> compareTopic = newsRepository.findAllNewsAboutTopic();
+            List<News> compareTopic = newsRepository.findAll();
+//            List<News> compareTopic = newsRepository.findAllNewsAboutTopic();
 
             for (int i = 0; i < items.size(); i++) {
                 ObjectMapper mapper = new ObjectMapper();
@@ -268,7 +276,7 @@ public class NewsService {
     }
 
     private RecentNews getRecentNewsAlreadySeen(News news, User user) {
-        List<RecentNews> recentNews = recentNewsRepository.getRecentNewsAlreadySeen(news, user);
+        List<RecentNews> recentNews = recentNewsRepository.findByUserUserIdAndNewsNewsId(user.getUserId(), news.getNewsId());
         if(recentNews.isEmpty()){
             return null;
         }

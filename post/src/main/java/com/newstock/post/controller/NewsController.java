@@ -2,7 +2,6 @@ package com.newstock.post.controller;
 
 import com.newstock.post.domain.user.User;
 import com.newstock.post.dto.news.NewsDetailDto;
-import com.newstock.post.repository.user.PreferenceTitleRepository;
 import com.newstock.post.service.NewsService;
 import com.newstock.post.web.Login;
 import lombok.RequiredArgsConstructor;

@@ -5,7 +5,6 @@ import com.newstock.post.domain.user.User;
 import com.newstock.post.dto.auth.SignupDto;
 import com.newstock.post.repository.user.PreferenceTitleRepository;
 import com.newstock.post.repository.user.UserRepository;
-import com.newstock.post.web.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +43,7 @@ public class UserService {
     }
 
     public User findByUserId(String userId){
-        List<User> temp = userRepository.findByUserId(userId);
+        List<User> temp = userRepository.findById(userId);
         if(temp.isEmpty()) return null;
         return temp.get(0);
     }
@@ -55,13 +54,14 @@ public class UserService {
 
     @Transactional
     public void addPreferenceTitle(String interestWord, Long userId) {
-        PreferenceTitle preferenceTitle = PreferenceTitle.preferenceTitle(userRepository.findById(userId), interestWord);
+        PreferenceTitle preferenceTitle = PreferenceTitle.preferenceTitle(userRepository.findById(userId).orElse(null), interestWord);
         preferenceTitleRepository.save(preferenceTitle);
     }
 
     @Transactional
     public void deletePreferenceTitle(Long preferenceTitleId) {
-        preferenceTitleRepository.delete(preferenceTitleRepository.findById(preferenceTitleId));
+        //한 번 확인해볼것
+        preferenceTitleRepository.delete(preferenceTitleRepository.findById(preferenceTitleId).orElse(null));
     }
 
     public void validateLoginData(SignupDto signupDto, BindingResult bindingResult) {
@@ -89,7 +89,7 @@ public class UserService {
     }
 
     public Long save(User user){
-        return userRepository.save(user);
+        return userRepository.save(user).getUserId();
     }
 
     private boolean checkIdDuplicate(String id) {

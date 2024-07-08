@@ -1,7 +1,7 @@
 package com.newstock.post.service;
 
 import com.newstock.post.domain.user.User;
-import com.newstock.post.repository.user.UserRepository;
+import com.newstock.post.repository.user.CustomUserRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,11 +16,11 @@ import java.util.List;
 @Slf4j
 public class CustomUserDetailService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final CustomUserRepositoryImpl customUserRepositoryImpl;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        List<User> users = userRepository.findByUserId(username);
+        List<User> users = customUserRepositoryImpl.findByUserId(username);
 
         if(!users.isEmpty()){
             return new CustomUserDetails(users.get(0));

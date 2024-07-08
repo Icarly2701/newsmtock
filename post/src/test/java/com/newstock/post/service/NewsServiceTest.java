@@ -1,6 +1,6 @@
 package com.newstock.post.service;
 
-import com.newstock.post.repository.news.NewsRepository;
+import com.newstock.post.repository.news.newsrep.CustomNewsRepositoryImpl;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,5 +16,5 @@ class NewsServiceTest {
     NewsService newsService;
 
     @Autowired
-    NewsRepository newsRepository;
+    CustomNewsRepositoryImpl customNewsRepositoryImpl;
 }

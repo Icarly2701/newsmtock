@@ -2,8 +2,6 @@ package com.newstock.post.service;
 
 import com.newstock.post.domain.Category;
 import com.newstock.post.domain.Target;
-import com.newstock.post.domain.news.News;
-import com.newstock.post.domain.news.RecentNews;
 import com.newstock.post.domain.post.*;
 import com.newstock.post.domain.user.User;
 import com.newstock.post.dto.post.PostDto;
@@ -20,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,10 +25,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PostService {
 
+    //private final CustomPostRepositoryImpl customPostRepositoryImpl;
     private final PostRepository postRepository;
+    private final CategoryRepository categoryRepository;
     private final PostCommentRepository postCommentRepository;
     private final PostImageRepository postImageRepository;
-    private final LikeDislikePostRepository likeDislikePostRepository;
+    private final LikePostRepository likePostRepository;
+    private final DislikePostRepository dislikePostRepository;
     private final RecentPostRepository recentPostRepository;
     private final TempPostRepository tempPostRepository;
     private final FileStore fileStore;
@@ -39,11 +39,11 @@ public class PostService {
     private String bucketName;
 
     public List<RecentPost> getRecentPostList(User user) {
-        return recentPostRepository.getRecentPost(user);
+        return recentPostRepository.findByUserUserId(user.getUserId());
     }
 
     public List<Post> getMyPostList(User user) {
-        return postRepository.findByUser(user);
+        return postRepository.findByUserUserId(user.getUserId());
     }
 
     public List<Post> getSearchData(String keyword, Target target) {
@@ -56,49 +56,49 @@ public class PostService {
 
     @Transactional
     public Long addPostComment(Long postId, User user, String postCommentContent) {
-        Post post = postRepository.findById(postId);
+        Post post = postRepository.findById(postId).orElse(null);
         PostComment postComment = PostComment.makePostComment(post, user, postCommentContent);
-        return postCommentRepository.save(postComment);
+        return  postCommentRepository.save(postComment).getPostCommentId();
     }
 
     @Transactional
     public void deletePostComment(Long postCommentId) {
-        PostComment postComment = postCommentRepository.findById(postCommentId);
-        log.info("postComment = {}" , postComment.getPostCommentId());
-        log.info("id = {}", postCommentId);
-        postCommentRepository.deletePostComment(postComment);
+        PostComment postComment = postCommentRepository.findById(postCommentId).orElse(null);
+        postCommentRepository.delete(postComment);
     }
 
     @Transactional
     public void deletePost(Long postId) {
-        Post post = postRepository.findById(postId);
+        Post post = postRepository.findById(postId).orElse(null);
         Long postContentId = post.getPostContent().getPostContentId();
-        likeDislikePostRepository.deleteLikePost(postId);
-        likeDislikePostRepository.deleteDislikePost(postId);
-        recentPostRepository.deleteByPost(postId);
-        postCommentRepository.deleteByPost(postId);
+        likePostRepository.deleteByPostId(postId);
+        dislikePostRepository.deleteByPostId(postId);
+        recentPostRepository.deleteByPostId(postId);
+        postCommentRepository.deleteByPostId(postId);
         postImageRepository.deleteByPostContentId(postContentId);
         postRepository.deletePost(post);
     }
 
     public Post findById(Long postId) {
-        return postRepository.findById(postId);
+        return postRepository.findById(postId).orElse(null);
     }
 
     public TempPost findByUser(User user){
-        return tempPostRepository.findByUser(user);
+        List<TempPost> postList = tempPostRepository.findByUserUserId(user.getUserId());
+        if(postList.isEmpty()) return null;
+        return postList.get(0);
     }
 
     public List<Post> findAboutTopic(String category){
-        return postRepository.findAboutTopic(category);
+        return postRepository.findByCategoryCategoryContent(category);
     }
 
     public List<PostComment> findCommentByPost(Long postId){
-        return postCommentRepository.findByPost(postId);
+        return postCommentRepository.findByPostId(postId);
     }
 
     public List<PostImage> findImageByPost(Long postId){
-        return postImageRepository.findByPost(postId);
+        return postImageRepository.findByPostId(postId);
     }
 
     @Transactional
@@ -155,7 +155,7 @@ public class PostService {
 
     @Transactional
     public void saveCategory(Category category){
-        postRepository.saveCategory(category);
+//        postRepository.save(category);
     }
 
     private Long savePost(Post post){
@@ -183,43 +183,43 @@ public class PostService {
     }
 
     private void addLikeCount(Post post, User user) {
-        List<LikePost> likePost = likeDislikePostRepository.findLikePost(post, user);
-        List<DislikePost> dislikePost = likeDislikePostRepository.findDislikePost(post, user);
+        List<LikePost> likePost = likePostRepository.findByUserUserIdPostPostId(user.getUserId(), post.getPostId());
+        List<DislikePost> dislikePost = dislikePostRepository.findByUserUserIdPostPostId(user.getUserId(), post.getPostId());
 
         if(likePost.isEmpty() && dislikePost.isEmpty()){
             post.addLike();
-            likeDislikePostRepository.saveLikePost(LikePost.makeLikePost(post,user));
+            likePostRepository.save(LikePost.makeLikePost(post, user));
             return;
         }else if(likePost.isEmpty()){
             post.addLike();
-            likeDislikePostRepository.deleteDislikePost(dislikePost.get(0));
+            dislikePostRepository.delete(dislikePost.get(0));
             return;
         }
 
         post.subLike();
-        likeDislikePostRepository.deleteLikePost(likePost.get(0));
+        likePostRepository.delete(likePost.get(0));
     }
 
     private void subLikeCount(Post post, User user){
-        List<DislikePost> dislikePost = likeDislikePostRepository.findDislikePost(post, user);
-        List<LikePost> likePost = likeDislikePostRepository.findLikePost(post, user);
+        List<DislikePost> dislikePost = dislikePostRepository.findByUserUserIdPostPostId(user.getUserId(), post.getPostId());
+        List<LikePost> likePost = likePostRepository.findByUserUserIdPostPostId(user.getUserId(), post.getPostId());
 
         if(dislikePost.isEmpty() && likePost.isEmpty()){
             post.subLike();
-            likeDislikePostRepository.saveDislikePost(DislikePost.makeDislikePost(post,user));
+            dislikePostRepository.save(DislikePost.makeDislikePost(post, user));
             return;
         }else if(dislikePost.isEmpty()){
             post.subLike();
-            likeDislikePostRepository.deleteLikePost(likePost.get(0));
+            likePostRepository.delete(likePost.get(0));
             return;
         }
 
         post.addLike();
-        likeDislikePostRepository.deleteDislikePost(dislikePost.get(0));
+        dislikePostRepository.delete(dislikePost.get(0));
     }
 
     private RecentPost getRecentPostAlreadySeen(Post post, User user) {
-        List<RecentPost> recentPost = recentPostRepository.getRecentPostAlreadySeen(post, user);
+        List<RecentPost> recentPost =recentPostRepository.findByUserUserIdPostPostId(user.getUserId(), post.getPostId());
         if(recentPost.isEmpty()){
             return null;
         }
@@ -236,15 +236,15 @@ public class PostService {
     }
 
     private List<Post> findAboutTopicCount(String stock) {
-        return postRepository.findAboutTopicCount(stock);
+        return postRepository.findByTopicTitle(stock);
     }
 
     private List<Post> findAboutTopicLike(String stock) {
-        return postRepository.findAboutTopicLike(stock);
+        return postRepository.findByTopicTitle(stock);
     }
 
     private List<Post> findAboutTopicDate(String stock) {
-        return postRepository.findAboutTopicDate(stock);
+        return postRepository.findByTopicTitle(stock);
     }
 
     private void updatePost(Post post, PostUploadUpdate postUpload) {
@@ -252,7 +252,7 @@ public class PostService {
     }
 
     private void updatePostImage(Long postContentId, List<String> imagePath) {
-        postImageRepository.deleteByPostContentIdExceptImagePath(postContentId, imagePath);
+        postImageRepository.deleteByPostContentIdAndImagePathIn(postContentId, imagePath);
     }
 
 
@@ -261,11 +261,11 @@ public class PostService {
     }
 
     private Category findCategory(String category) {
-        return postRepository.findCategory(category);
+        return categoryRepository.findByCategoryContent(category);
     }
 
     private void deleteTempPost(TempPost tempPost){
-        tempPostRepository.deletePost(tempPost);
+        tempPostRepository.delete(tempPost);
     }
 
     private void processRecentPost(Post post, User user) {
