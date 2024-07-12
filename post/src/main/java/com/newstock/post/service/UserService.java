@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,8 +61,9 @@ public class UserService {
 
     @Transactional
     public void deletePreferenceTitle(Long preferenceTitleId) {
-        //한 번 확인해볼것
-        preferenceTitleRepository.delete(preferenceTitleRepository.findById(preferenceTitleId).orElse(null));
+        PreferenceTitle preferenceTitle = preferenceTitleRepository.findById(preferenceTitleId).orElse(null);
+        if(preferenceTitle == null) return;
+        preferenceTitleRepository.delete(preferenceTitle);
     }
 
     public void validateLoginData(SignupDto signupDto, BindingResult bindingResult) {
@@ -82,13 +84,18 @@ public class UserService {
     }
 
     public void savePreferenceTitle(User user, String preferenceWord){
-        if(!preferenceWord.trim().isEmpty()){
-            PreferenceTitle preferenceTitle = PreferenceTitle.preferenceTitle(user, preferenceWord);
-            preferenceTitleRepository.save(preferenceTitle);
-        }
+        String removeSpace = preferenceWord.replaceAll(" ", "");
+        if(removeSpace.isEmpty() || removeSpace.equals(","))return;
+        if(removeSpace.startsWith(",")) removeSpace = removeSpace.substring(1);
+        if(removeSpace.endsWith(",")) removeSpace = removeSpace.substring(0, removeSpace.length()-1);
+        Arrays.stream(removeSpace.split(","))
+                        .forEach(s -> preferenceTitleRepository
+                                .save(PreferenceTitle.preferenceTitle(user, s)));
     }
 
+    @Transactional
     public Long save(User user){
+        User userS = userRepository.save(user);
         return userRepository.save(user).getUserId();
     }
 

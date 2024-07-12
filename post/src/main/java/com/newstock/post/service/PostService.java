@@ -71,11 +71,11 @@ public class PostService {
     public void deletePost(Long postId) {
         Post post = postRepository.findById(postId).orElse(null);
         Long postContentId = post.getPostContent().getPostContentId();
-        likePostRepository.deleteByPostId(postId);
-        dislikePostRepository.deleteByPostId(postId);
-        recentPostRepository.deleteByPostId(postId);
-        postCommentRepository.deleteByPostId(postId);
-        postImageRepository.deleteByPostContentId(postContentId);
+        likePostRepository.deleteByPostPostId(postId);
+        dislikePostRepository.deleteByPostPostId(postId);
+        recentPostRepository.deleteByPostPostId(postId);
+        postCommentRepository.deleteByPostPostId(postId);
+        postImageRepository.deleteByPostContentPostContentId(postContentId);
         postRepository.deletePost(post);
     }
 
@@ -94,11 +94,11 @@ public class PostService {
     }
 
     public List<PostComment> findCommentByPost(Long postId){
-        return postCommentRepository.findByPostId(postId);
+        return postCommentRepository.findByPostPostId(postId);
     }
 
     public List<PostImage> findImageByPost(Long postId){
-        return postImageRepository.findByPostId(postId);
+        return postImageRepository.findByPostContentPostContentId(postId);
     }
 
     @Transactional
@@ -159,7 +159,7 @@ public class PostService {
     }
 
     private Long savePost(Post post){
-        return postRepository.save(post);
+        return postRepository.save(post).getPostId();
     }
 
     private void savePostImage(PostImage postImage) {
@@ -183,8 +183,8 @@ public class PostService {
     }
 
     private void addLikeCount(Post post, User user) {
-        List<LikePost> likePost = likePostRepository.findByUserUserIdPostPostId(user.getUserId(), post.getPostId());
-        List<DislikePost> dislikePost = dislikePostRepository.findByUserUserIdPostPostId(user.getUserId(), post.getPostId());
+        List<LikePost> likePost = likePostRepository.findByUserUserIdAndPostPostId(user.getUserId(), post.getPostId());
+        List<DislikePost> dislikePost = dislikePostRepository.findByUserUserIdAndPostPostId(user.getUserId(), post.getPostId());
 
         if(likePost.isEmpty() && dislikePost.isEmpty()){
             post.addLike();
@@ -201,8 +201,8 @@ public class PostService {
     }
 
     private void subLikeCount(Post post, User user){
-        List<DislikePost> dislikePost = dislikePostRepository.findByUserUserIdPostPostId(user.getUserId(), post.getPostId());
-        List<LikePost> likePost = likePostRepository.findByUserUserIdPostPostId(user.getUserId(), post.getPostId());
+        List<DislikePost> dislikePost = dislikePostRepository.findByUserUserIdAndPostPostId(user.getUserId(), post.getPostId());
+        List<LikePost> likePost = likePostRepository.findByUserUserIdAndPostPostId(user.getUserId(), post.getPostId());
 
         if(dislikePost.isEmpty() && likePost.isEmpty()){
             post.subLike();
@@ -219,7 +219,7 @@ public class PostService {
     }
 
     private RecentPost getRecentPostAlreadySeen(Post post, User user) {
-        List<RecentPost> recentPost =recentPostRepository.findByUserUserIdPostPostId(user.getUserId(), post.getPostId());
+        List<RecentPost> recentPost =recentPostRepository.findByUserUserIdAndPostPostId(user.getUserId(), post.getPostId());
         if(recentPost.isEmpty()){
             return null;
         }

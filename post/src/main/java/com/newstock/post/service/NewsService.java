@@ -56,7 +56,7 @@ public class NewsService {
     }
 
     public List<News> getPopularNews(){
-        return newsRepository.findByNewsOrderByNewsCheckCount();
+        return newsRepository.findAllByOrderByNewsCheckCount();
 //        return newsRepository.findPopularNews();
     }
 

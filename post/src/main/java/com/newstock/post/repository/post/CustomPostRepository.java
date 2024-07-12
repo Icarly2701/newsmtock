@@ -13,5 +13,4 @@ public interface CustomPostRepository {
 
     void deletePost(Post post);
 
-    Long save(Post post);
 }

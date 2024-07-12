@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface DislikePostRepository extends JpaRepository<DislikePost, Long> {
-    List<DislikePost> findByUserUserIdPostPostId(Long userId, Long postId);
-    void deleteByPostId(Long postId);
+    List<DislikePost> findByUserUserIdAndPostPostId(Long userId, Long postId);
+    void deleteByPostPostId(Long postId);
 }

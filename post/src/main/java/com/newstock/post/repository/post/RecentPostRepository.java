@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface RecentPostRepository extends JpaRepository<RecentPost, Long> {
-    List<RecentPost> findByUserUserIdPostPostId(Long userId, Long postId);
+    List<RecentPost> findByUserUserIdAndPostPostId(Long userId, Long postId);
     List<RecentPost> findByUserUserId(Long userId);
-    void deleteByPostId(Long postId);
+    void deleteByPostPostId(Long postId);
 }

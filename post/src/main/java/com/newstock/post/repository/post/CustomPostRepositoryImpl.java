@@ -45,15 +45,4 @@ public class CustomPostRepositoryImpl implements CustomPostRepository{
         em.remove(em.contains(post) ? post : em.merge(post));
     }
 
-    @Override
-    @Transactional
-    public Long save(Post post) {
-        if (post.getPostId() == null) {
-            em.persist(post);
-            return post.getPostId();
-        } else {
-            em.merge(post);
-            return post.getPostId();
-        }
-    }
 }

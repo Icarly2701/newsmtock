@@ -11,8 +11,8 @@ import java.util.List;
 
 @Repository
 public interface PostImageRepository extends JpaRepository<PostImage, Long> {
-    List<PostImage> findByPostId(Long postId);
-    void deleteByPostContentId(Long postContentId);
+    List<PostImage> findByPostContentPostContentId(Long postId);
+    void deleteByPostContentPostContentId(Long postContentId);
     @Modifying
     @Transactional
     @Query("DELETE FROM PostImage pi WHERE pi.postContent.id = :postContentId AND pi.postImagePath IN :imagePath")

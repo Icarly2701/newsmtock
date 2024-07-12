@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface NewsRepository extends JpaRepository<News, Long>, CustomNewsRepository {
     List<News> findByNewsTopicOrderByNewsDateDesc(String newsTopic);
-    List<News> findByNewsOrderByNewsCheckCount();
+    List<News> findAllByOrderByNewsCheckCount();
 }

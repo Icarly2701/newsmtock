@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface PostCommentRepository extends JpaRepository<PostComment, Long> {
-    List<PostComment> findByPostId(Long postId);
-    void deleteByPostId(Long postId);
+    List<PostComment> findByPostPostId(Long postId);
+    void deleteByPostPostId(Long postId);
 }

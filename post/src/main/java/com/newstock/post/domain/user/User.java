@@ -52,4 +52,12 @@ public class User {
         user.password = "temppassword";
         return user;
     }
+
+    public static User makeTestUser(String userId, String nickname){
+        User user = new User();
+        user.id = userId;
+        user.password = "temppassword";
+        user.nickname = nickname;
+        return user;
+    }
 }
