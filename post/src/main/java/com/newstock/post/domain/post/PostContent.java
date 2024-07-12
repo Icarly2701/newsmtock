@@ -25,6 +25,7 @@ public class PostContent {
         return postContent;
     }
 
+
     public void setPostContent(String content) {
         this.postContentText = content;
     }

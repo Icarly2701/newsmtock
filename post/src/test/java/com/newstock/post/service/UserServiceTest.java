@@ -24,9 +24,6 @@ class UserServiceTest {
     UserService userService;
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
     PreferenceTitleRepository preferenceTitleRepository;
 
     @Test

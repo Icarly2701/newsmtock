@@ -102,7 +102,7 @@ public class PostController {
                                  @PathVariable("postId") Long postId,
                                  @RequestParam("postCommentContent") String postCommentContent,
                                  RedirectAttributes redirectAttributes){
-        Long id = postService.addPostComment(postId, user, postCommentContent);
+        postService.addPostComment(postId, user, postCommentContent);
         redirectAttributes.addFlashAttribute("isLike", "notCount");
         return "redirect:/post/" + postId;
     }

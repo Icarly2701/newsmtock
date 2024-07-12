@@ -55,16 +55,21 @@ public class PostService {
     }
 
     @Transactional
-    public Long addPostComment(Long postId, User user, String postCommentContent) {
+    public void addPostComment(Long postId, User user, String postCommentContent) {
         Post post = postRepository.findById(postId).orElse(null);
+        if(post == null) return;
         PostComment postComment = PostComment.makePostComment(post, user, postCommentContent);
-        return  postCommentRepository.save(postComment).getPostCommentId();
+        postCommentRepository.save(postComment);
     }
 
     @Transactional
     public void deletePostComment(Long postCommentId) {
         PostComment postComment = postCommentRepository.findById(postCommentId).orElse(null);
         postCommentRepository.delete(postComment);
+    }
+
+    public List<PostComment> getPostCommentList(Long postId){
+        return postCommentRepository.findByPostPostId(postId);
     }
 
     @Transactional
@@ -105,9 +110,9 @@ public class PostService {
     public Long processAddPost(User user, String category, PostUpload postUpload) {
         Post post = Post.makePost(new PostDto(postUpload.getTitle(),
                 postUpload.getContent(),
-                this.findCategory(category)), user);
+                findCategory(category)), user);
         Long postId = savePost(post);
-        this.saveImage(postUpload.getFileList(), post);
+        saveImage(postUpload.getFileList(), post);
         return postId;
     }
 
