@@ -3,6 +3,7 @@ package com.newstock.post.service;
 import com.newstock.post.domain.Category;
 import com.newstock.post.domain.post.Post;
 import com.newstock.post.domain.post.PostComment;
+import com.newstock.post.domain.post.TempPost;
 import com.newstock.post.domain.user.User;
 import com.newstock.post.dto.post.PostUpload;
 import com.newstock.post.dto.post.PostUploadUpdate;
@@ -133,7 +134,7 @@ class PostServiceTest {
         PostComment postComment = postService.getPostCommentList(postId).stream()
                 .filter(comment -> comment.getUser().getId().equals("testUsing"))
                 .findFirst().orElse(null);
-        
+
         //when
         postService.deletePostComment(postComment.getPostCommentId());
 
@@ -148,6 +149,102 @@ class PostServiceTest {
         Assertions.assertThat(idList.contains("otherUser")).isTrue();
     }
 
+    @Test
+    public void 포스트_추천_테스트1() throws Exception{
+        //given
+        PostUpload postUpload = makeTempPost("test", "testC");
+        Long postId = postService.processAddPost(user, "test", postUpload);
+
+        //when
+        postService.processRecommend(postId, user, "like");
+        postService.processRecommend(postId, otherUser, "like");
+
+        //then
+        Post post = postService.findById(postId);
+        Assertions.assertThat(post.getPostLikeCount()).isEqualTo(2);
+    }
+
+    @Test
+    public void 포스트_추천_테스트2() throws Exception{
+        //given
+        PostUpload postUpload = makeTempPost("test", "testC");
+        Long postId = postService.processAddPost(user, "test", postUpload);
+
+        //when
+        postService.processRecommend(postId, user, "like");
+        postService.processRecommend(postId, user, "like");
+
+        //then
+        Post post = postService.findById(postId);
+        Assertions.assertThat(post.getPostLikeCount()).isEqualTo(0);
+    }
+
+    @Test
+    public void 포스트_추천_테스트3() throws Exception{
+        //given
+        PostUpload postUpload = makeTempPost("test", "testC");
+        Long postId = postService.processAddPost(user, "test", postUpload);
+
+        //when
+        postService.processRecommend(postId, user, "like");
+        postService.processRecommend(postId, user, "dislike");
+
+        //then
+        Post post = postService.findById(postId);
+        Assertions.assertThat(post.getPostLikeCount()).isEqualTo(0);
+    }
+
+    @Test
+    public void 포스트_추천_테스트4() throws Exception{
+        //given
+        PostUpload postUpload = makeTempPost("test", "testC");
+        Long postId = postService.processAddPost(user, "test", postUpload);
+
+        //when
+        postService.processRecommend(postId, user, "like");
+        postService.processRecommend(postId, otherUser, "dislike");
+
+        //then
+        Post post = postService.findById(postId);
+        Assertions.assertThat(post.getPostLikeCount()).isEqualTo(0);
+    }
+
+    @Test
+    public void 포스트_추천_테스트5() throws Exception{
+        //given
+        PostUpload postUpload = makeTempPost("test", "testC");
+        Long postId = postService.processAddPost(user, "test", postUpload);
+
+        //when
+        postService.processRecommend(postId, user, "dislike");
+        postService.processRecommend(postId, otherUser, "dislike");
+
+        //then
+        Post post = postService.findById(postId);
+        Assertions.assertThat(post.getPostLikeCount()).isEqualTo(-2);
+    }
+
+    @Test
+    public void 임시저장_테스트1() throws Exception{
+        //given
+        PostUploadUpdate postUploadUpdate = makeUpdate("testTitle", "testContent");
+
+        //when
+        postService.processTempPost(user, "test", postUploadUpdate);
+
+        //then
+        TempPost tempPost = postService.findByUser(user);
+        Assertions.assertThat(tempPost).isNotNull();
+    }
+
+    @Test
+    public void 임시저장_테스트3() throws Exception{
+        //given
+        //when
+        //then
+        TempPost tempPost = postService.findByUser(user);
+        Assertions.assertThat(tempPost).isNull();
+    }
 
     private static PostUpload makeTempPost(String title, String content) {
         PostUpload postUpload = new PostUpload();

@@ -15,6 +15,5 @@ class NewsServiceTest {
     @Autowired
     NewsService newsService;
 
-    @Autowired
-    CustomNewsRepositoryImpl customNewsRepositoryImpl;
+
 }
