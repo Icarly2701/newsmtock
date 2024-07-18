@@ -40,8 +40,8 @@ public class NewsService {
     private final PreferenceTitleRepository preferenceTitleRepository;
     private final NewsCommentRepository newsCommentRepository;
 
-    public void getNewsData(String topic){
-        getNewsDataUseApi(topic);
+    public List<News> getNewsData(String topic){
+        return getNewsDataUseApi(topic);
     }
 
     public void getNewsData(Long userId){
@@ -49,13 +49,16 @@ public class NewsService {
                 .forEach(v -> getNewsDataUseApi(v.getPreferenceTitle()));
     }
 
-    public void saveNews(Item item, String topic){
+    public News saveNews(Item item, String topic){
+        News news = News.makeNewsItem(item, topic);
         if(topic.equals("코스피") || topic.equals("나스닥")){
-            newsRepository.save(News.makeNewsItem(item, topic));
-            return;
+            newsRepository.save(news);
+            return news;
         }
 
         // 그 외의 뉴스는 redis로 저장 후 보여줌
+        newsRepository.save(News.makeNewsItem(item, topic));
+        return news;
     }
 
     public List<News> getPopularNews(){
@@ -72,12 +75,12 @@ public class NewsService {
     }
 
     public List<News> getSearchData(String keyword, Target target) {
-        this.getNewsData(keyword);
-        return target == null ? this.getRecentNewsAboutTopic(keyword) : switch (target) {
-            case title_content -> this.getRecentNewsAboutTopic(keyword);
-            case content -> this.getRecentNewsAboutTitle(keyword);
-            default -> this.getRecentNewsAboutContent(keyword);
-        };
+        return getNewsData(keyword);
+//        return target == null ? this.getRecentNewsAboutTopic(keyword) : switch (target) {
+//            case title_content -> this.getRecentNewsAboutTopic(keyword);
+//            case content -> this.getRecentNewsAboutTitle(keyword);
+//            default -> this.getRecentNewsAboutContent(keyword);
+//        };
     }
 
     public List<News> getEconomicNewsList(String target) {
@@ -236,7 +239,8 @@ public class NewsService {
                 .build();
     }
 
-    private void getNewsDataUseApi(String topic) {
+    private List<News> getNewsDataUseApi(String topic) {
+        List<News> result = new ArrayList<>();
         try{
             WebClient webClient = getWebClient();
             String apiUrl = getApiUrl(topic);
@@ -263,12 +267,16 @@ public class NewsService {
                         .findAny();
 
                 if(existingNews.isEmpty()){
-                    saveNews(item, topic);
+                    result.add(saveNews(item, topic));
                 }
             }
+
+            return result;
         } catch (WebClientResponseException.BadRequest ex){
             log.error("error = {}", ex.toString());
         }
+
+        return result;
     }
 
     private void addRecentNews(News news, User user) {
