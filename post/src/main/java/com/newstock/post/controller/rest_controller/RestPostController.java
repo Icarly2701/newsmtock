@@ -8,7 +8,6 @@ import com.newstock.post.service.PostService;
 import com.newstock.post.web.Login;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +19,7 @@ import java.util.Comparator;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class PostController {
+public class RestPostController {
 
     private final PostService postService;
 
@@ -146,7 +145,7 @@ public class PostController {
         return "ok";
     }
 
-    @GetMapping("/post/add/temp/{category}")
+    @GetMapping("/test/post/add/temp/{category}")
     public String viewTempPost(@Login User user,
                                @PathVariable("category") String category,
                                RedirectAttributes redirectAttributes){

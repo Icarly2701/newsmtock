@@ -2,22 +2,23 @@ package com.newstock.post.controller.rest_controller;
 
 import com.newstock.post.domain.news.News;
 import com.newstock.post.domain.user.User;
+import com.newstock.post.dto.news.NewsCommentDto;
 import com.newstock.post.dto.news.NewsDetailDto;
+import com.newstock.post.dto.news.NewsDto;
 import com.newstock.post.service.NewsService;
 import com.newstock.post.web.Login;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class NewsController {
+public class RestNewsController {
 
     private final NewsService newsService;
 
@@ -25,10 +26,12 @@ public class NewsController {
     public NewsDetailDto viewNewsDetail(@Login User user,
                              @PathVariable("newsId") Long newsId,
                              @ModelAttribute("isLike") String isLike){
+
         return new NewsDetailDto(
                 newsService.processDetailPageNews(newsId, user, isLike),
-                newsService.findCommentById(newsId),
-                user);
+                newsService.findCommentById(newsId).stream()
+                        .map(NewsCommentDto::new)
+                        .collect(Collectors.toList()));
     }
 
     @PostMapping("/test/news/{newsId}")
@@ -61,8 +64,10 @@ public class NewsController {
     }
 
     @GetMapping("/test/news/economic")
-    public List<News> viewNewsList(@RequestParam(value = "target", required = false) String target){
-        return newsService.getEconomicNewsList(target);
+    public List<NewsDto> viewNewsList(@RequestParam(value = "target", required = false) String target){
+        return newsService.getEconomicNewsList(target).stream()
+                .map(NewsDto::new)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/test/refresh")

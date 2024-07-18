@@ -7,12 +7,12 @@ import java.util.List;
 
 @Data
 public class HomeDto {
-    private List<News> newsList;
-    private List<News> popularNewsList;
-    private List<News> preferenceNews;
-    private List<News> nasdaqList;
+    private List<NewsDto> newsList;
+    private List<NewsDto> popularNewsList;
+    private List<NewsDto> preferenceNews;
+    private List<NewsDto> nasdaqList;
 
-    public HomeDto(List<News> newsList, List<News> popularNewsList) {
+    public HomeDto(List<NewsDto> newsList, List<NewsDto> popularNewsList) {
         this.newsList = newsList;
         this.popularNewsList = popularNewsList;
     }

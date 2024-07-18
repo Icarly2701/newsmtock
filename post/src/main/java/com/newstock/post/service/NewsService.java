@@ -6,12 +6,15 @@ import com.newstock.post.domain.Target;
 import com.newstock.post.domain.news.*;
 import com.newstock.post.domain.user.PreferenceTitle;
 import com.newstock.post.domain.user.User;
+import com.newstock.post.dto.news.NewsDto;
 import com.newstock.post.repository.news.*;
 import com.newstock.post.repository.news.newsrep.NewsRepository;
 import com.newstock.post.repository.user.PreferenceTitleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -56,7 +59,8 @@ public class NewsService {
     }
 
     public List<News> getPopularNews(){
-        return newsRepository.findAllByOrderByNewsCheckCount();
+        Pageable pageable = PageRequest.of(0, 15);
+        return newsRepository.findAllByOrderByNewsCheckCount(pageable);
 //        return newsRepository.findPopularNews();
     }
 
@@ -87,12 +91,13 @@ public class NewsService {
     }
 
     public List<News> getRecentNewsAboutStock(){
-        return newsRepository.findByNewsTopicOrderByNewsDateDesc("코스피");
-//        return newsRepository.findRecentNewsAboutStock();
+        Pageable pageable = PageRequest.of(0,15);
+        return newsRepository.findByNewsTopicOrderByNewsDateDesc("코스피", pageable);
     }
 
     public List<News> getRecentNewsAboutNasdaq() {
-        return newsRepository.findByNewsTopicOrderByNewsDateDesc("나스닥");
+        Pageable pageable = PageRequest.of(0,15);
+        return newsRepository.findByNewsTopicOrderByNewsDateDesc("나스닥", pageable);
 //        return newsRepository.findRecentNewsAboutNasdaq();
     }
 
