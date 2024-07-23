@@ -8,6 +8,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class PostDetailDto {
@@ -18,11 +19,10 @@ public class PostDetailDto {
     private int checkCount;
     private int likeCount;
     private String content;
-    private User user;
     private Long postId;
 
-    private List<PostComment> postCommentList;
-    private List<PostImage> postImageList;
+    private List<PostCommentDto> postCommentList;
+    private List<PostImageDto> postImageList;
     private User viewUser;
     private String category;
 
@@ -37,9 +37,12 @@ public class PostDetailDto {
         postDetailDto.viewUser = user;
         postDetailDto.postId = post.getPostId();
         postDetailDto.category = post.getCategory().getCategoryContent();
-        postDetailDto.user = post.getUser();
-        postDetailDto.postCommentList = postCommentList;
-        postDetailDto.postImageList = postImageList;
+
+
+        postDetailDto.postCommentList = postCommentList.stream()
+                .map(PostCommentDto::new).collect(Collectors.toList());
+        postDetailDto.postImageList = postImageList.stream()
+                .map(PostImageDto::new).collect(Collectors.toList());
         return postDetailDto;
     }
 }

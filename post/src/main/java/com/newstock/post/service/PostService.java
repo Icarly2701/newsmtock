@@ -95,7 +95,11 @@ public class PostService {
     }
 
     public List<Post> findAboutTopic(String category){
-        return postRepository.findByCategoryCategoryContent(category);
+        List<Post> all = postRepository.findAll();
+        for(Post post : all)
+            log.info("id: {}", post.getPostId());
+        return all;
+//        return postRepository.findByCategory_CategoryContent(category);
     }
 
     public List<PostComment> findCommentByPost(Long postId){

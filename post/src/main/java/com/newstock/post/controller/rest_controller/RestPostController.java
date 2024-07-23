@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,14 +47,14 @@ public class RestPostController {
     @GetMapping("/test/post/stock")
     public PostBoardDto viewPostStockBoard(@RequestParam(value = "target", required = false) String target,
                                      Model model){
-
         return new PostBoardDto(postService.findAboutTopic("stock")
                 .stream()
                 .sorted(target == null ? Comparator.comparing(Post::getPostDate).reversed() : switch(target){
                     case "count" -> Comparator.comparingInt(Post::getPostCheckCount).reversed();
                     case "like" -> Comparator.comparingInt(Post::getPostLikeCount).reversed();
                     default -> Comparator.comparing(Post::getPostDate).reversed();})
-                .toList(),
+                .toList()
+                .stream().map(PostTitleDto::new).collect(Collectors.toList()),
                 "주식",
                 "stock");
     }
@@ -66,7 +68,8 @@ public class RestPostController {
                     case "count" -> Comparator.comparingInt(Post::getPostCheckCount).reversed();
                     case "like" -> Comparator.comparingInt(Post::getPostLikeCount).reversed();
                     default -> Comparator.comparing(Post::getPostDate).reversed();})
-                .toList(),
+                .toList()
+                .stream().map(PostTitleDto::new).collect(Collectors.toList()),
                 "자유",
                 "freeBoard");
     }
