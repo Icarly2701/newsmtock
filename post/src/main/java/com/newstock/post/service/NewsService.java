@@ -1,5 +1,6 @@
 package com.newstock.post.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newstock.post.api.Item;
 import com.newstock.post.domain.Target;
@@ -13,6 +14,7 @@ import com.newstock.post.repository.user.PreferenceTitleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -39,6 +41,7 @@ public class NewsService {
     private final DisLikeNewsRepository disLikeNewsRepository;
     private final PreferenceTitleRepository preferenceTitleRepository;
     private final NewsCommentRepository newsCommentRepository;
+    private final NewsContentRepository newsContentRepository;
 
     public List<News> getNewsData(String topic){
         return getNewsDataUseApi(topic);
@@ -50,15 +53,31 @@ public class NewsService {
     }
 
     public News saveNews(Item item, String topic){
-        News news = News.makeNewsItem(item, topic);
-        if(topic.equals("코스피") || topic.equals("나스닥")){
-            newsRepository.save(news);
-            return news;
-        }
+        try{
+            News news = News.makeNewsItem(item, topic);
+            log.info("제목: {}", news.getNewsHeadline());
+            newsRepository.upsertNews(news.getNewsURL(),
+                    news.getNewsHeadline(),
+                    news.getNewsDate(),
+                    news.getNewsCheckCount(),
+                    news.getNewsLikeCount(),
+                    news.getNewsTopic());
+            News insertNews = newsRepository.findByNewsURL(news.getNewsURL());
+            log.info("id값: {}", insertNews.getNewsId());
 
-        // 그 외의 뉴스는 redis로 저장 후 보여줌
-        newsRepository.save(News.makeNewsItem(item, topic));
-        return news;
+            if(insertNews.getNewsContent() == null){
+                log.info("null일 때 값 확인: {}", insertNews.getNewsHeadline());
+                NewsContent newsContent = NewsContent.makeNewsContent(item.getDescription(), insertNews);
+                newsContentRepository.save(newsContent);
+                insertNews.setNewsContent(newsContent);
+            } else{
+                log.info("null이 아닐 때 값 확인: {}", insertNews.getNewsHeadline());
+            }
+            return news;
+        }catch(DataIntegrityViolationException e){
+            log.info("중복 삽입 에러 처리");
+        }
+        return null;
     }
 
     public List<News> getPopularNews(){
@@ -145,16 +164,17 @@ public class NewsService {
     }
 
 
-//    @Scheduled(fixedDelay = 600000000)
-    @Scheduled(cron = "0 0 9,15 * * *")
-    public void getKospiNewsData(){
-        getNewsDataUseApi("코스피");
-    }
+//    @Scheduled(cron = "0 0 9,15 * * *")
 
-//    @Scheduled(fixedDelay = 600000000)
-    @Scheduled(cron = "0 0 6,22 * * *")
-    public void getNasdaqNewsData(){
-        getNewsDataUseApi("나스닥");
+    @Transactional(noRollbackFor = DataIntegrityViolationException.class)
+    @Scheduled(fixedDelay = 7200000)
+    public void getNewsData(){
+        log.info("검색 시작 시간: {}", System.currentTimeMillis());
+        String [] stockKeyword = {"주식", "증권", "금융", "코스피", "코스닥", "나스닥", "NASDAQ", "다우존스", "금리", "증시", "부동산"};
+        for(String keyword : stockKeyword){
+            List<News> newsDataUseApi = getNewsDataUseApi(keyword);
+        }
+        log.info("검색 끝 시간: {}", System.currentTimeMillis());
     }
 
     public List<News> getRecentNewsAboutTopic(String topic){
@@ -220,7 +240,7 @@ public class NewsService {
 
         return UriComponentsBuilder.fromUriString(baseUrl)
                 .queryParam("query", topic)
-                .queryParam("display", 10)
+                .queryParam("display", 20)
                 .queryParam("sort", "date")
                 .build()
                 .toString();
@@ -239,43 +259,35 @@ public class NewsService {
                 .build();
     }
 
+
     private List<News> getNewsDataUseApi(String topic) {
         List<News> result = new ArrayList<>();
         try{
             WebClient webClient = getWebClient();
             String apiUrl = getApiUrl(topic);
-
             Map<String, Object> newsData = webClient.get()
                     .uri(apiUrl)
                     .retrieve()
                     .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
                     .block();
-
             List<Item> items = (List<Item>) newsData.get("items");
-            List<News> compareTopic = newsRepository.findAll();
-//            List<News> compareTopic = newsRepository.findAllNewsAboutTopic();
 
-            for (int i = 0; i < items.size(); i++) {
+            for (int i = 0; i<items.size(); i++) {
                 ObjectMapper mapper = new ObjectMapper();
-
                 Item item = mapper.convertValue(items.get(i), Item.class);
                 item.cleanHtmlCode();
-
-                String newsLink = item.getLink() != null ? item.getLink() : item.getOriginallink();
-                Optional<News> existingNews = compareTopic.stream()
-                        .filter(v -> ((v.getNewsURL().equals(newsLink))))
-                        .findAny();
-
-                if(existingNews.isEmpty()){
-                    result.add(saveNews(item, topic));
+                News news = saveNews(item, topic);
+                if(news != null){
+                    result.add(news);
+                }else{
+                    log.info("값이 제대로 null로 반환되는지 확인");
                 }
-            }
 
+            }
             return result;
         } catch (WebClientResponseException.BadRequest ex){
             log.error("error = {}", ex.toString());
         }
-
         return result;
     }
 

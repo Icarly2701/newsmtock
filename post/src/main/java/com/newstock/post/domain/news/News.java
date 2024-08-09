@@ -60,11 +60,12 @@ public class News {
     public void checkCount(){
         this.newsCheckCount++;
     }
-
     public void addLike(){
         this.newsLikeCount++;
     }
     public void subLike(){
         this.newsLikeCount--;
     }
+
+    public void setNewsContent(NewsContent newsContent){this.newsContent = newsContent;}
 }
