@@ -1,4 +1,4 @@
-package com.newstock.post.controller.rest_controller;
+package com.newstock.post.rest_backend.rest_controller;
 
 import com.newstock.post.domain.news.News;
 import com.newstock.post.domain.user.User;

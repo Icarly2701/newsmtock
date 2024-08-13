@@ -11,6 +11,7 @@ import com.newstock.post.dto.news.NewsDto;
 import com.newstock.post.repository.news.*;
 import com.newstock.post.repository.news.newsrep.NewsRepository;
 import com.newstock.post.repository.user.PreferenceTitleRepository;
+import com.newstock.post.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -42,6 +43,8 @@ public class NewsService {
     private final PreferenceTitleRepository preferenceTitleRepository;
     private final NewsCommentRepository newsCommentRepository;
     private final NewsContentRepository newsContentRepository;
+    private final SearchKeywordNewsRepository searchKeywordNewsRepository;
+    private final UserRepository userRepository;
 
     public List<News> getNewsData(String topic){
         return getNewsDataUseApi(topic);
@@ -55,24 +58,21 @@ public class NewsService {
     public News saveNews(Item item, String topic){
         try{
             News news = News.makeNewsItem(item, topic);
-            log.info("제목: {}", news.getNewsHeadline());
             newsRepository.upsertNews(news.getNewsURL(),
                     news.getNewsHeadline(),
                     news.getNewsDate(),
                     news.getNewsCheckCount(),
                     news.getNewsLikeCount(),
                     news.getNewsTopic());
+
             News insertNews = newsRepository.findByNewsURL(news.getNewsURL());
-            log.info("id값: {}", insertNews.getNewsId());
 
             if(insertNews.getNewsContent() == null){
-                log.info("null일 때 값 확인: {}", insertNews.getNewsHeadline());
                 NewsContent newsContent = NewsContent.makeNewsContent(item.getDescription(), insertNews);
                 newsContentRepository.save(newsContent);
                 insertNews.setNewsContent(newsContent);
-            } else{
-                log.info("null이 아닐 때 값 확인: {}", insertNews.getNewsHeadline());
             }
+
             return news;
         }catch(DataIntegrityViolationException e){
             log.info("중복 삽입 에러 처리");
@@ -166,15 +166,28 @@ public class NewsService {
 
 //    @Scheduled(cron = "0 0 9,15 * * *")
 
-    @Transactional(noRollbackFor = DataIntegrityViolationException.class)
+    @Transactional
     @Scheduled(fixedDelay = 7200000)
     public void getNewsData(){
         log.info("검색 시작 시간: {}", System.currentTimeMillis());
         String [] stockKeyword = {"주식", "증권", "금융", "코스피", "코스닥", "나스닥", "NASDAQ", "다우존스", "금리", "증시", "부동산"};
         for(String keyword : stockKeyword){
-            List<News> newsDataUseApi = getNewsDataUseApi(keyword);
+            getNewsDataUseApi(keyword);
         }
         log.info("검색 끝 시간: {}", System.currentTimeMillis());
+    }
+
+    @Transactional
+    @Scheduled(fixedDelay = 7200000)
+    public void getKeywordNews(){
+        List<String> preferenceTitles = preferenceTitleRepository.findAll()
+                .stream()
+                .map(PreferenceTitle::getPreferenceTitle)
+                .toList();
+
+        for(String preferenceTitle : preferenceTitles){
+            getNewsDataUseApi(preferenceTitle);
+        }
     }
 
     public List<News> getRecentNewsAboutTopic(String topic){
@@ -259,6 +272,7 @@ public class NewsService {
                 .build();
     }
 
+    //내일 searchKeywordNews 저장하는 로직 구현하기
 
     private List<News> getNewsDataUseApi(String topic) {
         List<News> result = new ArrayList<>();
@@ -279,10 +293,7 @@ public class NewsService {
                 News news = saveNews(item, topic);
                 if(news != null){
                     result.add(news);
-                }else{
-                    log.info("값이 제대로 null로 반환되는지 확인");
                 }
-
             }
             return result;
         } catch (WebClientResponseException.BadRequest ex){

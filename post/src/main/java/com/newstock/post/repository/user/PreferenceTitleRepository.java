@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface PreferenceTitleRepository extends JpaRepository<PreferenceTitle, Long> {
     List<PreferenceTitle> findByUserUserId(Long userId);
+
 }
